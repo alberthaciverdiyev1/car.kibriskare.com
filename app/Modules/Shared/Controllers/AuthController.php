@@ -81,16 +81,12 @@ class AuthController extends Controller
 
     protected function renderRegister(): string
     {
-        $agencies = Autosalon::where('is_active', true)
-            ->orderBy('name')
-            ->get(['id', 'name']);
-
         $breadcrumbs = [
             ['label' => __('Ana səhifə'), 'url' => '/'],
             ['label' => __('Qeydiyyat'), 'url' => null],
         ];
 
-        return view('pages.auth.register', compact('agencies', 'breadcrumbs'))->render();
+        return view('pages.auth.register', compact('breadcrumbs'))->render();
     }
 
     /**
@@ -162,7 +158,7 @@ class AuthController extends Controller
         $roleType = $request->input('role_type', 'user');
 
         $rules = [
-            'role_type' => ['required', 'in:user,agent,agency'],
+            'role_type' => ['required', 'in:user,agency'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users,email'],
             'password' => ['required', 'string', 'min:6', 'confirmed'],
         ];
@@ -173,10 +169,6 @@ class AuthController extends Controller
             $rules['phone'] = ['required', 'string', 'max:50'];
             $rules['whatsapp'] = ['nullable', 'string', 'max:50'];
             $rules['address'] = ['nullable', 'string', 'max:255'];
-        } elseif ($roleType === 'agent') {
-            $rules['name'] = ['required', 'string', 'max:255'];
-            $rules['phone'] = ['required', 'string', 'max:50'];
-            $rules['whatsapp'] = ['nullable', 'string', 'max:50'];
         } else {
             $rules['name'] = ['required', 'string', 'max:255'];
         }

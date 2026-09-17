@@ -22,17 +22,13 @@
                 </p>
             </div>
 
-            {{-- Role Switcher Tabs (3 columns) --}}
-            <div class="grid grid-cols-3 gap-2 p-1.5 bg-gray-100/80 rounded-2xl max-w-2xl mx-auto">
-                <button type="button" class="role-tab-btn py-3 px-2 rounded-xl text-xs sm:text-sm font-bold transition flex flex-col sm:flex-row items-center justify-center gap-1.5 bg-white text-orange-600 shadow-sm cursor-pointer" data-role="user">
+            {{-- Role Switcher Tabs (2 columns: Bireysel vs Oto Galeri / Avtosalon) --}}
+            <div class="grid grid-cols-2 gap-2 p-1.5 bg-gray-100/80 rounded-2xl max-w-xl mx-auto">
+                <button type="button" class="role-tab-btn py-3 px-3 rounded-xl text-xs sm:text-sm font-bold transition flex items-center justify-center gap-2 bg-white text-orange-600 shadow-sm cursor-pointer" data-role="user">
                     <i class="bi bi-person text-base"></i>
                     <span>{{ __('auth.role_individual') }}</span>
                 </button>
-                <button type="button" class="role-tab-btn py-3 px-2 rounded-xl text-xs sm:text-sm font-bold transition flex flex-col sm:flex-row items-center justify-center gap-1.5 text-gray-600 hover:text-gray-900 cursor-pointer" data-role="agent">
-                    <i class="bi bi-person-badge text-base"></i>
-                    <span>{{ __('auth.role_agent') }}</span>
-                </button>
-                <button type="button" class="role-tab-btn py-3 px-2 rounded-xl text-xs sm:text-sm font-bold transition flex flex-col sm:flex-row items-center justify-center gap-1.5 text-gray-600 hover:text-gray-900 cursor-pointer" data-role="agency">
+                <button type="button" class="role-tab-btn py-3 px-3 rounded-xl text-xs sm:text-sm font-bold transition flex items-center justify-center gap-2 text-gray-600 hover:text-gray-900 cursor-pointer" data-role="agency">
                     <i class="bi bi-building text-base"></i>
                     <span>{{ __('auth.role_agency') }}</span>
                 </button>
@@ -95,7 +91,7 @@
                     </div>
                 </div>
 
-                {{-- ==================== PHONE & WHATSAPP (Agent & Agency) ==================== --}}
+                {{-- ==================== PHONE & WHATSAPP (Agency) ==================== --}}
                 <div id="contactFields" class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5 hidden">
                     <div class="space-y-1.5">
                         <label for="reg_phone" class="block text-xs font-semibold text-gray-700 uppercase tracking-wider">
@@ -121,36 +117,15 @@
                     </div>
                 </div>
 
-                {{-- ==================== AGENT / AGENCY EXTRA FIELDS ==================== --}}
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 sm:gap-5">
-                    {{-- AGENT: AGENCY SELECTION --}}
-                    <div id="field_agency_select" class="space-y-1.5 hidden">
-                        <label for="reg_agency_id" class="block text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                            {{ __('auth.affiliated_agency') }} <span class="text-gray-400 font-normal">({{ __('auth.optional') }})</span>
-                        </label>
-                        <div class="relative">
-                            <i class="bi bi-diagram-3 absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-base"></i>
-                            <select id="reg_agency_id" name="agency_id"
-                                    class="w-full pl-11 pr-8 py-3.5 bg-gray-50/80 border border-gray-200 rounded-2xl text-sm sm:text-base text-gray-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition shadow-inner appearance-none">
-                                <option value="">{{ __('auth.independent_realtor') }}</option>
-                                @foreach($agencies as $agency)
-                                    <option value="{{ $agency->id }}">{{ $agency->name }}</option>
-                                @endforeach
-                            </select>
-                            <i class="bi bi-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-gray-400 pointer-events-none"></i>
-                        </div>
-                    </div>
-
-                    {{-- AGENCY: ADDRESS --}}
-                    <div id="field_agency_address" class="space-y-1.5 hidden">
-                        <label for="reg_address" class="block text-xs font-semibold text-gray-700 uppercase tracking-wider">
-                            {{ __('auth.office_address') }} <span class="text-gray-400 font-normal">({{ __('auth.optional') }})</span>
-                        </label>
-                        <div class="relative">
-                            <i class="bi bi-geo-alt absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-base"></i>
-                            <input type="text" id="reg_address" name="address" placeholder="{{ __('auth.office_address_placeholder') }}"
-                                   class="w-full pl-11 pr-4 py-3.5 bg-gray-50/80 border border-gray-200 rounded-2xl text-sm sm:text-base text-gray-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition shadow-inner">
-                        </div>
+                {{-- ==================== AGENCY ADDRESS FIELD ==================== --}}
+                <div id="field_agency_address" class="space-y-1.5 hidden">
+                    <label for="reg_address" class="block text-xs font-semibold text-gray-700 uppercase tracking-wider">
+                        {{ __('auth.office_address') }} <span class="text-gray-400 font-normal">({{ __('auth.optional') }})</span>
+                    </label>
+                    <div class="relative">
+                        <i class="bi bi-geo-alt absolute left-4 top-1/2 -translate-y-1/2 text-gray-400 text-base"></i>
+                        <input type="text" id="reg_address" name="address" placeholder="{{ __('auth.office_address_placeholder') }}"
+                               class="w-full pl-11 pr-4 py-3.5 bg-gray-50/80 border border-gray-200 rounded-2xl text-sm sm:text-base text-gray-900 focus:bg-white focus:outline-none focus:ring-2 focus:ring-orange-500 focus:border-orange-500 transition shadow-inner">
                     </div>
                 </div>
 
@@ -253,10 +228,6 @@
             label_user: "{{ __('auth.full_name') }}",
             role_info_user: "{{ __('auth.role_info_individual') }}",
             btn_user: "{{ __('auth.register_as_user') }}",
-
-            label_agent: "{{ __('auth.realtor_name') }}",
-            role_info_agent: "<strong>{{ __('auth.role_agent') }}:</strong> {{ __('auth.role_info_agent') }}",
-            btn_agent: "{{ __('auth.register_as_agent') }}",
 
             label_agency: "{{ __('auth.responsible_person_name') }}",
             role_info_agency: "<strong>{{ __('auth.role_agency') }}:</strong> {{ __('auth.role_info_agency') }}",

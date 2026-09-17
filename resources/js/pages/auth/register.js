@@ -27,9 +27,9 @@ document.addEventListener('DOMContentLoaded', function () {
 
             // Update Tab UI
             roleTabs.forEach(b => {
-                b.className = 'role-tab-btn py-3 px-2 rounded-xl text-xs sm:text-sm font-bold transition flex flex-col sm:flex-row items-center justify-center gap-1.5 text-gray-600 hover:text-gray-900';
+                b.className = 'role-tab-btn py-3 px-3 rounded-xl text-xs sm:text-sm font-bold transition flex items-center justify-center gap-2 text-gray-600 hover:text-gray-900 cursor-pointer';
             });
-            this.className = 'role-tab-btn py-3 px-2 rounded-xl text-xs sm:text-sm font-bold transition flex flex-col sm:flex-row items-center justify-center gap-1.5 bg-white text-orange-600 shadow-sm';
+            this.className = 'role-tab-btn py-3 px-3 rounded-xl text-xs sm:text-sm font-bold transition flex items-center justify-center gap-2 bg-white text-orange-600 shadow-sm cursor-pointer';
 
             // Show/Hide Role-specific Fields
             if (role === 'user') {
@@ -39,25 +39,11 @@ document.addEventListener('DOMContentLoaded', function () {
                 contactFields.classList.add('hidden');
                 inputPhone.required = false;
 
-                fieldAgencySelect.classList.add('hidden');
-                fieldAgencyAddress.classList.add('hidden');
+                if (fieldAgencyAddress) fieldAgencyAddress.classList.add('hidden');
 
                 labelName.innerHTML = (i18n.label_user || 'Ad və Soyadınız') + ' <span class="text-rose-500">*</span>';
                 roleInfoText.innerHTML = i18n.role_info_user || 'Fərdi istifadəçi olaraq avtomobil elanları yerləşdirə, axtarışları və bəyəndiyiniz avtomobilləri sevimlilər siyahısına əlavə edə bilərsiniz.';
                 registerBtnText.textContent = i18n.btn_user || 'İstifadəçi Kimi Qeydiyyatdan Keç';
-            } else if (role === 'agent') {
-                fieldAgencyName.classList.add('hidden');
-                inputAgencyName.required = false;
-
-                contactFields.classList.remove('hidden');
-                inputPhone.required = true;
-
-                fieldAgencySelect.classList.remove('hidden');
-                fieldAgencyAddress.classList.add('hidden');
-
-                labelName.innerHTML = (i18n.label_agent || 'Satıcının Ad və Soyadı') + ' <span class="text-rose-500">*</span>';
-                roleInfoText.innerHTML = i18n.role_info_agent || '<strong>Satıcı Hesabı:</strong> Qeydiyyatdan dərhal sonra Satıcı İdarəetmə Panelinə yönləndiriləcəksiniz və elanlarınızı vahid paneldən idarə edə biləcəksiniz.';
-                registerBtnText.textContent = i18n.btn_agent || 'Satıcı Kimi Qeydiyyatdan Keç';
             } else if (role === 'agency') {
                 fieldAgencyName.classList.remove('hidden');
                 inputAgencyName.required = true;
@@ -65,11 +51,10 @@ document.addEventListener('DOMContentLoaded', function () {
                 contactFields.classList.remove('hidden');
                 inputPhone.required = true;
 
-                fieldAgencySelect.classList.add('hidden');
-                fieldAgencyAddress.classList.remove('hidden');
+                if (fieldAgencyAddress) fieldAgencyAddress.classList.remove('hidden');
 
                 labelName.innerHTML = (i18n.label_agency || 'Məsul Şəxsin Ad və Soyadı') + ' <span class="text-rose-500">*</span>';
-                roleInfoText.innerHTML = i18n.role_info_agency || '<strong>Avtosalon Hesabı:</strong> Qeydiyyatdan dərhal sonra Avtosalon İdarəetmə Panelinə yönləndiriləcəksiniz, şirkət profilini və satıcılarınızı idarə edə biləcəksiniz.';
+                roleInfoText.innerHTML = i18n.role_info_agency || '<strong>Avtosalon Hesabı:</strong> Qeydiyyatdan dərhal sonra Avtosalon İdarəetmə Panelinə yönləndiriləcəksiniz, şirkət profilinizi və elanlarınızı idarə edə biləcəksiniz.';
                 registerBtnText.textContent = i18n.btn_agency || 'Avtosalon Kimi Qeydiyyatdan Keç';
             }
         });
