@@ -1,5 +1,5 @@
 @php
-    $quickCities = \App\Models\City::where('is_active', true)->orderBy('name')->take(6)->get();
+    $quickCities = \App\Modules\Location\Models\City::where('is_active', true)->orderBy('sort_order')->take(6)->get();
     $quickBrands = \App\Modules\Car\Models\CarBrand::where('is_popular', true)->orderBy('name')->take(12)->get();
     if ($quickBrands->isEmpty()) {
         $quickBrands = \App\Modules\Car\Models\CarBrand::orderBy('name')->take(12)->get();
@@ -25,7 +25,7 @@
                         <li>
                             <a href="{{ url(app()->getLocale() . '/ilanlar?city_id=' . $city->id) }}" class="hover:text-[var(--primary)] transition flex items-center gap-1.5">
                                 <span class="w-1 h-1 rounded-full bg-gray-300"></span>
-                                {{ $city->name }} {{ __('Avtomobillər') }}
+                                {{ $city->getTrans('name') }} {{ __('Avtomobillər') }}
                             </a>
                         </li>
                     @endforeach
