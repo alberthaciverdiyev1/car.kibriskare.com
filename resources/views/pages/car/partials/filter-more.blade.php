@@ -23,9 +23,10 @@
                 <label class="block font-bold text-gray-900 text-sm mb-3">Ban Növü</label>
                 <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2.5">
                     @foreach($bodyTypes as $bt)
-                        <label class="flex items-center gap-2 p-3 rounded-2xl border border-gray-200 hover:border-[var(--primary)] hover:bg-orange-50/30 cursor-pointer transition select-none {{ request('body_type_id') == $bt->id ? 'border-[var(--primary)] bg-orange-50/60 font-semibold text-[var(--primary)]' : 'text-gray-700' }}">
-                            <input type="radio" name="body_type_id" value="{{ $bt->id }}" {{ request('body_type_id') == $bt->id ? 'checked' : '' }} class="sr-only">
-                            <i class="bi bi-car-front text-gray-400 text-sm shrink-0"></i>
+                        @php $isSelected = request('body_type_id') == $bt->id; @endphp
+                        <label class="modal-radio-chip flex items-center gap-2 p-3 rounded-2xl border cursor-pointer transition select-none {{ $isSelected ? 'border-[var(--primary)] bg-orange-50/60 font-semibold text-[var(--primary)]' : 'border-gray-200 bg-white text-gray-700 hover:border-[var(--primary)] hover:bg-orange-50/20' }}">
+                            <input type="radio" name="body_type_id" value="{{ $bt->id }}" {{ $isSelected ? 'checked' : '' }} class="sr-only">
+                            <i class="bi bi-car-front text-sm shrink-0 {{ $isSelected ? 'text-[var(--primary)]' : 'text-gray-400' }}"></i>
                             <span class="truncate text-xs sm:text-sm">{{ $bt->localized_name }}</span>
                         </label>
                     @endforeach
@@ -39,9 +40,10 @@
                     <label class="block font-bold text-gray-900 text-sm mb-3">Yanacaq Növü</label>
                     <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
                         @foreach($fuelTypes as $val => $lbl)
-                            <label class="flex items-center gap-2 p-2.5 rounded-2xl border border-gray-200 hover:border-[var(--primary)] hover:bg-orange-50/30 cursor-pointer transition select-none {{ request('fuel_type') === $val ? 'border-[var(--primary)] bg-orange-50/60 font-semibold text-[var(--primary)]' : 'text-gray-700' }}">
-                                <input type="radio" name="fuel_type" value="{{ $val }}" {{ request('fuel_type') === $val ? 'checked' : '' }} class="sr-only">
-                                <i class="bi bi-fuel-pump text-gray-400 text-sm shrink-0"></i>
+                            @php $isSelected = request('fuel_type') === $val; @endphp
+                            <label class="modal-radio-chip flex items-center gap-2 p-2.5 rounded-2xl border cursor-pointer transition select-none {{ $isSelected ? 'border-[var(--primary)] bg-orange-50/60 font-semibold text-[var(--primary)]' : 'border-gray-200 bg-white text-gray-700 hover:border-[var(--primary)] hover:bg-orange-50/20' }}">
+                                <input type="radio" name="fuel_type" value="{{ $val }}" {{ $isSelected ? 'checked' : '' }} class="sr-only">
+                                <i class="bi bi-fuel-pump text-sm shrink-0 {{ $isSelected ? 'text-[var(--primary)]' : 'text-gray-400' }}"></i>
                                 <span class="text-xs sm:text-sm">{{ $lbl }}</span>
                             </label>
                         @endforeach
@@ -53,9 +55,10 @@
                     <label class="block font-bold text-gray-900 text-sm mb-3">Sürətlər Qutusu</label>
                     <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
                         @foreach($transmissions as $val => $lbl)
-                            <label class="flex items-center gap-2 p-2.5 rounded-2xl border border-gray-200 hover:border-[var(--primary)] hover:bg-orange-50/30 cursor-pointer transition select-none {{ request('transmission') === $val ? 'border-[var(--primary)] bg-orange-50/60 font-semibold text-[var(--primary)]' : 'text-gray-700' }}">
-                                <input type="radio" name="transmission" value="{{ $val }}" {{ request('transmission') === $val ? 'checked' : '' }} class="sr-only">
-                                <i class="bi bi-gear text-gray-400 text-sm shrink-0"></i>
+                            @php $isSelected = request('transmission') === $val; @endphp
+                            <label class="modal-radio-chip flex items-center gap-2 p-2.5 rounded-2xl border cursor-pointer transition select-none {{ $isSelected ? 'border-[var(--primary)] bg-orange-50/60 font-semibold text-[var(--primary)]' : 'border-gray-200 bg-white text-gray-700 hover:border-[var(--primary)] hover:bg-orange-50/20' }}">
+                                <input type="radio" name="transmission" value="{{ $val }}" {{ $isSelected ? 'checked' : '' }} class="sr-only">
+                                <i class="bi bi-gear text-sm shrink-0 {{ $isSelected ? 'text-[var(--primary)]' : 'text-gray-400' }}"></i>
                                 <span class="truncate text-xs sm:text-sm">{{ $lbl }}</span>
                             </label>
                         @endforeach
@@ -70,12 +73,13 @@
                     <label class="block font-bold text-gray-900 text-sm mb-3">Sükan İstiqaməti</label>
                     <div class="grid grid-cols-2 gap-3">
                         @foreach($steeringWheels as $val => $lbl)
-                            <label class="flex items-center justify-between p-3 rounded-2xl border border-gray-200 hover:border-[var(--primary)] hover:bg-orange-50/30 cursor-pointer transition select-none {{ request('steering_wheel') === $val ? 'border-[var(--primary)] bg-orange-50/60 font-semibold text-[var(--primary)]' : 'text-gray-700' }}">
+                            @php $isSelected = request('steering_wheel') === $val; @endphp
+                            <label class="modal-radio-chip flex items-center justify-between p-3 rounded-2xl border cursor-pointer transition select-none {{ $isSelected ? 'border-[var(--primary)] bg-orange-50/60 font-semibold text-[var(--primary)]' : 'border-gray-200 bg-white text-gray-700 hover:border-[var(--primary)] hover:bg-orange-50/20' }}">
                                 <span class="flex items-center gap-2">
-                                    <i class="bi bi-compass text-gray-400"></i>
+                                    <i class="bi bi-compass text-sm {{ $isSelected ? 'text-[var(--primary)]' : 'text-gray-400' }}"></i>
                                     <span class="text-xs sm:text-sm font-medium">{{ $lbl }}</span>
                                 </span>
-                                <input type="radio" name="steering_wheel" value="{{ $val }}" {{ request('steering_wheel') === $val ? 'checked' : '' }} class="accent-[var(--primary)] w-4 h-4">
+                                <input type="radio" name="steering_wheel" value="{{ $val }}" {{ $isSelected ? 'checked' : '' }} class="sr-only">
                             </label>
                         @endforeach
                     </div>
@@ -85,9 +89,9 @@
                 <div>
                     <label class="block font-bold text-gray-900 text-sm mb-3">Yürüş (km)</label>
                     <div class="grid grid-cols-2 gap-3">
-                        <input type="number" name="mileage_min" value="{{ request('mileage_min') }}" placeholder="Min km (məs: 0)"
+                        <input type="number" name="mileage_min" id="modal_mileage_min" value="{{ request('mileage_min') }}" placeholder="Min km (məs: 0)"
                                class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-2xl text-xs sm:text-sm font-semibold focus:border-[var(--primary)] focus:bg-white transition outline-none">
-                        <input type="number" name="mileage_max" value="{{ request('mileage_max') }}" placeholder="Maks km (məs: 100,000)"
+                        <input type="number" name="mileage_max" id="modal_mileage_max" value="{{ request('mileage_max') }}" placeholder="Maks km (məs: 100,000)"
                                class="w-full px-4 py-2.5 bg-gray-50 border border-gray-200 rounded-2xl text-xs sm:text-sm font-semibold focus:border-[var(--primary)] focus:bg-white transition outline-none">
                     </div>
                 </div>
@@ -97,17 +101,22 @@
             <div class="pt-5 border-t border-gray-100">
                 <label class="block font-bold text-gray-900 text-sm mb-3">Əlavə Şərtlər</label>
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
-                    <label class="flex items-center gap-3 p-3.5 rounded-2xl bg-gray-50 border border-gray-200 cursor-pointer hover:bg-orange-50/30 transition select-none">
-                        <input type="checkbox" name="is_barter_available" value="1" {{ request('is_barter_available') ? 'checked' : '' }} class="accent-[var(--primary)] w-4 h-4 rounded">
-                        <span class="font-semibold text-xs sm:text-sm text-gray-800">Barter mümkündür</span>
+                    @php $isBarter = (bool)request('is_barter_available'); @endphp
+                    <label class="modal-check-chip flex items-center gap-3 p-3.5 rounded-2xl border cursor-pointer transition select-none {{ $isBarter ? 'border-[var(--primary)] bg-orange-50/60 font-semibold text-[var(--primary)]' : 'border-gray-200 bg-gray-50 hover:bg-orange-50/30 text-gray-800' }}">
+                        <input type="checkbox" name="is_barter_available" value="1" {{ $isBarter ? 'checked' : '' }} class="accent-[var(--primary)] w-4 h-4 rounded">
+                        <span class="font-semibold text-xs sm:text-sm">Barter mümkündür</span>
                     </label>
-                    <label class="flex items-center gap-3 p-3.5 rounded-2xl bg-gray-50 border border-gray-200 cursor-pointer hover:bg-orange-50/30 transition select-none">
-                        <input type="checkbox" name="is_credit_available" value="1" {{ request('is_credit_available') ? 'checked' : '' }} class="accent-[var(--primary)] w-4 h-4 rounded">
-                        <span class="font-semibold text-xs sm:text-sm text-gray-800">Kreditlə verilir</span>
+
+                    @php $isCredit = (bool)request('is_credit_available'); @endphp
+                    <label class="modal-check-chip flex items-center gap-3 p-3.5 rounded-2xl border cursor-pointer transition select-none {{ $isCredit ? 'border-[var(--primary)] bg-orange-50/60 font-semibold text-[var(--primary)]' : 'border-gray-200 bg-gray-50 hover:bg-orange-50/30 text-gray-800' }}">
+                        <input type="checkbox" name="is_credit_available" value="1" {{ $isCredit ? 'checked' : '' }} class="accent-[var(--primary)] w-4 h-4 rounded">
+                        <span class="font-semibold text-xs sm:text-sm">Kreditlə verilir</span>
                     </label>
-                    <label class="flex items-center gap-3 p-3.5 rounded-2xl bg-gray-50 border border-gray-200 cursor-pointer hover:bg-orange-50/30 transition select-none">
-                        <input type="checkbox" name="seller_type" value="dealer" {{ request('seller_type') === 'dealer' ? 'checked' : '' }} class="accent-[var(--primary)] w-4 h-4 rounded">
-                        <span class="font-semibold text-xs sm:text-sm text-gray-800">Yalnız Avtosalonlar</span>
+
+                    @php $isDealer = request('seller_type') === 'dealer'; @endphp
+                    <label class="modal-check-chip flex items-center gap-3 p-3.5 rounded-2xl border cursor-pointer transition select-none {{ $isDealer ? 'border-[var(--primary)] bg-orange-50/60 font-semibold text-[var(--primary)]' : 'border-gray-200 bg-gray-50 hover:bg-orange-50/30 text-gray-800' }}">
+                        <input type="checkbox" name="seller_type" value="dealer" {{ $isDealer ? 'checked' : '' }} class="accent-[var(--primary)] w-4 h-4 rounded">
+                        <span class="font-semibold text-xs sm:text-sm">Yalnız Avtosalonlar</span>
                     </label>
                 </div>
             </div>
@@ -115,11 +124,11 @@
 
         <!-- Modal Footer -->
         <div class="px-6 py-4 border-t border-gray-100 flex items-center justify-between bg-gray-50/80 sticky bottom-0 z-10">
-            <button type="button" id="clearModalFiltersBtn" class="text-xs font-bold text-gray-500 hover:text-gray-900 transition underline underline-offset-4">
+            <button type="button" id="clearModalFiltersBtn" class="text-xs font-bold text-gray-500 hover:text-gray-900 transition underline underline-offset-4 cursor-pointer">
                 Filtrləri Təmizlə
             </button>
             <div class="flex items-center gap-2">
-                <button type="button" id="applyModalFiltersBtn" class="px-6 py-2.5 bg-[var(--primary)] hover:bg-[var(--primary-hover)] text-white text-xs sm:text-sm font-bold rounded-xl shadow-sm transition">
+                <button type="button" id="applyModalFiltersBtn" class="px-6 py-2.5 bg-[var(--primary)] hover:bg-[var(--primary-hover)] text-white text-xs sm:text-sm font-bold rounded-xl shadow-sm transition cursor-pointer">
                     Tətbiq Et
                 </button>
             </div>

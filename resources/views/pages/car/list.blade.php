@@ -304,7 +304,7 @@
                 });
             }
 
-            // 5. Modal Filter Controls
+            // 5. Modal Filter Controls & Interactive Chips
             const modal = document.getElementById('filterMoreModal');
             const modalCard = document.getElementById('filterMoreModalCard');
             const openModalBtn = document.getElementById('openFilterMoreBtn');
@@ -313,6 +313,7 @@
             const clearModalBtn = document.getElementById('clearModalFiltersBtn');
 
             function openModal() {
+                if (!modal) return;
                 modal.classList.remove('hidden');
                 setTimeout(() => {
                     modal.classList.remove('opacity-0');
@@ -321,6 +322,7 @@
             }
 
             function closeModal() {
+                if (!modal) return;
                 modal.classList.add('opacity-0');
                 modalCard.classList.add('scale-95');
                 setTimeout(() => {
@@ -334,6 +336,62 @@
                 modal.addEventListener('click', (e) => {
                     if (e.target === modal) closeModal();
                 });
+
+                // Radio chip interactive toggle logic
+                modal.querySelectorAll('.modal-radio-chip').forEach(chip => {
+                    chip.addEventListener('click', function(e) {
+                        e.preventDefault();
+                        const input = this.querySelector('input[type="radio"]');
+                        if (!input) return;
+
+                        const name = input.name;
+                        const isCurrentlyChecked = input.checked;
+
+                        // Uncheck all siblings in this radio group
+                        modal.querySelectorAll(`input[type="radio"][name="${name}"]`).forEach(r => {
+                            r.checked = false;
+                            const parent = r.closest('.modal-radio-chip');
+                            if (parent) {
+                                parent.classList.remove('border-[var(--primary)]', 'bg-orange-50/60', 'font-semibold', 'text-[var(--primary)]');
+                                parent.classList.add('border-gray-200', 'bg-white', 'text-gray-700');
+                                const icon = parent.querySelector('i');
+                                if (icon) {
+                                    icon.classList.remove('text-[var(--primary)]');
+                                    icon.classList.add('text-gray-400');
+                                }
+                            }
+                        });
+
+                        // Toggle on if not already checked
+                        if (!isCurrentlyChecked) {
+                            input.checked = true;
+                            this.classList.add('border-[var(--primary)]', 'bg-orange-50/60', 'font-semibold', 'text-[var(--primary)]');
+                            this.classList.remove('border-gray-200', 'bg-white', 'text-gray-700');
+                            const icon = this.querySelector('i');
+                            if (icon) {
+                                icon.classList.add('text-[var(--primary)]');
+                                icon.classList.remove('text-gray-400');
+                            }
+                        }
+                    });
+                });
+
+                // Checkbox chip interactive toggle logic
+                modal.querySelectorAll('.modal-check-chip').forEach(chip => {
+                    chip.addEventListener('click', function(e) {
+                        const input = this.querySelector('input[type="checkbox"]');
+                        if (!input) return;
+                        setTimeout(() => {
+                            if (input.checked) {
+                                this.classList.add('border-[var(--primary)]', 'bg-orange-50/60', 'font-semibold', 'text-[var(--primary)]');
+                                this.classList.remove('border-gray-200', 'bg-gray-50', 'text-gray-800');
+                            } else {
+                                this.classList.remove('border-[var(--primary)]', 'bg-orange-50/60', 'font-semibold', 'text-[var(--primary)]');
+                                this.classList.add('border-gray-200', 'bg-gray-50', 'text-gray-800');
+                            }
+                        }, 10);
+                    });
+                });
             }
 
             if (applyModalBtn) {
@@ -345,9 +403,24 @@
 
             if (clearModalBtn) {
                 clearModalBtn.addEventListener('click', function() {
-                    modal.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
-                    modal.querySelectorAll('input[type="checkbox"]').forEach(c => c.checked = false);
-                    modal.querySelectorAll('input[type="number"]').forEach(n => n.value = '');
+                    if (modal) {
+                        modal.querySelectorAll('input[type="radio"]').forEach(r => r.checked = false);
+                        modal.querySelectorAll('input[type="checkbox"]').forEach(c => c.checked = false);
+                        modal.querySelectorAll('input[type="number"]').forEach(n => n.value = '');
+                        modal.querySelectorAll('.modal-radio-chip').forEach(chip => {
+                            chip.classList.remove('border-[var(--primary)]', 'bg-orange-50/60', 'font-semibold', 'text-[var(--primary)]');
+                            chip.classList.add('border-gray-200', 'bg-white', 'text-gray-700');
+                            const icon = chip.querySelector('i');
+                            if (icon) {
+                                icon.classList.remove('text-[var(--primary)]');
+                                icon.classList.add('text-gray-400');
+                            }
+                        });
+                        modal.querySelectorAll('.modal-check-chip').forEach(chip => {
+                            chip.classList.remove('border-[var(--primary)]', 'bg-orange-50/60', 'font-semibold', 'text-[var(--primary)]');
+                            chip.classList.add('border-gray-200', 'bg-gray-50', 'text-gray-800');
+                        });
+                    }
                     closeModal();
                     submitCarFilter();
                 });
@@ -359,11 +432,25 @@
                 
                 // Append modal form fields into form data
                 if (modal) {
-                    modal.querySelectorAll('input:checked, input[type="number"]').forEach(input => {
+                    modal.querySelectorAll('input[type="radio"]:checked, input[type="checkbox"]:checked').forEach(input => {
                         if (input.value) {
                             formData.set(input.name, input.value);
                         }
                     });
+                    modal.querySelectorAll('input[type="number"]').forEach(input => {
+                        if (input.value) {
+                            formData.set(input.name, input.value);
+                        } else {
+                            formData.delete(input.name);
+                        }
+                    });
+                }
+
+                // Clean empty keys
+                for (const [key, value] of Array.from(formData.entries())) {
+                    if (!value || value === 'all') {
+                        formData.delete(key);
+                    }
                 }
 
                 const params = new URLSearchParams(formData);
