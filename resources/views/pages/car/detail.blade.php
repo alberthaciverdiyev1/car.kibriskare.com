@@ -325,6 +325,29 @@
                         @endif
                     </div>
 
+                    <!-- Promotion Action Buttons (Önə Çək & Premium Et) -->
+                    <div class="grid grid-cols-2 gap-2.5 pt-1">
+                        <!-- Önə çək -->
+                        <div onclick="openAdvanceModal()"
+                             class="js-btn-advance bg-white hover:bg-emerald-50/50 border border-gray-200/90 hover:border-emerald-300 rounded-2xl p-3 flex flex-col justify-between cursor-pointer transition shadow-2xs group">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs sm:text-sm font-bold text-gray-800 group-hover:text-emerald-700 transition">{{ __('property.advance_ad') }}</span>
+                                <span class="w-6 h-6 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center text-xs font-bold group-hover:bg-emerald-600 group-hover:text-white transition"><i class="fa-solid fa-arrow-up"></i></span>
+                            </div>
+                            <span class="text-[11px] font-semibold text-blue-600 mt-1.5">{{ __('property.from_azn', ['amount' => 3]) }}</span>
+                        </div>
+
+                        <!-- Premium -->
+                        <div onclick="openPremiumModal()"
+                             class="js-btn-premium bg-white hover:bg-amber-50/50 border border-gray-200/90 hover:border-amber-300 rounded-2xl p-3 flex flex-col justify-between cursor-pointer transition shadow-2xs group">
+                            <div class="flex items-center justify-between">
+                                <span class="text-xs sm:text-sm font-bold text-gray-800 group-hover:text-amber-700 transition">{{ __('property.premium_ad') }}</span>
+                                <span class="w-6 h-6 rounded-lg bg-amber-50 text-amber-500 flex items-center justify-center text-xs font-bold group-hover:bg-amber-500 group-hover:text-white transition"><i class="fa-solid fa-crown"></i></span>
+                            </div>
+                            <span class="text-[11px] font-semibold text-blue-600 mt-1.5">{{ __('property.from_azn', ['amount' => 7]) }}</span>
+                        </div>
+                    </div>
+
                     <!-- Safety Note -->
                     <div class="pt-3 border-t border-gray-100 flex items-start gap-2.5 text-[11px] text-gray-500 leading-tight">
                         <i class="bi bi-shield-lock text-gray-400 text-sm mt-0.5"></i>
@@ -352,6 +375,10 @@
             </div>
         @endif
     </div>
+
+    <!-- Promotion Modals -->
+    @include('components.car.move-forward-modal')
+    @include('components.car.premium-modal')
 
     <!-- Gallery Fullscreen Modal -->
     <div id="carGalleryModal" class="fixed inset-0 z-50 hidden bg-black/95 flex flex-col items-center justify-between p-4 select-none">
@@ -429,5 +456,34 @@
                 window.location.href = `tel:${fullPhone}`;
             }
         }
+
+        // Promotion modals logic
+        function openAdvanceModal() {
+            const modal = document.getElementById('modal-advance');
+            if (modal) modal.style.display = 'flex';
+        }
+
+        function openPremiumModal() {
+            const modal = document.getElementById('modal-premium');
+            if (modal) modal.style.display = 'flex';
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+            const modalAdvance = document.getElementById('modal-advance');
+            const modalPremium = document.getElementById('modal-premium');
+
+            document.querySelectorAll('[data-close]').forEach(btn => {
+                btn.addEventListener('click', function () {
+                    const targetId = this.getAttribute('data-close');
+                    const targetModal = document.getElementById(targetId);
+                    if (targetModal) targetModal.style.display = 'none';
+                });
+            });
+
+            window.addEventListener('click', function (e) {
+                if (e.target === modalAdvance) modalAdvance.style.display = 'none';
+                if (e.target === modalPremium) modalPremium.style.display = 'none';
+            });
+        });
     </script>
 @endsection
