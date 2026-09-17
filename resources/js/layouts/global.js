@@ -251,8 +251,13 @@ const R = window.KibrisKareRoutes || {};
     };
 
     /* ===== QLOBAL FAVORITE & COMPARE (ANLIQ OPTIMISTIC UPDATE & BACKEND SİNXRONİZASİYASI) ===== */
-    window.toggleFavorite = function (element, propertyId) {
-        propertyId = parseInt(propertyId, 10);
+    window.toggleFavorite = function (element, targetId) {
+        let itemId = parseInt(targetId, 10);
+        if (isNaN(itemId) && (typeof element === 'number' || !isNaN(parseInt(element, 10)))) {
+            itemId = parseInt(element, 10);
+        }
+        if (isNaN(itemId)) return;
+
         const csrf = window.KibrisKare.csrfToken();
 
         let favIds = [];
@@ -261,14 +266,14 @@ const R = window.KibrisKareRoutes || {};
             favIds = raw.map(f => typeof f === 'object' && f !== null ? f.id : f).filter(Boolean);
         } catch(e) {}
 
-        const currentlyInFav = favIds.includes(propertyId);
+        const currentlyInFav = favIds.includes(itemId);
         const willBeInFav = !currentlyInFav;
 
         // Dərhal vizual olaraq dəyiş (0ms gecikmə)
-        window.updateCardFavoriteButton(propertyId, willBeInFav);
+        window.updateCardFavoriteButton(itemId, willBeInFav);
 
         // Yerli yaddaşı müvəqqəti yenilə
-        let newFavs = willBeInFav ? [...favIds, propertyId] : favIds.filter(id => id !== propertyId);
+        let newFavs = willBeInFav ? [...favIds, itemId] : favIds.filter(id => id !== itemId);
         try {
             localStorage.setItem('favorites', JSON.stringify(newFavs.map(id => ({ id: id }))));
         } catch(e) {}
@@ -281,7 +286,7 @@ const R = window.KibrisKareRoutes || {};
                 'X-Requested-With': 'XMLHttpRequest',
                 'Accept': 'application/json'
             },
-            body: JSON.stringify({ property_id: propertyId })
+            body: JSON.stringify({ id: itemId, car_id: itemId, property_id: itemId })
         })
         .then(r => r.json())
         .then(data => {
@@ -295,7 +300,7 @@ const R = window.KibrisKareRoutes || {};
                     localStorage.setItem('favorites', JSON.stringify((data.ids || []).map(id => ({ id: id }))));
                 } catch (e) {}
 
-                window.updateCardFavoriteButton(propertyId, data.is_favorite);
+                window.updateCardFavoriteButton(itemId, data.is_favorite);
 
                 if (data.is_favorite) {
                     window.showKibrisKareToast({
@@ -316,12 +321,17 @@ const R = window.KibrisKareRoutes || {};
         })
         .catch(e => {
             console.error('Favorite error:', e);
-            window.updateCardFavoriteButton(propertyId, currentlyInFav);
+            window.updateCardFavoriteButton(itemId, currentlyInFav);
         });
     };
 
-    window.toggleCompare = function (element, propertyId) {
-        propertyId = parseInt(propertyId, 10);
+    window.toggleCompare = function (element, targetId) {
+        let itemId = parseInt(targetId, 10);
+        if (isNaN(itemId) && (typeof element === 'number' || !isNaN(parseInt(element, 10)))) {
+            itemId = parseInt(element, 10);
+        }
+        if (isNaN(itemId)) return;
+
         const csrf = window.KibrisKare.csrfToken();
 
         let compIds = [];
@@ -330,7 +340,7 @@ const R = window.KibrisKareRoutes || {};
             compIds = raw.map(c => typeof c === 'object' && c !== null ? c.id : c).filter(Boolean);
         } catch(e) {}
 
-        const currentlyInCompare = compIds.includes(propertyId);
+        const currentlyInCompare = compIds.includes(itemId);
         const willBeInCompare = !currentlyInCompare;
 
         if (willBeInCompare && compIds.length >= 4) {
@@ -342,10 +352,10 @@ const R = window.KibrisKareRoutes || {};
         }
 
         // Dərhal vizual olaraq dəyiş (0ms gecikmə)
-        window.updateCardCompareButton(propertyId, willBeInCompare);
+        window.updateCardCompareButton(itemId, willBeInCompare);
 
         // Yerli yaddaşı müvəqqəti yenilə
-        let newComps = willBeInCompare ? [...compIds, propertyId] : compIds.filter(id => id !== propertyId);
+        let newComps = willBeInCompare ? [...compIds, itemId] : compIds.filter(id => id !== itemId);
         try {
             localStorage.setItem('compareList', JSON.stringify(newComps.map(id => ({ id: id }))));
         } catch(e) {}
@@ -358,7 +368,7 @@ const R = window.KibrisKareRoutes || {};
                 'X-Requested-With': 'XMLHttpRequest',
                 'Accept': 'application/json'
             },
-            body: JSON.stringify({ property_id: propertyId })
+            body: JSON.stringify({ id: itemId, car_id: itemId, property_id: itemId })
         })
         .then(r => r.json())
         .then(data => {
@@ -370,7 +380,7 @@ const R = window.KibrisKareRoutes || {};
                     localStorage.setItem('compareList', JSON.stringify((data.ids || []).map(id => ({ id: id }))));
                 } catch (e) {}
 
-                window.updateCardCompareButton(propertyId, data.is_compared);
+                window.updateCardCompareButton(itemId, data.is_compared);
 
                 if (data.is_compared) {
                     window.showKibrisKareToast({

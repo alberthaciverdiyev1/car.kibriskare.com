@@ -3,6 +3,7 @@
 namespace App\Modules\Property\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Modules\Car\Models\Car;
 use App\Modules\Property\Models\Compare;
 use App\Modules\Property\Models\Favorite;
 use App\Modules\Property\Models\Property;
@@ -18,15 +19,25 @@ class FavoriteCompareController extends Controller
      */
     public function toggleFavorite(Request $request): JsonResponse
     {
-        $propertyId = (int) $request->input('property_id');
-        if (! $propertyId || ! Property::where('id', $propertyId)->exists()) {
-            return response()->json(['success' => false, 'message' => 'Property not found'], 404);
+        $id = (int) ($request->input('car_id') ?: ($request->input('property_id') ?: $request->input('id')));
+        
+        $isCar = $id && Car::where('id', $id)->exists();
+        $isProperty = ! $isCar && $id && Property::where('id', $id)->exists();
+
+        if (! $isCar && ! $isProperty) {
+            return response()->json(['success' => false, 'message' => 'Item not found'], 404);
         }
 
         $userId = auth()->id();
         $sessionId = $request->hasSession() ? $request->session()->getId() : 'default-session';
 
-        $query = Favorite::where('property_id', $propertyId);
+        $query = Favorite::query();
+        if ($isCar) {
+            $query->where('car_id', $id);
+        } else {
+            $query->where('property_id', $id);
+        }
+
         if ($userId) {
             $query->where('user_id', $userId);
         } else {
@@ -42,12 +53,13 @@ class FavoriteCompareController extends Controller
             Favorite::create([
                 'user_id' => $userId,
                 'session_id' => $userId ? null : $sessionId,
-                'property_id' => $propertyId,
+                'car_id' => $isCar ? $id : null,
+                'property_id' => $isProperty ? $id : null,
             ]);
             $isFavorite = true;
         }
 
-        // Seçilmişlər səhifəsinin keşini təmizlə ki, dəyişiklik dərhal görünsün
+        // Seçilmişlər səhifəsinin keşini təmizlə
         Cache::forget(StaticPageController::favoritesCacheKey($userId, $sessionId));
 
         $countQuery = Favorite::query();
@@ -57,7 +69,11 @@ class FavoriteCompareController extends Controller
             $countQuery->where('session_id', $sessionId);
         }
 
-        $ids = (clone $countQuery)->pluck('property_id')->toArray();
+        $ids = (clone $countQuery)->selectRaw('COALESCE(car_id, property_id) as target_id')
+            ->pluck('target_id')
+            ->filter()
+            ->values()
+            ->toArray();
         $count = count($ids);
 
         return response()->json([
@@ -83,7 +99,11 @@ class FavoriteCompareController extends Controller
             $query->where('session_id', $sessionId);
         }
 
-        $ids = $query->pluck('property_id')->toArray();
+        $ids = $query->selectRaw('COALESCE(car_id, property_id) as target_id')
+            ->pluck('target_id')
+            ->filter()
+            ->values()
+            ->toArray();
 
         return response()->json([
             'success' => true,
@@ -108,6 +128,7 @@ class FavoriteCompareController extends Controller
         }
 
         $query->delete();
+        Cache::forget(StaticPageController::favoritesCacheKey($userId, $sessionId));
 
         return response()->json([
             'success' => true,
@@ -121,15 +142,25 @@ class FavoriteCompareController extends Controller
      */
     public function toggleCompare(Request $request): JsonResponse
     {
-        $propertyId = (int) $request->input('property_id');
-        if (! $propertyId || ! Property::where('id', $propertyId)->exists()) {
-            return response()->json(['success' => false, 'message' => 'Property not found'], 404);
+        $id = (int) ($request->input('car_id') ?: ($request->input('property_id') ?: $request->input('id')));
+        
+        $isCar = $id && Car::where('id', $id)->exists();
+        $isProperty = ! $isCar && $id && Property::where('id', $id)->exists();
+
+        if (! $isCar && ! $isProperty) {
+            return response()->json(['success' => false, 'message' => 'Item not found'], 404);
         }
 
         $userId = auth()->id();
         $sessionId = $request->hasSession() ? $request->session()->getId() : 'default-session';
 
-        $query = Compare::where('property_id', $propertyId);
+        $query = Compare::query();
+        if ($isCar) {
+            $query->where('car_id', $id);
+        } else {
+            $query->where('property_id', $id);
+        }
+
         if ($userId) {
             $query->where('user_id', $userId);
         } else {
@@ -160,7 +191,8 @@ class FavoriteCompareController extends Controller
             Compare::create([
                 'user_id' => $userId,
                 'session_id' => $userId ? null : $sessionId,
-                'property_id' => $propertyId,
+                'car_id' => $isCar ? $id : null,
+                'property_id' => $isProperty ? $id : null,
             ]);
             $isCompared = true;
         }
@@ -175,7 +207,11 @@ class FavoriteCompareController extends Controller
             $countQuery->where('session_id', $sessionId);
         }
 
-        $ids = (clone $countQuery)->pluck('property_id')->toArray();
+        $ids = (clone $countQuery)->selectRaw('COALESCE(car_id, property_id) as target_id')
+            ->pluck('target_id')
+            ->filter()
+            ->values()
+            ->toArray();
         $count = count($ids);
 
         return response()->json([
@@ -201,7 +237,11 @@ class FavoriteCompareController extends Controller
             $query->where('session_id', $sessionId);
         }
 
-        $ids = $query->pluck('property_id')->toArray();
+        $ids = $query->selectRaw('COALESCE(car_id, property_id) as target_id')
+            ->pluck('target_id')
+            ->filter()
+            ->values()
+            ->toArray();
 
         return response()->json([
             'success' => true,
@@ -226,6 +266,7 @@ class FavoriteCompareController extends Controller
         }
 
         $query->delete();
+        Cache::forget(StaticPageController::comparesCacheKey($userId, $sessionId));
 
         return response()->json([
             'success' => true,

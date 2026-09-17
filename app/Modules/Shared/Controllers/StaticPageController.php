@@ -29,19 +29,22 @@ class StaticPageController extends Controller
                 ['label' => __('favorites.page_title'), 'url' => null],
             ];
 
-            $favoritePropertyIds = \App\Modules\Property\Models\Favorite::where($userId ? 'user_id' : 'session_id', $userId ?: $sessionId)
-                ->pluck('property_id')
+            $favoriteCarIds = \App\Modules\Property\Models\Favorite::where($userId ? 'user_id' : 'session_id', $userId ?: $sessionId)
+                ->selectRaw('COALESCE(car_id, property_id) as target_id')
+                ->pluck('target_id')
+                ->filter()
+                ->values()
                 ->toArray();
 
-            $properties = \App\Modules\Property\Models\Property::whereIn('id', $favoritePropertyIds)
-                ->where('status', \App\Modules\Property\Enums\PropertyStatus::Published)
-                ->with(['images', 'filterOptions', 'city', 'district'])
+            $cars = \App\Modules\Car\Models\Car::whereIn('id', $favoriteCarIds)
+                ->where('status', \App\Modules\Car\Enums\CarStatus::Active)
+                ->with(['images', 'city', 'brand', 'model', 'autosalon', 'bodyType'])
                 ->get()
-                ->sortBy(function ($property) use ($favoritePropertyIds) {
-                    return array_search($property->id, $favoritePropertyIds);
+                ->sortBy(function ($car) use ($favoriteCarIds) {
+                    return array_search($car->id, $favoriteCarIds);
                 });
 
-            return view('pages.favorites.favorites', compact('breadcrumbs', 'properties'))->render();
+            return view('pages.favorites.favorites', compact('breadcrumbs', 'cars'))->render();
         });
 
         return response($html);
@@ -62,7 +65,10 @@ class StaticPageController extends Controller
             $userId = auth()->id();
             $sessionId = $request->hasSession() ? $request->session()->getId() : 'default-session';
             $ids = \App\Modules\Property\Models\Favorite::where($userId ? 'user_id' : 'session_id', $userId ?: $sessionId)
-                ->pluck('property_id')
+                ->selectRaw('COALESCE(car_id, property_id) as target_id')
+                ->pluck('target_id')
+                ->filter()
+                ->values()
                 ->toArray();
         }
 
@@ -74,19 +80,19 @@ class StaticPageController extends Controller
             ]);
         }
 
-        $properties = \App\Modules\Property\Models\Property::whereIn('id', $ids)
-            ->where('status', \App\Modules\Property\Enums\PropertyStatus::Published)
-            ->with(['images', 'filterOptions', 'city', 'district'])
+        $cars = \App\Modules\Car\Models\Car::whereIn('id', $ids)
+            ->where('status', \App\Modules\Car\Enums\CarStatus::Active)
+            ->with(['images', 'city', 'brand', 'model', 'autosalon', 'bodyType'])
             ->get()
-            ->sortBy(function ($property) use ($ids) {
-                return array_search($property->id, $ids);
+            ->sortBy(function ($car) use ($ids) {
+                return array_search($car->id, $ids);
             });
 
-        $html = view('pages.favorites.partials.cards', compact('properties'))->render();
+        $html = view('pages.favorites.partials.cards', compact('cars'))->render();
 
         return response()->json([
             'success' => true,
-            'count' => $properties->count(),
+            'count' => $cars->count(),
             'html' => $html,
         ]);
     }
@@ -102,19 +108,22 @@ class StaticPageController extends Controller
                 ['label' => __('compare.page_title'), 'url' => null],
             ];
 
-            $comparePropertyIds = \App\Modules\Property\Models\Compare::where($userId ? 'user_id' : 'session_id', $userId ?: $sessionId)
-                ->pluck('property_id')
+            $compareCarIds = \App\Modules\Property\Models\Compare::where($userId ? 'user_id' : 'session_id', $userId ?: $sessionId)
+                ->selectRaw('COALESCE(car_id, property_id) as target_id')
+                ->pluck('target_id')
+                ->filter()
+                ->values()
                 ->toArray();
 
-            $properties = \App\Modules\Property\Models\Property::whereIn('id', $comparePropertyIds)
-                ->where('status', \App\Modules\Property\Enums\PropertyStatus::Published)
-                ->with(['images', 'filterOptions', 'city', 'district', 'amenities'])
+            $cars = \App\Modules\Car\Models\Car::whereIn('id', $compareCarIds)
+                ->where('status', \App\Modules\Car\Enums\CarStatus::Active)
+                ->with(['images', 'city', 'brand', 'model', 'autosalon', 'bodyType', 'features'])
                 ->get()
-                ->sortBy(function ($property) use ($comparePropertyIds) {
-                    return array_search($property->id, $comparePropertyIds);
+                ->sortBy(function ($car) use ($compareCarIds) {
+                    return array_search($car->id, $compareCarIds);
                 });
 
-            return view('pages.compare.compare', compact('breadcrumbs', 'properties'))->render();
+            return view('pages.compare.compare', compact('breadcrumbs', 'cars'))->render();
         });
 
         return response($html);

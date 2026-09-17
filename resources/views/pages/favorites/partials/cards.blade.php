@@ -1,6 +1,6 @@
-@forelse($properties as $property)
-    <div class="favorite-card-wrapper transition-all duration-300" data-fav-id="{{ $property->id }}">
-        @include('components.property-card', ['property' => $property])
+@forelse($cars as $car)
+    <div class="favorite-card-wrapper transition-all duration-300" data-fav-id="{{ $car->id }}">
+        <x-car-card :car="$car" />
     </div>
 @empty
     <div class="col-span-full text-center py-12">

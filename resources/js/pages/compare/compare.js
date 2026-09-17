@@ -3,7 +3,7 @@
 'use strict';
 
 const R = window.KibrisKareRoutes || {};
-window.removeCompareItem = function (propertyId) {
+window.removeCompareItem = function (itemId) {
     const csrf = window.KibrisKare?.csrfToken() || '';
     fetch(R.comparesToggle || '/api/compares/toggle', {
         method: 'POST',
@@ -13,7 +13,7 @@ window.removeCompareItem = function (propertyId) {
             'X-Requested-With': 'XMLHttpRequest',
             'Accept': 'application/json'
         },
-        body: JSON.stringify({ property_id: propertyId })
+        body: JSON.stringify({ id: itemId, car_id: itemId, property_id: itemId })
     })
     .then(r => r.json())
     .then(data => {
