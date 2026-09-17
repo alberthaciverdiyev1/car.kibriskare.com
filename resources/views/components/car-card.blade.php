@@ -55,12 +55,6 @@
                 </span>
             @endif
 
-            @if($car->is_urgent)
-                <span class="bg-amber-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-md shadow-xs flex items-center gap-1">
-                    <i class="bi bi-lightning-charge-fill text-[9px]"></i> ÖNƏ ÇƏKİLMİŞ
-                </span>
-            @endif
-
             @if(in_array($car->deal_type->value, ['rent_daily', 'rent_monthly', 'rent']))
                 <span class="bg-emerald-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-md shadow-xs">
                     KİRAYƏ
