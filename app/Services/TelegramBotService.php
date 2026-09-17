@@ -2,9 +2,7 @@
 
 namespace App\Services;
 
-use App\Modules\Property\Models\Property;
-use App\Modules\PropertyRequest\Models\PropertyRequest;
-use App\Modules\Roommate\Models\RoommateListing;
+use App\Modules\Car\Models\Car;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\Log;
@@ -52,40 +50,22 @@ class TelegramBotService
         $description = \Illuminate\Support\Str::limit($description, 250);
         $descText = $description ? "📝 *Təsvir:* {$description}\n" : '';
 
-        if ($model instanceof Property) {
-            $type = 'property';
-            $price = number_format($model->price) . ' ' . $model->currency;
+        if ($model instanceof \App\Modules\Car\Models\Car) {
+            $type = 'car';
+            $title = $model->display_title;
+            $price = $model->formatted_price;
             $city = $this->getTranslatableString($model->city?->name, '-');
-            $district = $this->getTranslatableString($model->district?->name, '-');
-            $rooms = $model->rooms ?? '-';
-            $area = $model->area ? $model->area . ' m²' : '-';
+            $year = $model->year;
+            $mileage = $model->formatted_mileage;
+            $fuel = $model->fuel_type?->label() ?? '-';
+            $transmission = $model->transmission?->label() ?? '-';
 
-            $details = "🏢 *YENİ ƏMLAK ELANI*\n"
-                . "🏷️ *Başlıq:* {$title}\n"
+            $details = "🚗 *YENİ AVTOMOBİL ELANI*\n"
+                . "🏷️ *Avtomobil:* {$title}\n"
                 . "💰 *Qiymət:* {$price}\n"
-                . "📍 *Məkan:* {$city} / {$district}\n"
-                . "🚪 *Otaq:* {$rooms} otaqlı | *Sahə:* {$area}\n"
-                . $descText;
-        } elseif ($model instanceof PropertyRequest) {
-            $type = 'request';
-            $budget = number_format($model->budget_min) . ' - ' . number_format($model->budget_max) . ' ' . $model->currency;
-            $city = $this->getTranslatableString($model->city?->name, '-');
-            $district = $this->getTranslatableString($model->district?->name, '-');
-
-            $details = "🔍 *YENİ ƏMLAK TƏLƏBİ (AXTARIRAM)*\n"
-                . "🏷️ *Başlıq:* {$title}\n"
-                . "💰 *Büdcə:* {$budget}\n"
-                . "📍 *Məkan:* {$city} / {$district}\n"
-                . $descText;
-        } elseif ($model instanceof RoommateListing) {
-            $type = 'roommate';
-            $price = number_format($model->price) . ' ' . $model->currency;
-            $city = $this->getTranslatableString($model->city?->name, '-');
-
-            $details = "🤝 *YENİ OTAQ YOLDAŞI ELANI*\n"
-                . "🏷️ *Başlıq:* {$title}\n"
-                . "💰 *Qiymət:* {$price}\n"
-                . "📍 *Məkan:* {$city}\n"
+                . "📅 *İl:* {$year} | 🛣️ *Yürüş:* {$mileage}\n"
+                . "⚙️ *Transmissiya:* {$transmission} | ⛽ *Yanacaq:* {$fuel}\n"
+                . "📍 *Şəhər:* {$city}\n"
                 . $descText;
         }
 
@@ -180,13 +160,13 @@ class TelegramBotService
             $data = $callbackQuery['data'];
             $originalText = $callbackQuery['message']['text'] ?? $callbackQuery['message']['caption'] ?? '';
 
-            if (preg_match('/^approve_(property|request|roommate)_(\d+)$/', $data, $matches)) {
+            if (preg_match('/^approve_(car|property|request|roommate)_(\d+)$/', $data, $matches)) {
                 $type = $matches[1];
                 $id = $matches[2];
 
                 $model = $this->getModelInstance($type, $id);
                 if ($model) {
-                    $model->status = $type === 'property' ? 'published' : 'published';
+                    $model->status = $type === 'car' ? \App\Modules\Car\Enums\CarStatus::Active : 'published';
                     if (isset($model->rejection_reason)) {
                         $model->rejection_reason = null;
                     }
@@ -221,7 +201,7 @@ class TelegramBotService
                         'text' => 'Elan təsdiqləndi!',
                     ]);
                 }
-            } elseif (preg_match('/^reject_prompt_(property|request|roommate)_(\d+)$/', $data, $matches)) {
+            } elseif (preg_match('/^reject_prompt_(car|property|request|roommate)_(\d+)$/', $data, $matches)) {
                 $type = $matches[1];
                 $id = $matches[2];
 
@@ -290,7 +270,7 @@ class TelegramBotService
 
                 $model = $this->getModelInstance($type, $id);
                 if ($model) {
-                    $model->status = 'rejected';
+                    $model->status = $type === 'car' ? \App\Modules\Car\Enums\CarStatus::Rejected : 'rejected';
                     $model->rejection_reason = $text;
                     $model->save();
 
@@ -332,12 +312,10 @@ class TelegramBotService
     protected function getModelInstance(string $type, int $id)
     {
         switch ($type) {
+            case 'car':
+                return \App\Modules\Car\Models\Car::find($id);
             case 'property':
-                return Property::find($id);
-            case 'request':
-                return PropertyRequest::find($id);
-            case 'roommate':
-                return RoommateListing::find($id);
+                return class_exists(\App\Modules\Property\Models\Property::class) ? \App\Modules\Property\Models\Property::find($id) : null;
         }
         return null;
     }

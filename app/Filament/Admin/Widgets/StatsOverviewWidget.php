@@ -2,13 +2,10 @@
 
 namespace App\Filament\Admin\Widgets;
 
-use App\Modules\Agency\Models\Agency;
-use App\Modules\Agency\Models\Agent;
+use App\Modules\Car\Enums\CarStatus;
+use App\Modules\Car\Models\Autosalon;
+use App\Modules\Car\Models\Car;
 use App\Modules\Inquiry\Models\Inquiry;
-use App\Modules\Property\Enums\PropertyStatus;
-use App\Modules\Property\Models\Property;
-use App\Modules\PropertyRequest\Models\PropertyRequest;
-use App\Modules\Roommate\Models\RoommateListing;
 use App\Modules\Shared\Models\User;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
@@ -28,38 +25,34 @@ class StatsOverviewWidget extends BaseWidget
         $now = Carbon::now();
 
         // 7-day sparkline data
-        $propertyTrend = [];
+        $carTrend = [];
         $userTrend = [];
         for ($i = 6; $i >= 0; $i--) {
             $day = $now->copy()->subDays($i)->format('Y-m-d');
-            $propertyTrend[] = Property::whereDate('created_at', $day)->count();
+            $carTrend[] = Car::whereDate('created_at', $day)->count();
             $userTrend[] = User::whereDate('created_at', $day)->count();
         }
 
-        $totalProperties = Property::count();
-        $publishedCount = Property::where('status', PropertyStatus::Published)->count();
-        $pendingCount = Property::where('status', PropertyStatus::PendingApproval)->count();
-        $totalViews = (int) Property::sum('views_count');
+        $totalCars = Car::count();
+        $activeCount = Car::where('status', CarStatus::Active)->count();
+        $pendingCount = Car::where('status', CarStatus::Pending)->count();
+        $totalViews = (int) Car::sum('views_count');
 
         $totalUsers = User::count();
         $newUsersThisWeek = User::where('created_at', '>=', $now->copy()->subDays(7))->count();
 
-        $agencyCount = Agency::count();
-        $agentCount = Agent::count();
-
-        $roommateCount = RoommateListing::count();
-        $requestCount = PropertyRequest::count();
+        $autosalonCount = Autosalon::count();
         $inquiryCount = Inquiry::count();
 
         return [
-            Stat::make('Ümumi Əmlak', number_format($totalProperties))
-                ->description("Son 7 gündə: +" . array_sum($propertyTrend))
-                ->descriptionIcon('heroicon-m-home-modern')
+            Stat::make('Ümumi Avtomobil', number_format($totalCars))
+                ->description("Son 7 gündə: +" . array_sum($carTrend))
+                ->descriptionIcon('heroicon-m-truck')
                 ->color('primary')
-                ->chart($propertyTrend),
+                ->chart($carTrend),
 
-            Stat::make('Dərc Olunmuş', number_format($publishedCount))
-                ->description('Saytda aktiv elanlar')
+            Stat::make('Aktiv Elanlar', number_format($activeCount))
+                ->description('Saytda dərc edilmiş elanlar')
                 ->descriptionIcon('heroicon-m-check-badge')
                 ->color('success'),
 
@@ -74,15 +67,10 @@ class StatsOverviewWidget extends BaseWidget
                 ->color('info')
                 ->chart($userTrend),
 
-            Stat::make('Agentliklər & Agentlər', "{$agencyCount} / {$agentCount}")
-                ->description("{$agencyCount} şirkət, {$agentCount} rieltor")
-                ->descriptionIcon('heroicon-m-building-office-2')
+            Stat::make('Avtosalonlar (Qalereyalar)', number_format($autosalonCount))
+                ->description('Qeydiyyatlı rəsmi dilerlər')
+                ->descriptionIcon('heroicon-m-building-storefront')
                 ->color('primary'),
-
-            Stat::make('Otaq Yoldaşı & Sifariş', "{$roommateCount} / {$requestCount}")
-                ->description("{$roommateCount} otaq, {$requestCount} tələb")
-                ->descriptionIcon('heroicon-m-user-group')
-                ->color('success'),
 
             Stat::make('Müştəri Müraciətləri', number_format($inquiryCount))
                 ->description('Gələn mesaj & sorğular')
@@ -90,9 +78,10 @@ class StatsOverviewWidget extends BaseWidget
                 ->color('danger'),
 
             Stat::make('Ümumi Baxış Sayı', number_format($totalViews))
-                ->description('Bütün baxışlar cəmi')
+                ->description('Bütün elanların baxış cəmi')
                 ->descriptionIcon('heroicon-m-eye')
                 ->color('gray'),
         ];
     }
 }
+

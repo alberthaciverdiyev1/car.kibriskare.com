@@ -19,11 +19,11 @@ class DashboardController extends Controller
 
     public function myProperties(): RedirectResponse
     {
-        return $this->redirectByRole('/admin/properties', '/agency/properties');
+        return $this->redirectByRole('/admin/cars', '/agency/cars');
     }
 
     /**
-     * Admin istifadəçi admin panelinə, digərləri agentlik panelinə yönləndirilir.
+     * Admin istifadəçi admin panelinə, digərləri avtosalon/agency panelinə yönləndirilir.
      * Giriş etməyənlər login səhifəsinə aparılır.
      */
     private function redirectByRole(string $adminPath, string $agencyPath): RedirectResponse
@@ -39,3 +39,4 @@ class DashboardController extends Controller
         return redirect($agencyPath);
     }
 }
+

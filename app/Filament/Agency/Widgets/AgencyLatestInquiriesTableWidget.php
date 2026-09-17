@@ -2,9 +2,8 @@
 
 namespace App\Filament\Agency\Widgets;
 
-use App\Filament\Agency\Resources\PropertyResource;
+use App\Modules\Car\Models\Car;
 use App\Modules\Inquiry\Models\Inquiry;
-use App\Modules\Property\Models\Property;
 use Filament\Tables;
 use Filament\Tables\Table;
 use Filament\Widgets\TableWidget as BaseWidget;
@@ -20,38 +19,31 @@ class AgencyLatestInquiriesTableWidget extends BaseWidget
 
     public function getHeading(): ?string
     {
-        return app()->getLocale() === 'tr'
-            ? 'Son Müşteri Talepleri ve Mesajları'
-            : (app()->getLocale() === 'az' ? 'Son Müştəri Müraciətləri' : 'Recent Client Inquiries');
+        return 'Son Müşteri Talepleri ve Mesajları';
     }
 
     public function table(Table $table): Table
     {
         $user = Auth::user();
-        $tenantAgency = $user?->tenantAgency();
-        $isOwner = $user?->isTenantOwner() && $tenantAgency;
+        $autosalonId = $user?->autosalon?->id ?? $user?->autosalons()->value('id');
 
-        $propertyQuery = Property::query();
-        if ($isOwner) {
-            $propertyQuery->where('agency_id', $tenantAgency->id);
-        } else {
-            $propertyQuery->where('user_id', $user?->id);
-        }
-
-        $propertyIds = $propertyQuery->pluck('id');
+        $carIds = Car::where(function ($q) use ($user, $autosalonId) {
+            $q->where('user_id', $user?->id);
+            if ($autosalonId) {
+                $q->orWhere('autosalon_id', $autosalonId);
+            }
+        })->pluck('id');
 
         return $table
             ->query(
                 Inquiry::query()
-                    ->with(['property'])
-                    ->where(function ($q) use ($propertyIds, $isOwner, $tenantAgency, $user) {
-                        if ($propertyIds->isNotEmpty()) {
-                            $q->whereIn('property_id', $propertyIds);
+                    ->with(['car.brand', 'car.model'])
+                    ->where(function ($q) use ($carIds, $autosalonId) {
+                        if ($carIds->isNotEmpty()) {
+                            $q->whereIn('car_id', $carIds);
                         }
-                        if ($isOwner && $tenantAgency) {
-                            $q->orWhere('agency_id', $tenantAgency->id);
-                        } else {
-                            $q->orWhere('agent_id', $user?->agent?->id);
+                        if ($autosalonId) {
+                            $q->orWhere('autosalon_id', $autosalonId);
                         }
                     })
                     ->latest('id')
@@ -59,29 +51,29 @@ class AgencyLatestInquiriesTableWidget extends BaseWidget
             )
             ->columns([
                 Tables\Columns\TextColumn::make('name')
-                    ->label(app()->getLocale() === 'tr' ? 'Müşteri' : (app()->getLocale() === 'az' ? 'Müştəri' : 'Client'))
+                    ->label('Müşteri')
                     ->searchable()
                     ->weight('bold'),
 
                 Tables\Columns\TextColumn::make('phone')
-                    ->label(app()->getLocale() === 'tr' ? 'Telefon' : (app()->getLocale() === 'az' ? 'Telefon' : 'Phone'))
+                    ->label('Telefon')
                     ->icon('heroicon-m-phone'),
 
-                Tables\Columns\TextColumn::make('property.title')
-                    ->label(app()->getLocale() === 'tr' ? 'İlgili İlan' : (app()->getLocale() === 'az' ? 'Əlaqəli Əmlak' : 'Property'))
+                Tables\Columns\TextColumn::make('car.display_title')
+                    ->label('İlgili Araç')
                     ->limit(25)
-                    ->placeholder(app()->getLocale() === 'tr' ? 'Genel Talep' : 'Ümumi Müraciət'),
+                    ->placeholder('Genel Talep'),
 
                 Tables\Columns\TextColumn::make('message')
-                    ->label(app()->getLocale() === 'tr' ? 'Mesaj' : (app()->getLocale() === 'az' ? 'Mesaj' : 'Message'))
+                    ->label('Mesaj')
                     ->limit(35),
 
                 Tables\Columns\TextColumn::make('created_at')
-                    ->label(app()->getLocale() === 'tr' ? 'Tarih' : (app()->getLocale() === 'az' ? 'Tarix' : 'Date'))
+                    ->label('Tarih')
                     ->since(),
             ])
-            ->emptyStateHeading(app()->getLocale() === 'tr' ? 'Henüz müşteri talebi bulunmuyor' : (app()->getLocale() === 'az' ? 'Hələ ki müraciət yoxdur' : 'No inquiries yet'))
-            ->emptyStateDescription(app()->getLocale() === 'tr' ? 'İlanlarınızdan gelen mesajlar burada listelenecektir.' : 'Elanlarınızdan daxil olan müraciətlər burada görünəcək.')
+            ->emptyStateHeading('Henüz müşteri talebi bulunmuyor')
+            ->emptyStateDescription('İlanlarınızdan gelen mesajlar burada listelenecektir.')
             ->emptyStateIcon('heroicon-o-chat-bubble-left-right');
     }
 }

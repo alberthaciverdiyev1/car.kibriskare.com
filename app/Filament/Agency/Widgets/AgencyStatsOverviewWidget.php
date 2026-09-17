@@ -2,11 +2,9 @@
 
 namespace App\Filament\Agency\Widgets;
 
+use App\Modules\Car\Enums\CarStatus;
+use App\Modules\Car\Models\Car;
 use App\Modules\Inquiry\Models\Inquiry;
-use App\Modules\Property\Enums\PropertyStatus;
-use App\Modules\Property\Models\ListingPhoneReveal;
-use App\Modules\Property\Models\Property;
-use App\Modules\PropertyRequest\Models\PropertyRequest;
 use Filament\Widgets\StatsOverviewWidget as BaseWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 use Illuminate\Support\Carbon;
@@ -25,102 +23,65 @@ class AgencyStatsOverviewWidget extends BaseWidget
     protected function getStats(): array
     {
         $user = Auth::user();
-        $tenantAgency = $user?->tenantAgency();
-        $isOwner = $user?->isTenantOwner() && $tenantAgency;
+        $autosalonId = $user?->autosalon?->id ?? $user?->autosalons()->value('id');
 
         $now = Carbon::now();
 
-        // 1. Property Query Scoping
-        $propertyQuery = Property::query();
-        if ($isOwner) {
-            $propertyQuery->where('agency_id', $tenantAgency->id);
-        } else {
-            $propertyQuery->where('user_id', $user?->id);
-        }
+        $carQuery = Car::query()->where(function ($q) use ($user, $autosalonId) {
+            $q->where('user_id', $user?->id);
+            if ($autosalonId) {
+                $q->orWhere('autosalon_id', $autosalonId);
+            }
+        });
 
-        $propertyIds = (clone $propertyQuery)->pluck('id');
+        $carIds = (clone $carQuery)->pluck('id');
 
-        // 7-day sparkline data for properties
-        $propertyTrend = [];
+        // 7-day sparkline data
+        $carTrend = [];
         for ($i = 6; $i >= 0; $i--) {
             $day = $now->copy()->subDays($i)->format('Y-m-d');
-            $propertyTrend[] = (clone $propertyQuery)->whereDate('created_at', $day)->count();
+            $carTrend[] = (clone $carQuery)->whereDate('created_at', $day)->count();
         }
 
-        $totalProperties = $propertyIds->count();
-        $publishedCount = (clone $propertyQuery)->where('status', PropertyStatus::Published)->count();
-        $pendingCount = (clone $propertyQuery)->where('status', PropertyStatus::PendingApproval)->count();
-        $totalViews = (int) (clone $propertyQuery)->sum('views_count');
+        $totalCars = $carIds->count();
+        $activeCount = (clone $carQuery)->where('status', CarStatus::Active)->count();
+        $pendingCount = (clone $carQuery)->where('status', CarStatus::Pending)->count();
+        $totalViews = (int) (clone $carQuery)->sum('views_count');
 
-        // 2. Inquiries Query Scoping
+        // Inquiries for these cars
         $inquiriesCount = 0;
-        if ($propertyIds->isNotEmpty()) {
-            $inquiriesCount = Inquiry::whereIn('property_id', $propertyIds)
-                ->when($isOwner, fn ($q) => $q->orWhere('agency_id', $tenantAgency->id))
+        if ($carIds->isNotEmpty()) {
+            $inquiriesCount = Inquiry::whereIn('car_id', $carIds)
+                ->when($autosalonId, fn ($q) => $q->orWhere('autosalon_id', $autosalonId))
                 ->count();
         }
 
-        // 3. Phone reveals
-        $phoneRevealsCount = 0;
-        if ($propertyIds->isNotEmpty()) {
-            $phoneRevealsCount = ListingPhoneReveal::whereIn('listing_id', $propertyIds)->count();
-        }
-
-        // 4. Market property requests (Arıyorum)
-        $marketRequestsCount = PropertyRequest::count();
-
-        // Stats array
-        $stats = [
-            Stat::make(__('panel.my_listings'), number_format($totalProperties))
-                ->description(app()->getLocale() === 'tr' ? 'Toplam portföy' : (app()->getLocale() === 'az' ? 'Ümumi portfel' : 'Total listings'))
-                ->descriptionIcon('heroicon-m-home-modern')
+        return [
+            Stat::make(__('panel.my_listings') ?: 'İlanlarım', number_format($totalCars))
+                ->description('Toplam araç portföyü')
+                ->descriptionIcon('heroicon-m-truck')
                 ->color('primary')
-                ->chart($propertyTrend),
+                ->chart($carTrend),
 
-            Stat::make(app()->getLocale() === 'tr' ? 'Yayında Olanlar' : (app()->getLocale() === 'az' ? 'Dərc Olunmuş' : 'Published'), number_format($publishedCount))
-                ->description(app()->getLocale() === 'tr' ? 'Aktif elanlar' : (app()->getLocale() === 'az' ? 'Aktiv elanlar' : 'Active listings'))
+            Stat::make('Yayında Olanlar', number_format($activeCount))
+                ->description('Aktif araç ilanları')
                 ->descriptionIcon('heroicon-m-check-badge')
                 ->color('success'),
 
-            Stat::make(app()->getLocale() === 'tr' ? 'Təsdiq Gözləyən' : (app()->getLocale() === 'az' ? 'Təsdiq Gözləyən' : 'Pending Approval'), number_format($pendingCount))
-                ->description($pendingCount > 0 ? (app()->getLocale() === 'tr' ? 'İnceleme aşamasında' : 'Moderasiyada') : (app()->getLocale() === 'tr' ? 'Bekleyen yok' : 'Hamısı aktiv'))
+            Stat::make('İncelemede Olanlar', number_format($pendingCount))
+                ->description($pendingCount > 0 ? 'Onay bekleyen ilanlar' : 'Bekleyen yok')
                 ->descriptionIcon('heroicon-m-clock')
                 ->color($pendingCount > 0 ? 'warning' : 'gray'),
 
-            Stat::make(app()->getLocale() === 'tr' ? 'Görüntülenme Sayısı' : (app()->getLocale() === 'az' ? 'Baxış Sayı' : 'Total Views'), number_format($totalViews))
-                ->description(app()->getLocale() === 'tr' ? 'Tüm ilanların görüntülenmesi' : (app()->getLocale() === 'az' ? 'Bütün elanların baxışı' : 'Total property views'))
+            Stat::make('Görüntülenme Sayısı', number_format($totalViews))
+                ->description('Toplam ilan görüntülenmesi')
                 ->descriptionIcon('heroicon-m-eye')
                 ->color('info'),
 
-            Stat::make(__('panel.inquiries'), number_format($inquiriesCount))
-                ->description(app()->getLocale() === 'tr' ? 'Müşteri mesajları' : (app()->getLocale() === 'az' ? 'Gələn müraciətlər' : 'Lead messages'))
+            Stat::make(__('panel.inquiries') ?: 'Müşteri Talepleri', number_format($inquiriesCount))
+                ->description('Gelen müşteri mesajları')
                 ->descriptionIcon('heroicon-m-chat-bubble-left-right')
                 ->color('primary'),
-
-            Stat::make(app()->getLocale() === 'tr' ? 'Numara Gösterimleri' : (app()->getLocale() === 'az' ? 'Nömrə Baxışları' : 'Phone Reveals'), number_format($phoneRevealsCount))
-                ->description(app()->getLocale() === 'tr' ? 'Telefonu göster tıklamaları' : (app()->getLocale() === 'az' ? 'Telefonu göstər klikləri' : 'Phone click reveals'))
-                ->descriptionIcon('heroicon-m-phone')
-                ->color('success'),
         ];
-
-        // If Agency Owner -> Show Agent count
-        if ($isOwner) {
-            $agentsCount = $tenantAgency->agents()->count();
-            $stats[] = Stat::make(__('panel.my_agents'), number_format($agentsCount))
-                ->description(app()->getLocale() === 'tr' ? 'Ekip danışmanları' : (app()->getLocale() === 'az' ? 'Kollektiv rieltorları' : 'Team agents'))
-                ->descriptionIcon('heroicon-m-user-group')
-                ->color('warning');
-        }
-
-        // Market Seeking requests (Arıyorum) - Yalnız Admin, Agentlik sahibi və Rieltorlar üçün
-        $isAgentOrAgency = $isOwner || $user?->isAdmin() || (bool) $user?->agent()->exists();
-        if ($isAgentOrAgency) {
-            $stats[] = Stat::make(__('panel.property_requests'), number_format($marketRequestsCount))
-                ->description(app()->getLocale() === 'tr' ? 'Pazardaki alıcı/kiracı talepleri' : (app()->getLocale() === 'az' ? 'Bazarda axtarılan əmlaklar' : 'Open market requests'))
-                ->descriptionIcon('heroicon-m-megaphone')
-                ->color('danger');
-        }
-
-        return $stats;
     }
 }

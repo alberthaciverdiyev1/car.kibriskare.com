@@ -110,22 +110,20 @@ class ActivityLogServiceProvider extends ServiceProvider
         // 2. MODEL LIFECYCLE EVENTS (CREATE, UPDATE, DELETE)
         // =========================================================================
         $models = [
-            \App\Modules\Property\Models\Property::class => 'Əmlak Elanı',
+            \App\Modules\Car\Models\Car::class => 'Avtomobil Elanı',
+            \App\Modules\Car\Models\Autosalon::class => 'Avtosalon',
+            \App\Modules\Car\Models\CarBrand::class => 'Avtomobil Markası',
+            \App\Modules\Car\Models\CarModel::class => 'Avtomobil Modeli',
+            \App\Modules\Car\Models\CarBodyType::class => 'Ban Növü',
+            \App\Modules\Car\Models\CarFeature::class => 'Avtomobil Təchizatı',
             \App\Modules\Shared\Models\User::class => 'İstifadəçi Hesabı',
             \App\Modules\Inquiry\Models\Inquiry::class => 'Müştəri Müraciəti (Inquiry)',
             \App\Modules\Blog\Models\Blog::class => 'Bloq Məqaləsi',
-            \App\Modules\Roommate\Models\RoommateListing::class => 'Otaq Yoldaşı Elanı',
-            \App\Modules\PropertyRequest\Models\PropertyRequest::class => 'Əmlak Tələbi (Axtarıram)',
-            \App\Modules\Agency\Models\Agency::class => 'Agentlik',
-            \App\Modules\Agency\Models\Agent::class => 'Rieltor / Agent',
             \App\Modules\Shared\Models\PageSeo::class => 'SEO Səhifə Tənzimləməsi',
             \App\Modules\Shared\Models\SeoSetting::class => 'Qlobal SEO Skriptləri',
             \App\Modules\Shared\Models\SiteSetting::class => 'Sayt Tənzimləmələri',
             \App\Modules\Location\Models\City::class => 'Şəhər',
             \App\Modules\Location\Models\District::class => 'Rayon / Bölgə',
-            \App\Modules\Location\Models\Amenity::class => 'Əmlak Xüsusiyyəti (Amenity)',
-            \App\Modules\Location\Models\Filter::class => 'Axtarış Filtri',
-            \App\Modules\Location\Models\FilterOption::class => 'Filtr Seçimi',
         ];
 
         foreach ($models as $modelClass => $modelName) {

@@ -2,7 +2,8 @@
 
 namespace Tests\Feature;
 
-use App\Modules\Property\Models\Property;
+use App\Modules\Car\Enums\CarStatus;
+use App\Modules\Car\Models\Car;
 use Tests\TestCase;
 
 class FavoritesPageTest extends TestCase
@@ -20,13 +21,13 @@ class FavoritesPageTest extends TestCase
     {
         $this->withoutMiddleware();
 
-        $property = Property::where('status', \App\Modules\Property\Enums\PropertyStatus::Published)->first();
-        if (! $property) {
-            $this->markTestSkipped('No published property found.');
+        $car = Car::where('status', CarStatus::Active)->first();
+        if (! $car) {
+            $this->markTestSkipped('No active car found.');
         }
 
         $response = $this->postJson(route('favorites.items'), [
-            'ids' => [$property->id],
+            'ids' => [$car->id],
         ]);
 
         $response->assertStatus(200);

@@ -2,7 +2,7 @@
 
 namespace App\Modules\Location\Models;
 
-use App\Modules\Property\Models\Property;
+use App\Modules\Car\Models\Car;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -18,7 +18,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
  * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Modules\Location\Models\District> $districts
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Modules\Property\Models\Property> $properties
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Modules\Car\Models\Car> $cars
  */
 use App\Modules\Shared\Concerns\HasLocalizedName;
 
@@ -49,8 +49,8 @@ class City extends Model
         return $this->hasMany(District::class)->where('is_active', true)->orderBy('sort_order', 'asc');
     }
 
-    public function properties(): HasMany
+    public function cars(): HasMany
     {
-        return $this->hasMany(Property::class);
+        return $this->hasMany(Car::class);
     }
 }

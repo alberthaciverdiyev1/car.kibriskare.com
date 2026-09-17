@@ -2,17 +2,17 @@
 
 namespace App\Modules\Shared\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
-use App\Modules\Agency\Models\Agency;
-use App\Modules\Agency\Models\Agent;
-use App\Modules\Property\Models\Property;
+use App\Modules\Car\Models\Autosalon;
+use App\Modules\Car\Models\Car;
+use App\Modules\Car\Models\Compare;
+use App\Modules\Car\Models\Favorite;
 use Database\Factories\UserFactory;
 use Filament\Models\Contracts\FilamentUser;
 use Filament\Panel;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
-use Illuminate\Database\Eloquent\Relations\HasOneThrough;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 
@@ -25,9 +25,9 @@ use Illuminate\Notifications\Notifiable;
  * @property string|null $remember_token
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
- * @property-read \App\Modules\Agency\Models\Agent|null $agent
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Modules\Agency\Models\Agency> $agencies
- * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Modules\Property\Models\Property> $properties
+ * @property-read \App\Modules\Car\Models\Autosalon|null $autosalon
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Modules\Car\Models\Autosalon> $autosalons
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Modules\Car\Models\Car> $cars
  */
 class User extends Authenticatable implements FilamentUser
 {
@@ -66,7 +66,7 @@ class User extends Authenticatable implements FilamentUser
     /**
      * Filament panellərinə giriş icazəsi.
      * - Admin panelinə yalnız sistem admini daxil ola bilər.
-     * - Agency / İstifadəçi panelinə bütün daxil olmuş istifadəçilər daxil ola bilər.
+     * - Agency / Avtosalon / İstifadəçi panelinə bütün daxil olmuş istifadəçilər daxil ola bilər.
      */
     public function canAccessPanel(Panel $panel): bool
     {
@@ -95,84 +95,76 @@ class User extends Authenticatable implements FilamentUser
     }
 
     /**
-     * İstifadəçinin rieltor (agent) qeydi (varsa)
+     * İstifadəçinin avtosalonu (1-ə 1)
      */
-    public function agent(): HasOne
+    public function autosalon(): HasOne
     {
-        return $this->hasOne(Agent::class, 'user_id');
+        return $this->hasOne(Autosalon::class, 'user_id');
     }
 
     /**
-     * İstifadəçinin sahibi olduğu agentliklər
+     * İstifadəçinin sahibi olduğu avtosalonlar
      */
-    public function agencies(): HasMany
+    public function autosalons(): HasMany
     {
-        return $this->hasMany(Agency::class, 'owner_id');
+        return $this->hasMany(Autosalon::class, 'user_id');
     }
 
     /**
-     * Rieltorun aid olduğu agentlik (agent profilindən keçərək)
+     * İstifadəçinin tenant avtosalonu
      */
-    public function agency(): HasOneThrough
+    public function tenantAutosalon(): ?Autosalon
     {
-        return $this->hasOneThrough(
-            Agency::class,
-            Agent::class,
-            'user_id',   // agents.user_id
-            'id',        // agencies.id
-            'id',        // users.id
-            'agency_id'  // agents.agency_id
-        );
+        return $this->autosalon ?? $this->autosalons()->first();
     }
 
     /**
-     * İstifadəçinin "tenant" agentliyi.
-     * Agentlik sahibi üçün sahib olduğu agentlik, rieltor üçün isə
-     * aid olduğu agentlik qaytarılır.
+     * İstifadəçinin avtosalon sahibi olub-olmadığını yoxlayır.
      */
-    public function tenantAgency(): ?Agency
+    public function isAutosalonOwner(): bool
     {
-        if ($this->agencies()->exists()) {
-            return $this->agencies()->first();
-        }
-
-        return $this->agent?->agency;
+        return $this->autosalons()->exists();
     }
 
     /**
-     * İstifadəçinin agentlik sahibi olub-olmadığını yoxlayır.
-     * Sahib agentlikləri idarə edə bilər; rieltor isə yalnız öz elanlarını.
+     * Köhnə metodlarla uyğunluq (Agency/Tenant fallback)
      */
     public function isTenantOwner(): bool
     {
-        return $this->agencies()->exists();
+        return $this->isAutosalonOwner();
+    }
+
+    public function tenantAgency(): ?Autosalon
+    {
+        return $this->tenantAutosalon();
     }
 
     /**
-     * İstifadəçinin yerləşdirdiyi bütün elanlar
+     * İstifadəçinin yerləşdirdiyi bütün avtomobil elanları
      */
-    public function properties(): HasMany
+    public function cars(): HasMany
     {
-        return $this->hasMany(Property::class, 'user_id');
+        return $this->hasMany(Car::class, 'user_id');
     }
 
     public function favorites(): HasMany
     {
-        return $this->hasMany(\App\Modules\Property\Models\Favorite::class);
+        return $this->hasMany(Favorite::class);
     }
 
-    public function favoriteProperties(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    public function favoriteCars(): BelongsToMany
     {
-        return $this->belongsToMany(Property::class, 'favorites');
+        return $this->belongsToMany(Car::class, 'favorites');
     }
 
     public function compares(): HasMany
     {
-        return $this->hasMany(\App\Modules\Property\Models\Compare::class);
+        return $this->hasMany(Compare::class);
     }
 
-    public function compareProperties(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    public function compareCars(): BelongsToMany
     {
-        return $this->belongsToMany(Property::class, 'compares');
+        return $this->belongsToMany(Car::class, 'compares');
     }
 }
+

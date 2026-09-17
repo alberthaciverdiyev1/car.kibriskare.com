@@ -16,7 +16,7 @@ class InquiryResource extends Resource
 
     protected static ?string $navigationIcon = 'heroicon-o-chat-bubble-left-right';
 
-    protected static ?string $navigationGroup = 'Əmlak və Müraciətlər';
+    protected static ?string $navigationGroup = 'Avtomobil Kataloqu';
 
     protected static ?string $navigationLabel = 'Müştəri Müraciətləri';
 
@@ -24,7 +24,7 @@ class InquiryResource extends Resource
 
     protected static ?string $pluralModelLabel = 'Müştəri Müraciətləri';
 
-    protected static ?int $navigationSort = 4;
+    protected static ?int $navigationSort = 5;
 
     public static function getNavigationBadge(): ?string
     {
@@ -43,14 +43,21 @@ class InquiryResource extends Resource
             ->schema([
                 Forms\Components\Section::make('Müraciət Məlumatları')
                     ->schema([
-                        Forms\Components\Select::make('property_id')
-                            ->label('Aid Olduğu Əmlak')
-                            ->relationship('property', 'title')
-                            ->getOptionLabelFromRecordUsing(fn ($record) => ($record->code ? "[{$record->code}] " : '') . (is_array($record->title) ? ($record->title['az'] ?? ($record->title['tr'] ?? reset($record->title))) : $record->title))
+                        Forms\Components\Select::make('car_id')
+                            ->label('Aid Olduğu Avtomobil')
+                            ->relationship('car', 'id')
+                            ->getOptionLabelFromRecordUsing(fn ($record) => "[#{$record->id}] {$record->display_title}")
                             ->searchable()
                             ->preload()
                             ->nullable()
-                            ->placeholder('Ümumi Müraciət (Əmlaksız)'),
+                            ->placeholder('Ümumi Müraciət'),
+
+                        Forms\Components\Select::make('autosalon_id')
+                            ->label('Avtosalon')
+                            ->relationship('autosalon', 'name')
+                            ->searchable()
+                            ->preload()
+                            ->nullable(),
 
                         Forms\Components\Select::make('status')
                             ->label('Status')
@@ -100,19 +107,17 @@ class InquiryResource extends Resource
                     ->searchable()
                     ->placeholder('-'),
 
-                Tables\Columns\TextColumn::make('property.code')
-                    ->label('Elan Kodu')
-                    ->badge()
-                    ->color('primary')
-                    ->placeholder('-')
-                    ->searchable(),
-
-                Tables\Columns\TextColumn::make('property.title')
-                    ->label('Əmlak')
-                    ->formatStateUsing(fn ($state, $record) => $record->property ? (is_array($record->property->title) ? ($record->property->title['az'] ?? ($record->property->title['tr'] ?? reset($record->property->title))) : $record->property->title) : 'Ümumi Müraciət')
+                Tables\Columns\TextColumn::make('car.display_title')
+                    ->label('Avtomobil')
                     ->limit(25)
                     ->placeholder('Ümumi Müraciət')
                     ->searchable(),
+
+                Tables\Columns\TextColumn::make('autosalon.name')
+                    ->label('Avtosalon')
+                    ->badge()
+                    ->color('info')
+                    ->placeholder('—'),
 
                 Tables\Columns\SelectColumn::make('status')
                     ->label('Status')

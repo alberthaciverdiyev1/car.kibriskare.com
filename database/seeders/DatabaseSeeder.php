@@ -208,23 +208,13 @@ class DatabaseSeeder extends Seeder
         );
 
         // ==========================================
-        // 5. YERLƏŞMƏLƏR (ŞƏHƏRLƏR VƏ RAYONLAR) + NÜMUNƏ ELANLAR (KUZEY KIBRIS)
+        // 5. YERLƏŞMƏLƏR (ŞƏHƏRLƏR VƏ RAYONLAR)
         // ==========================================
         $this->call(NorthernCyprusLocationSeeder::class);
 
         // ==========================================
-        // 6. Agentliklər və Rieltorlar (6 agentlik + 4 müstəqil rieltor)
-        // ==========================================
-        $this->call(AgencyAndAgentSeeder::class);
-
-        // ==========================================
-        // 7. Bloqlar (30 qısa məqalə)
+        // 6. Bloqlar (Məqalələr)
         // ==========================================
         $this->call(BlogSeeder::class);
-
-        // ==========================================
-        // 8. Populyar Axtarışlar (SEO Teqləri)
-        // ==========================================
-        $this->call(QuickSearchSeeder::class);
     }
 }

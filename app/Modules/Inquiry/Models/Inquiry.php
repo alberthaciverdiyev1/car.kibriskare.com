@@ -2,10 +2,9 @@
 
 namespace App\Modules\Inquiry\Models;
 
+use App\Modules\Car\Models\Autosalon;
+use App\Modules\Car\Models\Car;
 use App\Modules\Shared\Models\User;
-use App\Modules\Property\Models\Property;
-use App\Modules\Agency\Models\Agency;
-use App\Modules\Agency\Models\Agent;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -13,6 +12,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 
 /**
  * @property int $id
+ * @property int|null $car_id
+ * @property int|null $autosalon_id
  * @property int|null $property_id
  * @property int|null $agency_id
  * @property int|null $agent_id
@@ -27,9 +28,8 @@ use Illuminate\Database\Eloquent\SoftDeletes;
  * @property \Illuminate\Support\Carbon|null $created_at
  * @property \Illuminate\Support\Carbon|null $updated_at
  * @property \Illuminate\Support\Carbon|null $deleted_at
- * @property-read \App\Modules\Property\Models\Property|null $property
- * @property-read \App\Modules\Agency\Models\Agency|null $agency
- * @property-read \App\Modules\Agency\Models\Agent|null $agent
+ * @property-read \App\Modules\Car\Models\Car|null $car
+ * @property-read \App\Modules\Car\Models\Autosalon|null $autosalon
  * @property-read \App\Modules\Shared\Models\User|null $user
  */
 class Inquiry extends Model
@@ -40,41 +40,35 @@ class Inquiry extends Model
      * Kütləvi doldurula bilən sütunlar (Mass Assignable)
      */
     protected $fillable = [
-        'property_id', // Müraciət edilən əmlakın ID-si
-        'agency_id',   // Müraciət ünvanlanan agentliyin ID-si
-        'agent_id',    // Təyin edilmiş rieltorun ID-si
-        'user_id',     // Müraciət edən istifadəçinin ID-si (sistemdə qeydiyyatlıdırsa)
-        'name',        // Müştərinin adı və soyadı
-        'phone',       // Müştərinin əlaqə nömrəsi
-        'email',       // Müştərinin e-poçt ünvanı
-        'message',     // Müştərinin yazdığı mesaj / istək
-        'type',        // Müraciət növü (Ümumi sorğu, Baxış istəyi, Qiymət təklifi)
-        'status',      // Müraciətin icra vəziyyəti (Yeni, Əlaqə saxlanıldı, Baxış təyin edildi, Bağlandı)
-        'notes',       // Rieltorun daxili qeydləri
+        'car_id',       // Müraciət edilən avtomobilin ID-si
+        'autosalon_id', // Müraciət ünvanlanan avtosalonun ID-si
+        'property_id',
+        'agency_id',
+        'agent_id',
+        'user_id',      // Müraciət edən istifadəçinin ID-si
+        'name',         // Müştərinin adı və soyadı
+        'phone',        // Müştərinin əlaqə nömrəsi
+        'email',        // Müştərinin e-poçt ünvanı
+        'message',      // Müştərinin yazdığı mesaj / istək
+        'type',         // Müraciət növü (Ümumi sorğu, Test-drive, Qiymət təklifi)
+        'status',       // Müraciətin icra vəziyyəti (Yeni, Əlaqə saxlanıldı, Bağlandı)
+        'notes',        // Daxili qeydlər
     ];
 
     /**
-     * Müraciət edilən əmlak
+     * Müraciət edilən avtomobil
      */
-    public function property(): BelongsTo
+    public function car(): BelongsTo
     {
-        return $this->belongsTo(Property::class);
+        return $this->belongsTo(Car::class);
     }
 
     /**
-     * Müraciətin aid olduğu agentlik
+     * Müraciətin aid olduğu avtosalon
      */
-    public function agency(): BelongsTo
+    public function autosalon(): BelongsTo
     {
-        return $this->belongsTo(Agency::class);
-    }
-
-    /**
-     * Müraciətə cavabdeh olan rieltor
-     */
-    public function agent(): BelongsTo
-    {
-        return $this->belongsTo(Agent::class);
+        return $this->belongsTo(Autosalon::class);
     }
 
     /**
@@ -85,3 +79,4 @@ class Inquiry extends Model
         return $this->belongsTo(User::class);
     }
 }
+

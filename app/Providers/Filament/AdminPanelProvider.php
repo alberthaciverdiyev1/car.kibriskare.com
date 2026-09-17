@@ -56,19 +56,19 @@ class AdminPanelProvider extends PanelProvider
                 Pages\Dashboard::class,
             ])
             ->navigationGroups([
-                NavigationGroup::make('Əmlak və Müraciətlər')
+                NavigationGroup::make('Avtomobil Kataloqu')
                     ->collapsed(false),
-                NavigationGroup::make('İstifadəçilər və Agentliklər')
+                NavigationGroup::make('İstifadəçilər və Avtosalonlar')
                     ->collapsed(false),
-                NavigationGroup::make('Məzmun və Axtarış')
+                NavigationGroup::make('Məzmun və Bloq')
                     ->collapsed(false),
-                NavigationGroup::make('Kataloq və Tənzimləmələr')
+                NavigationGroup::make('Sistem və Tənzimləmələr')
                     ->collapsed(true),
             ])
             ->navigationItems([
                 NavigationItem::make('Profilim')
                     ->url(fn (): string => EditProfile::getUrl())
-                    ->group('Kataloq və Tənzimləmələr')
+                    ->group('Sistem və Tənzimləmələr')
                     ->icon('heroicon-o-user-circle')
                     ->sort(10),
             ])

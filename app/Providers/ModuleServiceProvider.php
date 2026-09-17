@@ -17,12 +17,9 @@ class ModuleServiceProvider extends ServiceProvider
      */
     protected array $modules = [
         'Car',
-        'Agency',
         'Blog',
         'Inquiry',
         'Location',
-        'PropertyRequest',
-        'Roommate',
         'Shared',
     ];
 
@@ -32,14 +29,6 @@ class ModuleServiceProvider extends ServiceProvider
         Route::middleware('web')->group(function () {
             Route::get('/lang/{lang}', [\App\Modules\Shared\Controllers\LocaleController::class, 'switchLanguage'])->name('lang.switch');
             Route::get('/currency/{code}', [\App\Modules\Shared\Controllers\LocaleController::class, 'switchCurrency'])->name('currency.switch');
-            Route::match(['GET', 'POST'], '/listings/{listing}/reveal-phone', [\App\Modules\Property\Controllers\RevealPhoneController::class, 'reveal'])
-                ->middleware('throttle:30,1');
-            Route::match(['GET', 'POST'], '/properties/{listing}/reveal-phone', [\App\Modules\Property\Controllers\RevealPhoneController::class, 'reveal'])
-                ->middleware('throttle:30,1');
-            Route::match(['GET', 'POST'], '/agency/{agency}/reveal-phone', [\App\Modules\Agency\Controllers\AgencyRevealPhoneController::class, 'revealAgency'])
-                ->middleware('throttle:30,1');
-            Route::match(['GET', 'POST'], '/agent/{agent}/reveal-phone', [\App\Modules\Agency\Controllers\AgencyRevealPhoneController::class, 'revealAgent'])
-                ->middleware('throttle:30,1');
         });
 
         // 2. Bütün Modul Marşrutları ({locale} prefiksi ilə: /tr/..., /az/..., /en/..., /ru/...)

@@ -2,9 +2,6 @@
 
 namespace App\Filament\Admin\Pages;
 
-use App\Modules\Agency\Models\Agency;
-use App\Modules\Property\Models\Property;
-use App\Modules\PropertyRequest\Models\PropertyRequest;
 use App\Modules\Shared\Models\User;
 use Filament\Actions\Action;
 use Filament\Notifications\Notification;
@@ -386,10 +383,10 @@ class SystemHealth extends Page
         $logsSize = $this->formatSize($this->getDirSizeBytes(storage_path('logs')));
 
         // 5. Project Counts
-        $propertyCount = Property::count();
+        $carCount = \App\Modules\Car\Models\Car::count();
         $userCount = User::count();
-        $agencyCount = Agency::count();
-        $requestCount = PropertyRequest::count();
+        $autosalonCount = \App\Modules\Car\Models\Autosalon::count();
+        $inquiryCount = \App\Modules\Inquiry\Models\Inquiry::count();
 
         // 6. PHP Extensions Check
         $extensions = [
@@ -448,10 +445,10 @@ class SystemHealth extends Page
                 'logs' => $logsSize,
             ],
             'counts' => [
-                'properties' => $propertyCount,
+                'properties' => $carCount,
                 'users' => $userCount,
-                'agencies' => $agencyCount,
-                'requests' => $requestCount,
+                'agencies' => $autosalonCount,
+                'requests' => $inquiryCount,
             ],
             'extensions' => $extensions,
         ];

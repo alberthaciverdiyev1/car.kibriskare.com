@@ -11,14 +11,14 @@ use Filament\Widgets\TableWidget as BaseWidget;
 class LatestInquiriesTableWidget extends BaseWidget
 {
     protected static ?string $heading = 'Son Müştəri Müraciətləri';
-    protected static ?int $sort = 6;
+    protected static ?int $sort = 7;
     protected int | string | array $columnSpan = 'full';
 
     public function table(Table $table): Table
     {
         return $table
             ->query(
-                Inquiry::query()->with(['property'])->latest('id')->limit(5)
+                Inquiry::query()->with(['car.brand', 'car.model', 'autosalon'])->latest('id')->limit(5)
             )
             ->columns([
                 Tables\Columns\TextColumn::make('name')
@@ -30,10 +30,14 @@ class LatestInquiriesTableWidget extends BaseWidget
                     ->label('Telefon')
                     ->icon('heroicon-m-phone'),
 
-                Tables\Columns\TextColumn::make('property.title')
-                    ->label('Əlaqəli Əmlak')
+                Tables\Columns\TextColumn::make('car.display_title')
+                    ->label('Əlaqəli Avtomobil')
                     ->limit(30)
                     ->placeholder('Ümumi Müraciət'),
+
+                Tables\Columns\TextColumn::make('autosalon.name')
+                    ->label('Avtosalon')
+                    ->placeholder('—'),
 
                 Tables\Columns\TextColumn::make('message')
                     ->label('Mesaj')
@@ -62,3 +66,4 @@ class LatestInquiriesTableWidget extends BaseWidget
             ->paginated(false);
     }
 }
+

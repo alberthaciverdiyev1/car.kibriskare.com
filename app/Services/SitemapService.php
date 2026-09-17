@@ -2,12 +2,9 @@
 
 namespace App\Services;
 
-use App\Modules\Property\Models\Property;
+use App\Modules\Car\Models\Autosalon;
+use App\Modules\Car\Models\Car;
 use App\Modules\Blog\Models\Blog;
-use App\Modules\Agency\Models\Agency;
-use App\Modules\Agency\Models\Agent;
-use App\Modules\Roommate\Models\RoommateListing;
-use App\Modules\PropertyRequest\Models\PropertyRequest;
 use Illuminate\Support\Facades\File;
 
 class SitemapService
@@ -24,16 +21,17 @@ class SitemapService
         $staticPaths = [
             '',
             '/ilanlar',
+            '/arabalar',
+            '/avtosalonlar',
             '/blog',
-            '/emlak-ofisleri',
             '/hakkimizda',
             '/iletisim',
             '/sikca-sorulan-sorular',
             '/kullanici-sozlesmesi',
             '/gizlilik-politikasi',
             '/kullanim-kosullari',
-            '/oda-arkadasi',
-            '/ariyorum',
+            '/favoriler',
+            '/karsilastir',
         ];
 
         foreach ($locales as $locale) {
@@ -47,13 +45,13 @@ class SitemapService
             }
         }
 
-        // 2. Properties (Published)
-        Property::where('status', 'published')->orderBy('id', 'desc')->chunk(500, function ($properties) use ($baseUrl, $locales, &$urls) {
-            foreach ($properties as $property) {
-                $lastmod = ($property->updated_at ?? $property->created_at ?? now())->toIso8601String();
+        // 2. Cars (Active)
+        Car::where('status', \App\Modules\Car\Enums\CarStatus::Active)->orderBy('id', 'desc')->chunk(500, function ($cars) use ($baseUrl, $locales, &$urls) {
+            foreach ($cars as $car) {
+                $lastmod = ($car->updated_at ?? $car->created_at ?? now())->toIso8601String();
                 foreach ($locales as $locale) {
                     $urls[] = [
-                        'loc' => $baseUrl . '/' . $locale . '/ilan/' . $property->slug,
+                        'loc' => $baseUrl . '/' . $locale . '/araba/' . $car->slug,
                         'lastmod' => $lastmod,
                         'changefreq' => 'weekly',
                         'priority' => '0.8',
@@ -62,7 +60,23 @@ class SitemapService
             }
         });
 
-        // 3. Blog articles (Published)
+        // 3. Autosalons (Active)
+        Autosalon::where('is_active', true)->orderBy('id', 'desc')->chunk(100, function ($salons) use ($baseUrl, $locales, &$urls) {
+            foreach ($salons as $salon) {
+                $lastmod = ($salon->updated_at ?? $salon->created_at ?? now())->toIso8601String();
+                $slug = $salon->slug ?? $salon->id;
+                foreach ($locales as $locale) {
+                    $urls[] = [
+                        'loc' => $baseUrl . '/' . $locale . '/avtosalon/' . $slug,
+                        'lastmod' => $lastmod,
+                        'changefreq' => 'monthly',
+                        'priority' => '0.6',
+                    ];
+                }
+            }
+        });
+
+        // 4. Blog articles (Published)
         if (class_exists(Blog::class)) {
             Blog::published()->orderBy('id', 'desc')->chunk(100, function ($blogs) use ($baseUrl, $locales, &$urls) {
                 foreach ($blogs as $blog) {
@@ -73,75 +87,6 @@ class SitemapService
                             'lastmod' => $lastmod,
                             'changefreq' => 'weekly',
                             'priority' => '0.6',
-                        ];
-                    }
-                }
-            });
-        }
-
-        // 4. Agencies
-        if (class_exists(Agency::class)) {
-            Agency::orderBy('id', 'desc')->chunk(100, function ($agencies) use ($baseUrl, $locales, &$urls) {
-                foreach ($agencies as $agency) {
-                    $lastmod = ($agency->updated_at ?? $agency->created_at ?? now())->toIso8601String();
-                    $slug = $agency->slug ?? $agency->id;
-                    foreach ($locales as $locale) {
-                        $urls[] = [
-                            'loc' => $baseUrl . '/' . $locale . '/emlak-ofisi/' . $slug,
-                            'lastmod' => $lastmod,
-                            'changefreq' => 'monthly',
-                            'priority' => '0.5',
-                        ];
-                    }
-                }
-            });
-        }
-
-        // 5. Agents
-        if (class_exists(Agent::class)) {
-            Agent::where('is_active', true)->orderBy('id', 'desc')->chunk(100, function ($agents) use ($baseUrl, $locales, &$urls) {
-                foreach ($agents as $agent) {
-                    $lastmod = ($agent->updated_at ?? $agent->created_at ?? now())->toIso8601String();
-                    foreach ($locales as $locale) {
-                        $urls[] = [
-                            'loc' => $baseUrl . '/' . $locale . '/danisman/' . $agent->id,
-                            'lastmod' => $lastmod,
-                            'changefreq' => 'monthly',
-                            'priority' => '0.5',
-                        ];
-                    }
-                }
-            });
-        }
-
-        // 6. Roommate Listings (Published)
-        if (class_exists(RoommateListing::class)) {
-            RoommateListing::where('status', 'published')->orderBy('id', 'desc')->chunk(100, function ($listings) use ($baseUrl, $locales, &$urls) {
-                foreach ($listings as $listing) {
-                    $lastmod = ($listing->updated_at ?? $listing->created_at ?? now())->toIso8601String();
-                    foreach ($locales as $locale) {
-                        $urls[] = [
-                            'loc' => $baseUrl . '/' . $locale . '/oda-arkadasi/' . $listing->slug,
-                            'lastmod' => $lastmod,
-                            'changefreq' => 'weekly',
-                            'priority' => '0.7',
-                        ];
-                    }
-                }
-            });
-        }
-
-        // 7. Property Requests (Published)
-        if (class_exists(PropertyRequest::class)) {
-            PropertyRequest::where('status', 'published')->orderBy('id', 'desc')->chunk(100, function ($requests) use ($baseUrl, $locales, &$urls) {
-                foreach ($requests as $request) {
-                    $lastmod = ($request->updated_at ?? $request->created_at ?? now())->toIso8601String();
-                    foreach ($locales as $locale) {
-                        $urls[] = [
-                            'loc' => $baseUrl . '/' . $locale . '/ariyorum/' . $request->slug,
-                            'lastmod' => $lastmod,
-                            'changefreq' => 'weekly',
-                            'priority' => '0.7',
                         ];
                     }
                 }

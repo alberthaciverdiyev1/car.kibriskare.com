@@ -41,13 +41,13 @@ Route::get('/karsilastir', [StaticPageController::class, 'compares'])->name('com
 Route::get('/compares', [StaticPageController::class, 'compares']);
 
 // Favoriler & Karşılaştır API
-Route::post('/api/favorites/toggle', [\App\Modules\Property\Controllers\FavoriteCompareController::class, 'toggleFavorite'])->name('favorites.toggle');
-Route::get('/api/favorites/ids', [\App\Modules\Property\Controllers\FavoriteCompareController::class, 'getFavorites'])->name('favorites.ids');
-Route::post('/api/favorites/clear', [\App\Modules\Property\Controllers\FavoriteCompareController::class, 'clearFavorites'])->name('favorites.clear');
+Route::post('/api/favorites/toggle', [\App\Modules\Car\Controllers\FavoriteCompareController::class, 'toggleFavorite'])->name('favorites.toggle');
+Route::get('/api/favorites/ids', [\App\Modules\Car\Controllers\FavoriteCompareController::class, 'getFavorites'])->name('favorites.ids');
+Route::post('/api/favorites/clear', [\App\Modules\Car\Controllers\FavoriteCompareController::class, 'clearFavorites'])->name('favorites.clear');
 
-Route::post('/api/compares/toggle', [\App\Modules\Property\Controllers\FavoriteCompareController::class, 'toggleCompare'])->name('compares.toggle');
-Route::get('/api/compares/ids', [\App\Modules\Property\Controllers\FavoriteCompareController::class, 'getCompares'])->name('compares.ids');
-Route::post('/api/compares/clear', [\App\Modules\Property\Controllers\FavoriteCompareController::class, 'clearCompares'])->name('compares.clear');
+Route::post('/api/compares/toggle', [\App\Modules\Car\Controllers\FavoriteCompareController::class, 'toggleCompare'])->name('compares.toggle');
+Route::get('/api/compares/ids', [\App\Modules\Car\Controllers\FavoriteCompareController::class, 'getCompares'])->name('compares.ids');
+Route::post('/api/compares/clear', [\App\Modules\Car\Controllers\FavoriteCompareController::class, 'clearCompares'])->name('compares.clear');
 
 // Kimlik Doğrulama & Kullanıcı Paneli
 Route::get('/giris-yap', [AuthController::class, 'showLogin'])->name('login');
@@ -71,15 +71,9 @@ Route::get('/profile', [DashboardController::class, 'profile']);
 
 Route::get('/ilanlarim', [DashboardController::class, 'myProperties'])->name('my-properties');
 Route::get('/my-properties', [DashboardController::class, 'myProperties']);
-
-
+Route::get('/arabalarim', [DashboardController::class, 'myProperties'])->name('my-cars');
+Route::get('/my-cars', [DashboardController::class, 'myProperties']);
 
 // Telegram Webhook
 Route::post('/api/telegram/webhook', [\App\Http\Controllers\TelegramWebhookController::class, 'handle'])->name('telegram.webhook');
 
-// ===================================================================
-// SEO Filtre URL'leri
-// ===================================================================
-Route::get('/{first}/{second}/{third}', \App\Modules\Property\Controllers\HomeController::class)->name('listing.path3');
-Route::get('/{first}/{second}', \App\Modules\Property\Controllers\HomeController::class)->name('listing.path2');
-Route::get('/{first}', \App\Modules\Property\Controllers\HomeController::class)->name('listing.path1');

@@ -34,7 +34,7 @@ class EditProfile extends BaseEditProfile
     }
 
     /**
-     * İstifadəçinin rolunu təyin edir (admin / sahib / rieltor / normal).
+     * İstifadəçinin rolunu təyin edir (admin / avtosalon / fərdi).
      */
     protected function getRoleLabel(): string
     {
@@ -42,17 +42,14 @@ class EditProfile extends BaseEditProfile
 
         return match (true) {
             $user->email === User::ADMIN_EMAIL => 'Admin (Super Administrator)',
-            $user->isTenantOwner() => 'Agentlik Sahibi — ' . ($user->tenantAgency()?->name ?? 'Agentlik'),
-            $user->agent && $user->agent->agency_id !== null => 'Rieltor — ' . ($user->agent->agency?->name ?? 'Agentlik'),
-            $user->agent !== null => 'Müstəqil Rieltor',
-            default => 'İstifadəçi',
+            $user->isAutosalonOwner() => 'Avtosalon Sahibi — ' . ($user->tenantAutosalon()?->name ?? 'Avtosalon'),
+            default => 'Fərdi İstifadəçi',
         };
     }
 
     /**
      * Əsas profil formuna əlavə komponentlər:
-     * - Əgər Agentlik Sahibidirsə: YALNIZ Agentlik Məlumatlarını görür (rieltor görmür).
-     * - Əgər Rieltordursa: YALNIZ Rieltor Məlumatlarını görür (agentlik görmür).
+     * - Əgər Avtosalon Sahibidirsə: Avtosalon Məlumatlarını görür və redaktə edir.
      */
     protected function getAdditionalFormComponents(): array
     {
@@ -68,99 +65,65 @@ class EditProfile extends BaseEditProfile
                 )),
         ];
 
-        // 1. Əgər Agentlik Sahibidirsə -> YALNIZ Agentlik Məlumatları göstərilir
-        if ($user->isTenantOwner() && $user->tenantAgency()) {
-            $components[] = Section::make('Agentlik Məlumatları')
-                ->description('Veb saytında və elanlarınızda görünən rəsmi agentlik detalları.')
+        // Əgər Avtosalon Sahibidirsə -> Avtosalon Məlumatları göstərilir
+        if ($user->isAutosalonOwner() && $user->tenantAutosalon()) {
+            $components[] = Section::make('Avtosalon Məlumatları')
+                ->description('Veb saytında və elanlarınızda görünən rəsmi avtosalon detalları.')
                 ->schema([
-                    TextInput::make('agency.name')
-                        ->label('Agentliyin Adı')
+                    TextInput::make('autosalon.name')
+                        ->label('Avtosalonun Adı')
                         ->required()
                         ->maxLength(255)
                         ->columnSpanFull(),
 
-                    Textarea::make('agency.description')
+                    Textarea::make('autosalon.description.tr')
                         ->label('Haqqında Ətraflı Məlumat')
                         ->rows(3)
                         ->columnSpanFull()
-                        ->helperText('Agentliyiniz haqqında ətraflı məlumat.'),
+                        ->helperText('Avtosalonunuz haqqında ətraflı məlumat.'),
 
-                    FileUpload::make('agency.logo')
-                        ->label('Agentlik Loqosu')
+                    FileUpload::make('autosalon.logo')
+                        ->label('Salon Loqosu')
                         ->image()
                         ->imageEditor()
-                        ->directory('agencies')
+                        ->directory('salons/logos')
                         ->visibility('public')
                         ->columnSpan(1),
 
-                    FileUpload::make('agency.banner')
+                    FileUpload::make('autosalon.banner')
                         ->label('Banner Şəkli')
                         ->image()
                         ->imageEditor()
-                        ->directory('agencies')
+                        ->directory('salons/banners')
                         ->visibility('public')
                         ->columnSpan(1),
 
-                    TextInput::make('agency.phone')
+                    TextInput::make('autosalon.phone')
                         ->label('Telefon Nömrəsi')
                         ->tel()
                         ->required(),
 
-                    TextInput::make('agency.whatsapp')
+                    TextInput::make('autosalon.whatsapp')
                         ->label('WhatsApp Nömrəsi')
                         ->tel()
                         ->prefixIcon('heroicon-o-chat-bubble-left-right'),
 
-                    TextInput::make('agency.email')
+                    TextInput::make('autosalon.email')
                         ->label('Rəsmi E-poçt')
                         ->email(),
 
-                    TextInput::make('agency.website')
+                    TextInput::make('autosalon.website')
                         ->label('Vebsayt')
                         ->url()
                         ->placeholder('https://...'),
 
-                    TextInput::make('agency.address')
-                        ->label('Ofis Ünvanı')
-                        ->maxLength(255)
-                        ->columnSpanFull(),
-                ])->columns(2);
-        }
-        // 2. Əks halda Rieltordursa -> YALNIZ Rieltor Profili göstərilir
-        elseif ($user->agent) {
-            $components[] = Section::make('Rieltor Profili')
-                ->description('Veb saytında görünən rieltor məlumatlarınızı buradan yeniləyin.')
-                ->schema([
-                    FileUpload::make('agent.avatar')
-                        ->label('Profil Şəkli')
-                        ->image()
-                        ->imageEditor()
-                        ->directory('agents')
-                        ->visibility('public')
-                        ->columnSpan(1),
+                    TextInput::make('autosalon.working_hours')
+                        ->label('İş Saatları')
+                        ->placeholder('09:00 - 18:30'),
 
-                    FileUpload::make('agent.banner')
-                        ->label('Banner Şəkli (Üzlük)')
-                        ->image()
-                        ->imageEditor()
-                        ->directory('agents/banners')
-                        ->visibility('public')
-                        ->columnSpan(1),
-
-                    TextInput::make('agent.position')
-                        ->label('Vəzifə / Titul')
-                        ->placeholder('Məs: Baş rieltor, Satış meneceri')
+                    TextInput::make('autosalon.address')
+                        ->label('Ofis / Salon Ünvanı')
                         ->maxLength(255),
-
-                    TextInput::make('agent.phone')
-                        ->label('Əlaqə Nömrəsi')
-                        ->tel(),
-
-                    TextInput::make('agent.whatsapp')
-                        ->label('WhatsApp Nömrəsi')
-                        ->tel()
-                        ->prefixIcon('heroicon-o-chat-bubble-left-right')
-                        ->columnSpanFull(),
                 ])->columns(2);
         }
 
@@ -191,29 +154,19 @@ class EditProfile extends BaseEditProfile
     {
         $user = $this->getUser();
 
-        // 1. Agentlik Sahibi üçün
-        if ($user->isTenantOwner() && $user->tenantAgency()) {
-            $agency = $user->tenantAgency();
-            $data['agency'] = [
-                'name' => $agency->name,
-                'description' => $agency->description,
-                'logo' => $agency->logo,
-                'banner' => $agency->banner,
-                'phone' => $agency->phone,
-                'whatsapp' => $agency->whatsapp,
-                'email' => $agency->email,
-                'website' => $agency->website,
-                'address' => $agency->address,
-            ];
-        }
-        // 2. Rieltor üçün
-        elseif ($user->agent) {
-            $data['agent'] = [
-                'avatar' => $user->agent->avatar,
-                'banner' => $user->agent->banner,
-                'position' => $user->agent->position,
-                'phone' => $user->agent->phone,
-                'whatsapp' => $user->agent->whatsapp,
+        if ($user->isAutosalonOwner() && $user->tenantAutosalon()) {
+            $salon = $user->tenantAutosalon();
+            $data['autosalon'] = [
+                'name' => $salon->name,
+                'description' => $salon->description,
+                'logo' => $salon->logo,
+                'banner' => $salon->banner,
+                'phone' => $salon->phone,
+                'whatsapp' => $salon->whatsapp,
+                'email' => $salon->email,
+                'website' => $salon->website,
+                'working_hours' => $salon->working_hours,
+                'address' => $salon->address,
             ];
         }
 
@@ -222,23 +175,15 @@ class EditProfile extends BaseEditProfile
 
     protected function handleRecordUpdate(Model $record, array $data): Model
     {
-        $agencyData = $data['agency'] ?? null;
-        $agentData = $data['agent'] ?? null;
-        unset($data['agency'], $data['agent']);
+        $autosalonData = $data['autosalon'] ?? null;
+        unset($data['autosalon']);
 
         $record->update($data);
 
-        // Əgər Agentlik Sahibidirsə -> Agentlik məlumatlarını yenilə
-        if ($record->isTenantOwner() && $agencyData !== null && $record->tenantAgency()) {
-            $record->tenantAgency()->update($agencyData);
-        }
-        // Əgər Rieltordursa -> Rieltor məlumatlarını yenilə
-        elseif ($record->agent && $agentData !== null) {
-            $agentData = array_filter($agentData, fn ($value) => $value !== null);
-            $record->agent->update($agentData);
+        if ($record->isAutosalonOwner() && $autosalonData !== null && $record->tenantAutosalon()) {
+            $record->tenantAutosalon()->update($autosalonData);
         }
 
-        // Yenilənmiş məlumatların front tərəfdə dərhal görünməsi üçün keşi təmizlə
         try {
             cache()->flush();
         } catch (\Throwable $e) {

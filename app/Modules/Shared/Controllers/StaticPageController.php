@@ -29,9 +29,8 @@ class StaticPageController extends Controller
                 ['label' => __('favorites.page_title'), 'url' => null],
             ];
 
-            $favoriteCarIds = \App\Modules\Property\Models\Favorite::where($userId ? 'user_id' : 'session_id', $userId ?: $sessionId)
-                ->selectRaw('COALESCE(car_id, property_id) as target_id')
-                ->pluck('target_id')
+            $favoriteCarIds = \App\Modules\Car\Models\Favorite::where($userId ? 'user_id' : 'session_id', $userId ?: $sessionId)
+                ->pluck('car_id')
                 ->filter()
                 ->values()
                 ->toArray();
@@ -64,9 +63,8 @@ class StaticPageController extends Controller
         if (empty($ids)) {
             $userId = auth()->id();
             $sessionId = $request->hasSession() ? $request->session()->getId() : 'default-session';
-            $ids = \App\Modules\Property\Models\Favorite::where($userId ? 'user_id' : 'session_id', $userId ?: $sessionId)
-                ->selectRaw('COALESCE(car_id, property_id) as target_id')
-                ->pluck('target_id')
+            $ids = \App\Modules\Car\Models\Favorite::where($userId ? 'user_id' : 'session_id', $userId ?: $sessionId)
+                ->pluck('car_id')
                 ->filter()
                 ->values()
                 ->toArray();
@@ -108,9 +106,8 @@ class StaticPageController extends Controller
                 ['label' => __('compare.page_title'), 'url' => null],
             ];
 
-            $compareCarIds = \App\Modules\Property\Models\Compare::where($userId ? 'user_id' : 'session_id', $userId ?: $sessionId)
-                ->selectRaw('COALESCE(car_id, property_id) as target_id')
-                ->pluck('target_id')
+            $compareCarIds = \App\Modules\Car\Models\Compare::where($userId ? 'user_id' : 'session_id', $userId ?: $sessionId)
+                ->pluck('car_id')
                 ->filter()
                 ->values()
                 ->toArray();

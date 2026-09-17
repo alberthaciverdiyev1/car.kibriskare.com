@@ -2,7 +2,7 @@
 
 namespace App\Console\Commands;
 
-use App\Modules\Property\Models\PropertyImage;
+use App\Modules\Car\Models\CarImage;
 use App\Modules\Shared\Services\ImageOptimizerService;
 use Illuminate\Console\Command;
 use Illuminate\Support\Facades\Storage;
@@ -14,19 +14,19 @@ class GenerateThumbnailsCommand extends Command
      *
      * @var string
      */
-    protected $signature = 'properties:generate-thumbnails {--force : Re-generate thumbnails even if already exists}';
+    protected $signature = 'cars:generate-thumbnails {--force : Re-generate thumbnails even if already exists}';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Generate compact WebP thumbnails for all property images';
+    protected $description = 'Generate compact WebP thumbnails for all car images';
 
     public function handle(ImageOptimizerService $optimizer): int
     {
         $force = $this->option('force');
-        $query = PropertyImage::query();
+        $query = CarImage::query();
 
         if (!$force) {
             $query->whereNull('thumbnail_url');

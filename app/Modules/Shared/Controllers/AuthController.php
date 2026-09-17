@@ -3,9 +3,9 @@
 namespace App\Modules\Shared\Controllers;
 
 use App\Http\Controllers\Controller;
-use App\Modules\Agency\Enums\AgencyStatus;
-use App\Modules\Agency\Models\Agency;
-use App\Modules\Agency\Models\Agent;
+use App\Modules\Car\Models\Autosalon;
+use App\Modules\Car\Models\Compare;
+use App\Modules\Car\Models\Favorite;
 use App\Modules\Shared\Concerns\CachesGuestPage;
 use App\Modules\Shared\Models\User;
 use Illuminate\Http\JsonResponse;
@@ -24,7 +24,7 @@ class AuthController extends Controller
     /**
      * İstifadəçinin roluna uyğun yönləndirmə ünvanını təyin edir:
      * - Admin -> /admin
-     * - Agentlik (Agency) və ya Rieltor (Agent) -> /agency (Filament paneli)
+     * - Avtosalon (Galeri) və ya Satıcı -> /agency (Filament paneli)
      * - Normal istifadəçi -> / (və ya /dashboard)
      */
     public static function getRedirectUrlForUser(User $user): string
@@ -33,7 +33,7 @@ class AuthController extends Controller
             return '/admin';
         }
 
-        if ($user->agencies()->exists() || $user->agent()->exists()) {
+        if ($user->isAutosalonOwner() || $user->autosalon()->exists()) {
             return '/agency';
         }
 
@@ -66,8 +66,6 @@ class AuthController extends Controller
             return redirect(self::getRedirectUrlForUser(Auth::user()));
         }
 
-        // Qonaqlar üçün tam səhifə keşi. Validasiya xətaları/old() girişi varsa keşlənir
-        // (form səhv göndərimindən sonra geri qayıdanda xətalar görünsün).
         if (auth()->guest()
             && ! session()->has('errors')
             && ! request()->has('_cache_bust')) {
@@ -83,7 +81,7 @@ class AuthController extends Controller
 
     protected function renderRegister(): string
     {
-        $agencies = Agency::where('status', AgencyStatus::Active)
+        $agencies = Autosalon::where('is_active', true)
             ->orderBy('name')
             ->get(['id', 'name']);
 
@@ -125,10 +123,8 @@ class AuthController extends Controller
             $role = 'user';
             if ($user->isAdmin()) {
                 $role = 'admin';
-            } elseif ($user->agencies()->exists()) {
+            } elseif ($user->isAutosalonOwner()) {
                 $role = 'agency';
-            } elseif ($user->agent()->exists()) {
-                $role = 'agent';
             }
 
             if ($request->wantsJson() || $request->ajax()) {
@@ -159,7 +155,7 @@ class AuthController extends Controller
     }
 
     /**
-     * Qeydiyyat əməliyyatı (Fərdi istifadəçi, Rieltor və Agentlik üçün).
+     * Qeydiyyat əməliyyatı (Fərdi istifadəçi və Avtosalon / Galeri üçün).
      */
     public function register(Request $request): JsonResponse|RedirectResponse
     {
@@ -181,13 +177,12 @@ class AuthController extends Controller
             $rules['name'] = ['required', 'string', 'max:255'];
             $rules['phone'] = ['required', 'string', 'max:50'];
             $rules['whatsapp'] = ['nullable', 'string', 'max:50'];
-            $rules['agency_id'] = ['nullable', 'integer', 'exists:agencies,id'];
         } else {
             $rules['name'] = ['required', 'string', 'max:255'];
         }
 
         $messages = [
-            'agency_name.required' => 'Agentliyin (şirkətin) adını daxil edin.',
+            'agency_name.required' => 'Avtosalonun (şirkətin) adını daxil edin.',
             'name.required' => 'Ad və soyadınızı daxil edin.',
             'email.required' => 'E-poçt ünvanınızı daxil edin.',
             'email.email' => 'Düzgün e-poçt ünvanı daxil edin.',
@@ -209,25 +204,16 @@ class AuthController extends Controller
             ]);
 
             if ($roleType === 'agency') {
-                Agency::create([
-                    'owner_id' => $user->id,
+                Autosalon::create([
+                    'user_id' => $user->id,
                     'name' => $validated['agency_name'],
                     'slug' => Str::slug($validated['agency_name']) . '-' . Str::random(5),
                     'email' => $validated['email'],
                     'phone' => $validated['phone'],
                     'whatsapp' => $validated['whatsapp'] ?? $validated['phone'],
                     'address' => $validated['address'] ?? null,
-                    'status' => AgencyStatus::Active,
-                    'is_verified' => false,
-                ]);
-            } elseif ($roleType === 'agent') {
-                Agent::create([
-                    'user_id' => $user->id,
-                    'agency_id' => !empty($validated['agency_id']) ? (int) $validated['agency_id'] : null,
-                    'phone' => $validated['phone'],
-                    'whatsapp' => $validated['whatsapp'] ?? $validated['phone'],
-                    'position' => 'Rieltor',
                     'is_active' => true,
+                    'is_verified' => false,
                 ]);
             }
 
@@ -286,12 +272,13 @@ class AuthController extends Controller
     {
         if (! $oldSessionId) return;
 
-        \App\Modules\Property\Models\Favorite::where('session_id', $oldSessionId)
+        Favorite::where('session_id', $oldSessionId)
             ->whereNull('user_id')
             ->update(['user_id' => $user->id, 'session_id' => null]);
 
-        \App\Modules\Property\Models\Compare::where('session_id', $oldSessionId)
+        Compare::where('session_id', $oldSessionId)
             ->whereNull('user_id')
             ->update(['user_id' => $user->id, 'session_id' => null]);
     }
 }
+

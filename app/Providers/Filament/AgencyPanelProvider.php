@@ -67,9 +67,9 @@ class AgencyPanelProvider extends PanelProvider
             ])
             ->widgets([
                 \App\Filament\Agency\Widgets\AgencyStatsOverviewWidget::class,
-                \App\Filament\Agency\Widgets\AgencyPropertiesTrendChartWidget::class,
+                \App\Filament\Agency\Widgets\AgencyCarsTrendChartWidget::class,
                 \App\Filament\Agency\Widgets\AgencyLatestInquiriesTableWidget::class,
-                \App\Filament\Agency\Widgets\AgencyLatestPropertiesTableWidget::class,
+                \App\Filament\Agency\Widgets\AgencyLatestCarsTableWidget::class,
             ])
             ->middleware([
                 EncryptCookies::class,
