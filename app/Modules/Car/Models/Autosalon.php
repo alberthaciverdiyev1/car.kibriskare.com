@@ -76,4 +76,30 @@ class Autosalon extends Model
     {
         return $this->hasMany(Car::class, 'autosalon_id');
     }
+
+    public function getLogoUrlAttribute(): string
+    {
+        if (empty($this->logo)) {
+            return 'https://images.unsplash.com/photo-1563986768609-322da13575f3?w=300&auto=format&fit=crop&q=80';
+        }
+
+        if (str_starts_with($this->logo, 'http://') || str_starts_with($this->logo, 'https://')) {
+            return $this->logo;
+        }
+
+        return \Illuminate\Support\Facades\Storage::disk('public')->url($this->logo);
+    }
+
+    public function getBannerUrlAttribute(): string
+    {
+        if (empty($this->banner)) {
+            return 'https://images.unsplash.com/photo-1617814076367-b759c7d7e738?w=1200&auto=format&fit=crop&q=80';
+        }
+
+        if (str_starts_with($this->banner, 'http://') || str_starts_with($this->banner, 'https://')) {
+            return $this->banner;
+        }
+
+        return \Illuminate\Support\Facades\Storage::disk('public')->url($this->banner);
+    }
 }

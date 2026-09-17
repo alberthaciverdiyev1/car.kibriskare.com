@@ -1,6 +1,7 @@
 <?php
 
 use App\Modules\Car\Controllers\AddCarController;
+use App\Modules\Car\Controllers\AutosalonController;
 use App\Modules\Car\Controllers\CarDetailController;
 use App\Modules\Car\Controllers\CarHomeController;
 use Illuminate\Support\Facades\Route;
@@ -14,6 +15,14 @@ Route::get('/ilanlar/{first}/{second}/{third}', CarHomeController::class)->name(
 Route::get('/arabalar', CarHomeController::class)->name('cars.index');
 Route::get('/cars', CarHomeController::class);
 Route::get('/avtomobiller', CarHomeController::class);
+
+// Avtosalonlar Kataloqu & Detay
+Route::get('/avtosalonlar', [AutosalonController::class, 'index'])->name('autosalons.index');
+Route::get('/autosalons', [AutosalonController::class, 'index']);
+Route::get('/agencies', [AutosalonController::class, 'index'])->name('agencies.list');
+Route::get('/avtosalon/{slug}', [AutosalonController::class, 'show'])->name('autosalons.show');
+Route::get('/autosalon/{slug}', [AutosalonController::class, 'show']);
+Route::get('/agency/{slug}', [AutosalonController::class, 'show'])->name('agencies.detail');
 
 // Avtomobil Detay Sayfası
 Route::get('/araba/{slug}', CarDetailController::class)->name('cars.show');

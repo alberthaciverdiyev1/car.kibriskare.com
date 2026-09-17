@@ -19,11 +19,11 @@ class AutosalonResource extends Resource
 
     protected static ?string $navigationGroup = 'Avtomobil Kataloqu';
 
-    protected static ?string $navigationLabel = 'Avtosalonlar və Dilerlər';
+    protected static ?string $navigationLabel = 'Avtosalonlar';
 
     protected static ?string $modelLabel = 'Avtosalon';
 
-    protected static ?string $pluralModelLabel = 'Avtosalonlar və Dilerlər';
+    protected static ?string $pluralModelLabel = 'Avtosalonlar';
 
     protected static ?int $navigationSort = 6;
 
@@ -36,7 +36,7 @@ class AutosalonResource extends Resource
                         Forms\Components\Tabs\Tab::make('Əsas Məlumatlar')
                             ->schema([
                                 Forms\Components\TextInput::make('name')
-                                    ->label('Salon / Şirkət Adı')
+                                    ->label('Avtosalonun Adı')
                                     ->placeholder('Məs: Kıbrıs Motors Galeri')
                                     ->required()
                                     ->live(onBlur: true)
@@ -70,7 +70,7 @@ class AutosalonResource extends Resource
                                     ->default(5.00),
 
                                 Forms\Components\Toggle::make('is_verified')
-                                    ->label('Rəsmi Təsdiqlənmiş Diler')
+                                    ->label('Təsdiqlənmiş Avtosalon')
                                     ->default(true),
 
                                 Forms\Components\Toggle::make('is_active')

@@ -272,7 +272,7 @@
                         <select name="seller_type" required
                                 class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl text-sm font-semibold text-gray-800 outline-none focus:border-[var(--primary)] focus:bg-white transition">
                             <option value="owner" selected>Şəxsi Sahibindən</option>
-                            <option value="dealer">Avtosalon / Diler</option>
+                            <option value="dealer">Avtosalon</option>
                         </select>
                     </div>
 

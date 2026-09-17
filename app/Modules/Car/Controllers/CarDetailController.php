@@ -9,8 +9,10 @@ use Illuminate\Http\Request;
 
 class CarDetailController extends Controller
 {
-    public function __invoke(Request $request, string $slug)
+    public function __invoke(Request $request, ...$params)
     {
+        $slug = end($params);
+
         $car = Car::with([
             'brand',
             'model',
@@ -40,10 +42,10 @@ class CarDetailController extends Controller
             ->get();
 
         $breadcrumbs = [
-            ['label' => 'Ana Səhifə', 'url' => url(app()->getLocale())],
-            ['label' => 'Avtomobillər', 'url' => route('listing')],
-            ['label' => $car->brand?->name ?? 'Marka', 'url' => route('listing', ['brand_id' => $car->brand_id])],
-            ['label' => $car->display_title, 'url' => ''],
+            ['title' => __('navbar.home'), 'url' => route('home')],
+            ['title' => __('navbar.mobile_properties'), 'url' => route('listing')],
+            ['title' => $car->brand?->name ?? 'Marka', 'url' => route('listing', ['brand_id' => $car->brand_id])],
+            ['title' => $car->display_title, 'url' => ''],
         ];
 
         return view('pages.car.detail', compact('car', 'similarCars', 'breadcrumbs'));
