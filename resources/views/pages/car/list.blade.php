@@ -166,17 +166,17 @@
                                 </div>
                             </div>
 
-                            <!-- 4. Actions: Ətraflı & Sıfırla & Axtar -->
-                            <div class="flex items-center gap-2 w-full justify-end">
+                            <!-- 4. Actions: Ətraflı & Elanları göstər -->
+                            <div class="flex items-center gap-2 w-full">
                                 <button type="button" id="openFilterMoreBtn" title="Ətraflı axtarış"
-                                        class="h-11 px-3 bg-gray-50 hover:bg-gray-100 border border-gray-200/90 text-gray-700 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-2xs">
-                                    <i class="bi bi-sliders text-sm"></i>
-                                    <span class="hidden sm:inline">Ətraflı</span>
+                                        class="h-11 flex-1 px-4 bg-white hover:bg-gray-50 border border-gray-200/90 text-gray-700 rounded-xl text-xs sm:text-sm font-bold transition flex items-center justify-center gap-2 shadow-2xs cursor-pointer">
+                                    <i class="bi bi-sliders text-sm text-[var(--primary)]"></i>
+                                    <span>Ətraflı</span>
                                 </button>
                                 <button type="submit"
-                                        class="h-11 flex-1 px-4 bg-[var(--primary)] hover:bg-[var(--primary-hover)] text-white rounded-xl text-sm font-bold transition shadow-sm flex items-center justify-center gap-2">
-                                    <i class="bi bi-search"></i>
-                                    <span>Elanları göstər</span>
+                                        class="h-11 px-5 bg-[var(--primary)] hover:bg-[var(--primary-hover)] text-white rounded-xl text-xs sm:text-sm font-bold transition shadow-sm flex items-center justify-center gap-1.5 shrink-0 cursor-pointer">
+                                    <i class="bi bi-search text-xs"></i>
+                                    <span>Göstər</span>
                                 </button>
                             </div>
 
