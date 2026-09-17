@@ -1,17 +1,17 @@
 @extends('layouts.app')
 
-@section('title', 'Kuzey Kıbrıs Avtomobil Elanları - KibrisKare.com')
-@section('meta_description', 'KKTC-də satılıq və kirayə avtomobillər, avtosalonlar, sağ sükan yapon və avropa maşınları.')
+@section('title', 'Kuzey Kıbrıs Araba İlanları - Satılık & Rent a Car | KibrisKare')
+@section('meta_description', 'Kıbrıs genelinde sahibinden ve galeriden satılık, kiralık ve rent a car araç ilanları. En geniş araba pazarı.')
 
 @section('content')
-    <div class="w-full pt-4">
+    <div class="w-full pt-4 pb-16">
         @include('components.scroll-top')
 
-        <section class="car-listing py-2">
-            <div class="container mx-auto px-2 sm:px-4 text-sm">
+        <section class="py-2 sm:py-4">
+            <div class="max-w-[1400px] mx-auto px-2 sm:px-4">
                 
-                <!-- Main Car Search Form -->
-                <form method="GET" action="{{ route('listing') }}" id="carFilterForm" class="space-y-4">
+                <!-- Main Filter Form -->
+                <form id="carFilterForm" method="GET" action="{{ route('listing') }}" class="space-y-3">
                     
                     <!-- Top Bar: Deal Type Tabs + Reset -->
                     <div class="flex flex-wrap items-center justify-between gap-3">
@@ -19,7 +19,7 @@
                             $selectedAdType = request('adType', request('deal_type', 'all'));
                         @endphp
                         
-                        <!-- Deal Type (Satılık / Kirayə / Günlük) -->
+                        <!-- Deal Type (Hamısı / Satılıq / Günlük Kirayə / Aylıq Kirayə) -->
                         <div class="flex gap-1 bg-gray-100 p-1 rounded-2xl border border-gray-200/60 shadow-2xs" data-role="add-type-toggle">
                             <button type="button" data-value="all"
                                     class="deal-type-btn px-4 sm:px-5 py-2 rounded-xl font-bold text-xs tracking-wide uppercase transition duration-200 {{ $selectedAdType === 'all' || !$selectedAdType ? 'bg-white text-[var(--primary)] shadow-sm' : 'text-gray-600 hover:text-gray-900' }}">
@@ -40,7 +40,7 @@
                             <input type="hidden" name="adType" id="adTypeInput" value="{{ $selectedAdType }}">
                         </div>
 
-                        <!-- Reset & View Controls -->
+                        <!-- Reset Button Top Right -->
                         <div class="flex items-center gap-2">
                             <button type="button" id="resetFiltersBtn" title="Filtrləri Sıfırla"
                                     class="px-3.5 py-2 bg-white border border-gray-200/90 rounded-xl hover:bg-gray-50 text-gray-600 flex items-center justify-center transition shadow-2xs">
@@ -49,88 +49,179 @@
                         </div>
                     </div>
 
-                    <!-- Primary Filter Row (Brand, Model, Year, Price, City, More Filters) -->
-                    <div class="bg-white p-3.5 sm:p-5 rounded-3xl border border-gray-200/80 shadow-sm grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+                    <!-- 2-ROW PRIMARY FILTER CONTAINER (Matching Turbo.az Style) -->
+                    <div class="bg-white p-4 sm:p-5 rounded-3xl border border-gray-200/80 shadow-sm space-y-3.5">
                         
-                        <!-- 1. Marka (Brand) -->
-                        <div>
-                            <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-1">Marka</label>
-                            <select name="brand_id" id="brandSelect"
-                                    class="w-full px-3 py-2.5 bg-gray-50 hover:bg-gray-100/70 border border-gray-200/90 rounded-xl text-xs font-semibold text-gray-800 transition outline-none focus:border-[var(--primary)] focus:bg-white">
-                                <option value="">Bütün Markalar</option>
-                                @foreach($brands as $b)
-                                    <option value="{{ $b->id }}" {{ request('brand_id') == $b->id ? 'selected' : '' }}>
-                                        {{ $b->name }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
+                        <!-- ROW 1: Marka | Model | Condition Segment (Hamısı / Yeni / Sürülmüş) | Şəhər -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
+                            
+                            <!-- 1. Marka -->
+                            <div class="relative">
+                                <select name="brand_id" id="brandSelect"
+                                        class="w-full h-11 px-4 bg-white border border-gray-200/90 rounded-xl text-sm font-medium text-gray-800 transition outline-none focus:border-[var(--primary)] focus:ring-1 focus:ring-[var(--primary)] cursor-pointer appearance-none pr-9">
+                                    <option value="">Marka</option>
+                                    @foreach($brands as $b)
+                                        <option value="{{ $b->id }}" {{ request('brand_id') == $b->id ? 'selected' : '' }}>
+                                            {{ $b->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <i class="bi bi-chevron-down absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs pointer-events-none"></i>
+                            </div>
 
-                        <!-- 2. Model -->
-                        <div>
-                            <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-1">Model</label>
-                            <select name="model_id" id="modelSelect"
-                                    class="w-full px-3 py-2.5 bg-gray-50 hover:bg-gray-100/70 border border-gray-200/90 rounded-xl text-xs font-semibold text-gray-800 transition outline-none focus:border-[var(--primary)] focus:bg-white {{ count($models) == 0 ? 'opacity-60 cursor-not-allowed' : '' }}">
-                                <option value="">{{ count($models) > 0 ? 'Bütün Modellər' : 'Əvvəlcə Marka seçin' }}</option>
-                                @foreach($models as $m)
-                                    <option value="{{ $m->id }}" {{ request('model_id') == $m->id ? 'selected' : '' }}>
-                                        {{ $m->name }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
+                            <!-- 2. Model -->
+                            <div class="relative">
+                                <select name="model_id" id="modelSelect"
+                                        class="w-full h-11 px-4 bg-white border border-gray-200/90 rounded-xl text-sm font-medium text-gray-800 transition outline-none focus:border-[var(--primary)] focus:ring-1 focus:ring-[var(--primary)] cursor-pointer appearance-none pr-9 {{ count($models) == 0 ? 'opacity-60 cursor-not-allowed' : '' }}">
+                                    <option value="">Model</option>
+                                    @foreach($models as $m)
+                                        <option value="{{ $m->id }}" {{ request('model_id') == $m->id ? 'selected' : '' }}>
+                                            {{ $m->name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <i class="bi bi-chevron-down absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs pointer-events-none"></i>
+                            </div>
 
-                        <!-- 3. İl (Year Min - Max) -->
-                        <div>
-                            <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-1">Buraxılış İli</label>
-                            <div class="flex items-center gap-1.5">
-                                <input type="number" name="year_min" value="{{ request('year_min') }}" placeholder="İl min"
-                                       class="w-1/2 px-2.5 py-2.5 bg-gray-50 border border-gray-200/90 rounded-xl text-xs font-semibold text-gray-800 outline-none focus:border-[var(--primary)] focus:bg-white">
-                                <span class="text-gray-400 font-bold">-</span>
-                                <input type="number" name="year_max" value="{{ request('year_max') }}" placeholder="İl maks"
-                                       class="w-1/2 px-2.5 py-2.5 bg-gray-50 border border-gray-200/90 rounded-xl text-xs font-semibold text-gray-800 outline-none focus:border-[var(--primary)] focus:bg-white">
+                            <!-- 3. Condition Segment: [ Hamısı | Yeni | Sürülmüş ] -->
+                            @php
+                                $currentCondition = request('condition', 'all');
+                                if (empty($currentCondition)) $currentCondition = 'all';
+                            @endphp
+                            <div class="flex h-11 border border-gray-200/90 rounded-xl overflow-hidden bg-white p-0.5 select-none" id="conditionSegmentGroup">
+                                <button type="button" data-condition="all"
+                                        class="condition-btn flex-1 flex items-center justify-center font-semibold text-xs sm:text-sm rounded-lg transition-colors {{ $currentCondition === 'all' ? 'bg-[#ca1016] text-white shadow-xs' : 'text-gray-600 hover:text-gray-900' }}">
+                                    Hamısı
+                                </button>
+                                <button type="button" data-condition="new"
+                                        class="condition-btn flex-1 flex items-center justify-center font-semibold text-xs sm:text-sm rounded-lg border-l border-gray-100 transition-colors {{ $currentCondition === 'new' ? 'bg-[#ca1016] text-white shadow-xs' : 'text-gray-600 hover:text-gray-900' }}">
+                                    Yeni
+                                </button>
+                                <button type="button" data-condition="used"
+                                        class="condition-btn flex-1 flex items-center justify-center font-semibold text-xs sm:text-sm rounded-lg border-l border-gray-100 transition-colors {{ $currentCondition === 'used' ? 'bg-[#ca1016] text-white shadow-xs' : 'text-gray-600 hover:text-gray-900' }}">
+                                    Sürülmüş
+                                </button>
+                                <input type="hidden" name="condition" id="conditionInput" value="{{ $currentCondition }}">
+                            </div>
+
+                            <!-- 4. Şəhər -->
+                            <div class="relative">
+                                <select name="city_id" id="citySelect"
+                                        class="w-full h-11 px-4 bg-white border border-gray-200/90 rounded-xl text-sm font-medium text-gray-800 transition outline-none focus:border-[var(--primary)] focus:ring-1 focus:ring-[var(--primary)] cursor-pointer appearance-none pr-9">
+                                    <option value="">Şəhər</option>
+                                    @foreach($cities as $c)
+                                        <option value="{{ $c->id }}" {{ request('city_id') == $c->id ? 'selected' : '' }}>
+                                            {{ $c->getTrans('name') }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <i class="bi bi-chevron-down absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs pointer-events-none"></i>
                             </div>
                         </div>
 
-                        <!-- 4. Qiymət (Price Min - Max) -->
-                        <div>
-                            @php $currencySym = session('currency', 'GBP') === 'TRY' ? '₺' : (session('currency') === 'EUR' ? '€' : (session('currency') === 'USD' ? '$' : '£')); @endphp
-                            <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-1">Qiymət ({{ $currencySym }})</label>
-                            <div class="flex items-center gap-1.5">
-                                <input type="number" name="price_min" value="{{ request('price_min') }}" placeholder="Min"
-                                       class="w-1/2 px-2.5 py-2.5 bg-gray-50 border border-gray-200/90 rounded-xl text-xs font-semibold text-gray-800 outline-none focus:border-[var(--primary)] focus:bg-white">
-                                <span class="text-gray-400 font-bold">-</span>
-                                <input type="number" name="price_max" value="{{ request('price_max') }}" placeholder="Maks"
-                                       class="w-1/2 px-2.5 py-2.5 bg-gray-50 border border-gray-200/90 rounded-xl text-xs font-semibold text-gray-800 outline-none focus:border-[var(--primary)] focus:bg-white">
+                        <!-- ROW 2: [Qiymət min | maks] | Currency | Kredit | Barter | Ban növü | [İl min | maks] | Actions -->
+                        <div class="flex flex-wrap lg:flex-nowrap items-center gap-3">
+                            
+                            <!-- 1. Qiymət min | maks (Dual Input Box) -->
+                            <div class="flex items-center h-11 border border-gray-200/90 rounded-xl bg-white overflow-hidden w-full sm:w-56 shrink-0 focus-within:border-[var(--primary)] focus-within:ring-1 focus-within:ring-[var(--primary)]">
+                                <input type="number" name="price_min" id="priceMinInput" value="{{ request('price_min') }}" placeholder="Qiymət, min."
+                                       class="w-1/2 px-3 h-full bg-transparent text-sm text-gray-800 outline-none placeholder-gray-400">
+                                <div class="h-6 w-px bg-gray-200 shrink-0"></div>
+                                <input type="number" name="price_max" id="priceMaxInput" value="{{ request('price_max') }}" placeholder="maks."
+                                       class="w-1/2 px-3 h-full bg-transparent text-sm text-gray-800 outline-none placeholder-gray-400">
                             </div>
+
+                            <!-- 2. Valyuta Seçimi -->
+                            @php
+                                $currentCurr = session('currency', 'GBP');
+                            @endphp
+                            <div class="relative shrink-0">
+                                <select name="currency" id="currencySelect"
+                                        class="h-11 pl-3.5 pr-8 bg-white border border-gray-200/90 rounded-xl text-sm font-medium text-gray-800 transition outline-none focus:border-[var(--primary)] cursor-pointer appearance-none">
+                                    <option value="AZN" {{ $currentCurr === 'AZN' ? 'selected' : '' }}>AZN</option>
+                                    <option value="USD" {{ $currentCurr === 'USD' ? 'selected' : '' }}>USD</option>
+                                    <option value="EUR" {{ $currentCurr === 'EUR' ? 'selected' : '' }}>EUR</option>
+                                    <option value="GBP" {{ $currentCurr === 'GBP' ? 'selected' : '' }}>GBP</option>
+                                    <option value="TRY" {{ $currentCurr === 'TRY' ? 'selected' : '' }}>TRY</option>
+                                </select>
+                                <i class="bi bi-chevron-down absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs pointer-events-none"></i>
+                            </div>
+
+                            <!-- 3. Kredit Toggle -->
+                            @php
+                                $isCredit = request()->boolean('is_credit_available') || request()->filled('credit');
+                            @endphp
+                            <button type="button" id="creditToggleBtn" data-active="{{ $isCredit ? 'true' : 'false' }}"
+                                    class="h-11 px-4 rounded-xl border text-sm font-medium transition cursor-pointer select-none {{ $isCredit ? 'border-[var(--primary)] bg-emerald-50 text-[var(--primary)] font-bold' : 'border-gray-200/90 bg-white text-gray-700 hover:bg-gray-50' }}">
+                                Kredit
+                            </button>
+                            <input type="hidden" name="is_credit_available" id="creditInput" value="{{ $isCredit ? '1' : '' }}">
+
+                            <!-- 4. Barter Toggle -->
+                            @php
+                                $isBarter = request()->boolean('is_barter_available') || request()->filled('barter');
+                            @endphp
+                            <button type="button" id="barterToggleBtn" data-active="{{ $isBarter ? 'true' : 'false' }}"
+                                    class="h-11 px-4 rounded-xl border text-sm font-medium transition cursor-pointer select-none {{ $isBarter ? 'border-[var(--primary)] bg-emerald-50 text-[var(--primary)] font-bold' : 'border-gray-200/90 bg-white text-gray-700 hover:bg-gray-50' }}">
+                                Barter
+                            </button>
+                            <input type="hidden" name="is_barter_available" id="barterInput" value="{{ $isBarter ? '1' : '' }}">
+
+                            <!-- 5. Ban növü -->
+                            <div class="relative flex-1 min-w-[140px]">
+                                <select name="body_type_id" id="bodyTypeSelect"
+                                        class="w-full h-11 px-4 bg-white border border-gray-200/90 rounded-xl text-sm font-medium text-gray-800 transition outline-none focus:border-[var(--primary)] focus:ring-1 focus:ring-[var(--primary)] cursor-pointer appearance-none pr-9">
+                                    <option value="">Ban növü</option>
+                                    @foreach($bodyTypes as $bt)
+                                        <option value="{{ $bt->id }}" {{ request('body_type_id') == $bt->id ? 'selected' : '' }}>
+                                            {{ $bt->localized_name }}
+                                        </option>
+                                    @endforeach
+                                </select>
+                                <i class="bi bi-chevron-down absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs pointer-events-none"></i>
+                            </div>
+
+                            <!-- 6. İl min | maks (Dual Select Box) -->
+                            <div class="flex items-center h-11 border border-gray-200/90 rounded-xl bg-white overflow-hidden w-full sm:w-56 shrink-0 focus-within:border-[var(--primary)] focus-within:ring-1 focus-within:ring-[var(--primary)]">
+                                <div class="relative w-1/2 h-full">
+                                    <select name="year_min" id="yearMinSelect"
+                                            class="w-full h-full pl-3 pr-6 bg-transparent text-sm text-gray-800 outline-none cursor-pointer appearance-none">
+                                        <option value="">İl, min.</option>
+                                        @for($y = (int)date('Y') + 1; $y >= 1980; $y--)
+                                            <option value="{{ $y }}" {{ request('year_min') == $y ? 'selected' : '' }}>{{ $y }}</option>
+                                        @endfor
+                                    </select>
+                                    <i class="bi bi-chevron-down absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 text-[10px] pointer-events-none"></i>
+                                </div>
+                                <div class="h-6 w-px bg-gray-200 shrink-0"></div>
+                                <div class="relative w-1/2 h-full">
+                                    <select name="year_max" id="yearMaxSelect"
+                                            class="w-full h-full pl-3 pr-6 bg-transparent text-sm text-gray-800 outline-none cursor-pointer appearance-none">
+                                        <option value="">maks.</option>
+                                        @for($y = (int)date('Y') + 1; $y >= 1980; $y--)
+                                            <option value="{{ $y }}" {{ request('year_max') == $y ? 'selected' : '' }}>{{ $y }}</option>
+                                        @endfor
+                                    </select>
+                                    <i class="bi bi-chevron-down absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 text-[10px] pointer-events-none"></i>
+                                </div>
+                            </div>
+
+                            <!-- Actions: Ətraflı & Axtar -->
+                            <div class="flex items-center gap-2 ml-auto shrink-0 w-full sm:w-auto justify-end">
+                                <button type="button" id="openFilterMoreBtn" title="Ətraflı axtarış"
+                                        class="h-11 px-3.5 bg-gray-50 hover:bg-gray-100 border border-gray-200/90 text-gray-700 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-2xs">
+                                    <i class="bi bi-sliders text-sm"></i>
+                                    <span class="hidden sm:inline">Ətraflı</span>
+                                </button>
+                                <button type="submit"
+                                        class="h-11 px-5 bg-[var(--primary)] hover:bg-[var(--primary-hover)] text-white rounded-xl text-sm font-bold transition shadow-sm flex items-center gap-2">
+                                    <i class="bi bi-search"></i>
+                                    <span class="hidden sm:inline">Elanları göstər</span>
+                                </button>
+                            </div>
+
                         </div>
 
-                        <!-- 5. Şəhər (City) -->
-                        <div>
-                            <label class="block text-[11px] font-bold text-gray-500 uppercase tracking-wider mb-1">Şəhər</label>
-                            <select name="city_id" id="citySelect"
-                                    class="w-full px-3 py-2.5 bg-gray-50 hover:bg-gray-100/70 border border-gray-200/90 rounded-xl text-xs font-semibold text-gray-800 transition outline-none focus:border-[var(--primary)] focus:bg-white">
-                                <option value="">Bütün Şəhərlər</option>
-                                @foreach($cities as $c)
-                                    <option value="{{ $c->id }}" {{ request('city_id') == $c->id ? 'selected' : '' }}>
-                                        {{ $c->getTrans('name') }}
-                                    </option>
-                                @endforeach
-                            </select>
-                        </div>
-
-                        <!-- 6. Ətraflı Filtrlər və Axtar Düyməsi -->
-                        <div class="flex items-end gap-2">
-                            <button type="button" id="openFilterMoreBtn"
-                                    class="flex-1 px-3.5 py-2.5 bg-gray-100 hover:bg-gray-200/80 text-gray-800 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1.5 shadow-2xs">
-                                <i class="bi bi-sliders text-sm"></i>
-                                <span>Ətraflı</span>
-                            </button>
-                            <button type="submit"
-                                    class="px-4 py-2.5 bg-[var(--primary)] hover:bg-[var(--primary-hover)] text-white rounded-xl text-xs font-bold transition shadow-sm flex items-center justify-center gap-1">
-                                <i class="bi bi-search"></i>
-                            </button>
-                        </div>
                     </div>
                 </form>
 
@@ -169,6 +260,12 @@
             const dealTypeBtns = document.querySelectorAll('.deal-type-btn');
             const adTypeInput = document.getElementById('adTypeInput');
             const resetBtn = document.getElementById('resetFiltersBtn');
+            const conditionBtns = document.querySelectorAll('.condition-btn');
+            const conditionInput = document.getElementById('conditionInput');
+            const creditToggleBtn = document.getElementById('creditToggleBtn');
+            const creditInput = document.getElementById('creditInput');
+            const barterToggleBtn = document.getElementById('barterToggleBtn');
+            const barterInput = document.getElementById('barterInput');
 
             // 1. Dynamic Brand -> Models AJAX loading
             if (brandSelect && modelSelect) {
@@ -178,7 +275,7 @@
                     modelSelect.disabled = true;
 
                     if (!brandId) {
-                        modelSelect.innerHTML = '<option value="">Əvvəlcə Marka seçin</option>';
+                        modelSelect.innerHTML = '<option value="">Model</option>';
                         modelSelect.disabled = true;
                         modelSelect.classList.add('opacity-60', 'cursor-not-allowed');
                         submitCarFilter();
@@ -190,7 +287,7 @@
                         const data = await res.json();
                         
                         if (data.success && data.models) {
-                            modelSelect.innerHTML = '<option value="">Bütün Modellər</option>';
+                            modelSelect.innerHTML = '<option value="">Model</option>';
                             data.models.forEach(m => {
                                 const opt = document.createElement('option');
                                 opt.value = m.id;
@@ -202,7 +299,7 @@
                         }
                     } catch (err) {
                         console.error('Error fetching models:', err);
-                        modelSelect.innerHTML = '<option value="">Bütün Modellər</option>';
+                        modelSelect.innerHTML = '<option value="">Model</option>';
                         modelSelect.disabled = false;
                     }
 
@@ -212,7 +309,59 @@
                 modelSelect.addEventListener('change', submitCarFilter);
             }
 
-            // 2. Deal Type Toggle
+            // 2. Condition Segment (Hamısı / Yeni / Sürülmüş)
+            conditionBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const cond = this.dataset.condition;
+                    conditionInput.value = cond;
+                    conditionBtns.forEach(b => {
+                        b.classList.remove('bg-[#ca1016]', 'text-white', 'shadow-xs');
+                        b.classList.add('text-gray-600');
+                    });
+                    this.classList.add('bg-[#ca1016]', 'text-white', 'shadow-xs');
+                    this.classList.remove('text-gray-600');
+                    submitCarFilter();
+                });
+            });
+
+            // 3. Kredit & Barter Toggles
+            if (creditToggleBtn && creditInput) {
+                creditToggleBtn.addEventListener('click', function() {
+                    const isActive = this.dataset.active === 'true';
+                    const newState = !isActive;
+                    this.dataset.active = newState ? 'true' : 'false';
+                    creditInput.value = newState ? '1' : '';
+
+                    if (newState) {
+                        this.classList.add('border-[var(--primary)]', 'bg-emerald-50', 'text-[var(--primary)]', 'font-bold');
+                        this.classList.remove('border-gray-200/90', 'bg-white', 'text-gray-700');
+                    } else {
+                        this.classList.remove('border-[var(--primary)]', 'bg-emerald-50', 'text-[var(--primary)]', 'font-bold');
+                        this.classList.add('border-gray-200/90', 'bg-white', 'text-gray-700');
+                    }
+                    submitCarFilter();
+                });
+            }
+
+            if (barterToggleBtn && barterInput) {
+                barterToggleBtn.addEventListener('click', function() {
+                    const isActive = this.dataset.active === 'true';
+                    const newState = !isActive;
+                    this.dataset.active = newState ? 'true' : 'false';
+                    barterInput.value = newState ? '1' : '';
+
+                    if (newState) {
+                        this.classList.add('border-[var(--primary)]', 'bg-emerald-50', 'text-[var(--primary)]', 'font-bold');
+                        this.classList.remove('border-gray-200/90', 'bg-white', 'text-gray-700');
+                    } else {
+                        this.classList.remove('border-[var(--primary)]', 'bg-emerald-50', 'text-[var(--primary)]', 'font-bold');
+                        this.classList.add('border-gray-200/90', 'bg-white', 'text-gray-700');
+                    }
+                    submitCarFilter();
+                });
+            }
+
+            // 4. Deal Type Toggle
             dealTypeBtns.forEach(btn => {
                 btn.addEventListener('click', function() {
                     const val = this.dataset.value;
@@ -227,14 +376,14 @@
                 });
             });
 
-            // 3. Reset Button
+            // 5. Reset Button
             if (resetBtn) {
                 resetBtn.addEventListener('click', function() {
                     window.location.href = `/${document.documentElement.lang || 'tr'}/ilanlar`;
                 });
             }
 
-            // 4. Modal Filter Controls
+            // 6. Modal Filter Controls
             const modal = document.getElementById('filterMoreModal');
             const modalCard = document.getElementById('filterMoreModalCard');
             const openModalBtn = document.getElementById('openFilterMoreBtn');
@@ -283,7 +432,7 @@
                 });
             }
 
-            // 5. AJAX form submission and live updates
+            // 7. AJAX form submission and live updates
             async function submitCarFilter() {
                 const formData = new FormData(form);
                 
