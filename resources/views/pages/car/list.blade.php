@@ -49,23 +49,6 @@
                         </div>
                     </div>
 
-                    <!-- Popular Brands Quick Carousel / Bar -->
-                    @if(count($popularBrands) > 0)
-                        <div class="py-2 overflow-x-auto no-scrollbar">
-                            <div class="flex items-center gap-2 min-w-max pb-1">
-                                <span class="text-xs font-bold text-gray-400 uppercase tracking-wider mr-1">Populyar:</span>
-                                @foreach($popularBrands as $pb)
-                                    <button type="button"
-                                            onclick="selectQuickBrand({{ $pb['id'] }})"
-                                            class="brand-chip px-3 py-1.5 bg-white hover:bg-orange-50/60 border {{ request('brand_id') == $pb['id'] ? 'border-[var(--primary)] bg-orange-50/60 text-[var(--primary)] font-bold' : 'border-gray-200/80 text-gray-700 font-medium' }} rounded-xl text-xs transition duration-150 shadow-2xs flex items-center gap-1.5">
-                                        <i class="bi bi-tag text-gray-400 text-xs"></i>
-                                        <span>{{ $pb['name'] }}</span>
-                                    </button>
-                                @endforeach
-                            </div>
-                        </div>
-                    @endif
-
                     <!-- Primary Filter Row (Brand, Model, Year, Price, City, More Filters) -->
                     <div class="bg-white p-3.5 sm:p-5 rounded-3xl border border-gray-200/80 shadow-sm grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
                         
@@ -228,14 +211,6 @@
 
                 modelSelect.addEventListener('change', submitCarFilter);
             }
-
-            // Quick brand selection from top chips
-            window.selectQuickBrand = function(brandId) {
-                if (brandSelect) {
-                    brandSelect.value = brandId;
-                    brandSelect.dispatchEvent(new Event('change'));
-                }
-            };
 
             // 2. Deal Type Toggle
             dealTypeBtns.forEach(btn => {
