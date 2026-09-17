@@ -56,7 +56,7 @@
                                     class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl text-sm font-semibold text-gray-800 outline-none focus:border-[var(--primary)] focus:bg-white transition">
                                 <option value="">Marka seçin</option>
                                 @foreach($brands as $b)
-                                    <option value="{{ $b->id }}">{{ $b->name }}</option>
+                                    <option value="{{ $b->id }}" data-applicable-types="{{ json_encode($b->applicable_types ?? []) }}">{{ $b->name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -73,12 +73,12 @@
                     <!-- Ban Növü & Buraxılış İli & Yürüş -->
                     <div class="grid grid-cols-1 sm:grid-cols-3 gap-4">
                         <div>
-                            <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">Ban Növü</label>
-                            <select name="body_type_id"
+                            <label id="bodyTypeLabel" class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">Ban Növü</label>
+                            <select name="body_type_id" id="formBodyTypeSelect"
                                     class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl text-sm font-semibold text-gray-800 outline-none focus:border-[var(--primary)] focus:bg-white transition">
                                 <option value="">Seçin</option>
                                 @foreach($bodyTypes as $bt)
-                                    <option value="{{ $bt->id }}">{{ $bt->localized_name }}</option>
+                                    <option value="{{ $bt->id }}" data-applicable-types="{{ json_encode($bt->applicable_types ?? []) }}">{{ $bt->localized_name }}</option>
                                 @endforeach
                             </select>
                         </div>
@@ -126,9 +126,9 @@
                         </select>
                     </div>
 
-                    <div>
+                    <div id="steeringWheelWrapper">
                         <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">Sükan İstiqaməti *</label>
-                        <select name="steering_wheel" required
+                        <select name="steering_wheel" id="steeringWheelSelect" required
                                 class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl text-sm font-semibold text-gray-800 outline-none focus:border-[var(--primary)] focus:bg-white transition">
                             @foreach($steeringWheels as $val => $lbl)
                                 <option value="{{ $val }}">{{ $lbl }}</option>
@@ -374,15 +374,131 @@
         </form>
     </div>
 
-    <!-- Script for Dynamic Brand->Model loading & Image Previews -->
+    <!-- Script for Dynamic Brand->Model loading, Vehicle Type filtering & Image Previews -->
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             const brandSelect = document.getElementById('formBrandSelect');
             const modelSelect = document.getElementById('formModelSelect');
+            const bodyTypeSelect = document.getElementById('formBodyTypeSelect');
+            const bodyTypeLabel = document.getElementById('bodyTypeLabel');
+            const steeringWheelWrapper = document.getElementById('steeringWheelWrapper');
+            const steeringWheelSelect = document.getElementById('steeringWheelSelect');
             const imagesInput = document.getElementById('carImagesInput');
             const previewContainer = document.getElementById('imagePreviewContainer');
             const form = document.getElementById('addCarForm');
             const submitBtn = document.getElementById('submitCarBtn');
+            const vehicleTypeRadios = document.querySelectorAll('input[name="vehicle_type"]');
+
+            // Cache all brand and body type options
+            const allBrandOptions = brandSelect ? Array.from(brandSelect.querySelectorAll('option')) : [];
+            const allBodyTypeOptions = bodyTypeSelect ? Array.from(bodyTypeSelect.querySelectorAll('option')) : [];
+
+            function filterByVehicleType(selectedType) {
+                if (!selectedType) return;
+
+                // 1. Filter Brands
+                if (brandSelect) {
+                    const currentBrandVal = brandSelect.value;
+                    brandSelect.innerHTML = '';
+                    let isCurrentBrandValid = false;
+
+                    allBrandOptions.forEach(opt => {
+                        if (!opt.value) {
+                            brandSelect.appendChild(opt.cloneNode(true));
+                            return;
+                        }
+                        let applicable = [];
+                        try {
+                            applicable = JSON.parse(opt.getAttribute('data-applicable-types') || '[]');
+                        } catch (e) {
+                            applicable = [];
+                        }
+
+                        if (!applicable || applicable.length === 0 || applicable.includes('all') || applicable.includes(selectedType)) {
+                            const cloned = opt.cloneNode(true);
+                            if (opt.value === currentBrandVal) {
+                                cloned.selected = true;
+                                isCurrentBrandValid = true;
+                            }
+                            brandSelect.appendChild(cloned);
+                        }
+                    });
+
+                    if (!isCurrentBrandValid) {
+                        brandSelect.value = '';
+                        if (modelSelect) {
+                            modelSelect.innerHTML = '<option value="">Əvvəlcə Marka seçin</option>';
+                            modelSelect.disabled = true;
+                            modelSelect.classList.add('opacity-60', 'cursor-not-allowed');
+                        }
+                    }
+                }
+
+                // 2. Filter Body Types
+                if (bodyTypeSelect) {
+                    const currentBodyTypeVal = bodyTypeSelect.value;
+                    bodyTypeSelect.innerHTML = '';
+                    let isCurrentBodyTypeValid = false;
+
+                    allBodyTypeOptions.forEach(opt => {
+                        if (!opt.value) {
+                            bodyTypeSelect.appendChild(opt.cloneNode(true));
+                            return;
+                        }
+                        let applicable = [];
+                        try {
+                            applicable = JSON.parse(opt.getAttribute('data-applicable-types') || '[]');
+                        } catch (e) {
+                            applicable = [];
+                        }
+
+                        if (!applicable || applicable.length === 0 || applicable.includes('all') || applicable.includes(selectedType)) {
+                            const cloned = opt.cloneNode(true);
+                            if (opt.value === currentBodyTypeVal) {
+                                cloned.selected = true;
+                                isCurrentBodyTypeValid = true;
+                            }
+                            bodyTypeSelect.appendChild(cloned);
+                        }
+                    });
+
+                    if (!isCurrentBodyTypeValid) {
+                        bodyTypeSelect.value = '';
+                    }
+                }
+
+                // 3. Update Labels & Motorcycle-specific visibility
+                const isMotorcycle = selectedType === 'motorcycle';
+                if (bodyTypeLabel) {
+                    bodyTypeLabel.textContent = isMotorcycle ? 'Motosiklet Növü' : 'Ban Növü';
+                }
+
+                if (steeringWheelWrapper && steeringWheelSelect) {
+                    if (isMotorcycle) {
+                        steeringWheelWrapper.style.display = 'none';
+                        steeringWheelSelect.removeAttribute('required');
+                        steeringWheelSelect.value = 'right';
+                    } else {
+                        steeringWheelWrapper.style.display = '';
+                        steeringWheelSelect.setAttribute('required', 'required');
+                    }
+                }
+            }
+
+            // Listen for vehicle type changes
+            vehicleTypeRadios.forEach(radio => {
+                radio.addEventListener('change', function() {
+                    if (this.checked) {
+                        filterByVehicleType(this.value);
+                    }
+                });
+            });
+
+            // Run initial filter on page load
+            const checkedRadio = document.querySelector('input[name="vehicle_type"]:checked');
+            if (checkedRadio) {
+                filterByVehicleType(checkedRadio.value);
+            }
 
             // 1. Dynamic Brand -> Models Loading
             if (brandSelect && modelSelect) {

@@ -73,6 +73,12 @@ class CarBodyTypeResource extends Resource
                             ->numeric()
                             ->default(0),
 
+                        Forms\Components\CheckboxList::make('applicable_types')
+                            ->label('Tətbiq olunan Kateqoriyalar')
+                            ->options(\App\Modules\Car\Enums\VehicleType::options())
+                            ->columns(3)
+                            ->helperText('Boş buraxıldıqda bütün kateqoriyalara aid edilir.'),
+
                         Forms\Components\Toggle::make('is_active')
                             ->label('Aktiv')
                             ->default(true),

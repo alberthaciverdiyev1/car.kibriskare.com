@@ -37,15 +37,16 @@
             </div>
 
             <!-- 2. Ban Növü (Body Type) -->
-            <div>
-                <label class="block font-bold text-gray-900 text-sm mb-3 flex items-center gap-1.5">
+            <div id="modalBodyTypeContainer">
+                <label id="modalBodyTypeLabel" class="block font-bold text-gray-900 text-sm mb-3 flex items-center gap-1.5">
                     <i class="bi bi-car-front text-[var(--primary)]"></i>
-                    {{ __('Ban Növü (Kasa Tipi)') }}
+                    <span id="modalBodyTypeLabelText">{{ __('Ban Növü (Kasa Tipi)') }}</span>
                 </label>
-                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2.5">
+                <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-2.5" id="modalBodyTypeChipsGrid">
                     @foreach($bodyTypes as $bt)
                         @php $isSelected = request('body_type_id') == $bt->id; @endphp
-                        <label class="modal-radio-chip flex items-center gap-2 p-3 rounded-2xl border cursor-pointer transition select-none {{ $isSelected ? 'border-[var(--primary)] bg-orange-50/60 font-semibold text-[var(--primary)]' : 'border-gray-200 bg-white text-gray-700 hover:border-[var(--primary)] hover:bg-orange-50/20' }}">
+                        <label class="modal-radio-chip modal-body-type-chip flex items-center gap-2 p-3 rounded-2xl border cursor-pointer transition select-none {{ $isSelected ? 'border-[var(--primary)] bg-orange-50/60 font-semibold text-[var(--primary)]' : 'border-gray-200 bg-white text-gray-700 hover:border-[var(--primary)] hover:bg-orange-50/20' }}"
+                               data-applicable-types="{{ json_encode($bt->applicable_types ?? []) }}">
                             <input type="radio" name="body_type_id" value="{{ $bt->id }}" {{ $isSelected ? 'checked' : '' }} class="sr-only">
                             <span class="truncate text-xs sm:text-sm">{{ $bt->localized_name }}</span>
                         </label>
@@ -91,9 +92,9 @@
             </div>
 
             <!-- 4. Sükan İstiqaməti & Ötürücü (Drivetrain) -->
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6" id="modalSteeringDrivetrainRow">
                 <!-- Sükan İstiqaməti (Steering Wheel) -->
-                <div>
+                <div id="modalSteeringWheelContainer">
                     <label class="block font-bold text-gray-900 text-sm mb-3 flex items-center gap-1.5">
                         <i class="bi bi-compass text-[var(--primary)]"></i>
                         {{ __('Sükan İstiqaməti') }}

@@ -127,7 +127,7 @@
                                         class="w-full h-11 px-4 bg-white border border-gray-200/90 rounded-xl text-sm font-medium text-gray-800 transition outline-none focus:border-[var(--primary)] focus:ring-1 focus:ring-[var(--primary)] cursor-pointer appearance-none pr-9">
                                     <option value="">Marka</option>
                                     @foreach($brands as $b)
-                                        <option value="{{ $b->id }}" {{ request('brand_id') == $b->id ? 'selected' : '' }}>
+                                        <option value="{{ $b->id }}" {{ request('brand_id') == $b->id ? 'selected' : '' }} data-applicable-types="{{ json_encode($b->applicable_types ?? []) }}">
                                             {{ $b->name }}
                                         </option>
                                     @endforeach
@@ -198,7 +198,7 @@
                                         class="w-full h-11 px-4 bg-white border border-gray-200/90 rounded-xl text-sm font-medium text-gray-800 transition outline-none focus:border-[var(--primary)] focus:ring-1 focus:ring-[var(--primary)] cursor-pointer appearance-none pr-9">
                                     <option value="">Ban növü</option>
                                     @foreach($bodyTypes as $bt)
-                                        <option value="{{ $bt->id }}" {{ request('body_type_id') == $bt->id ? 'selected' : '' }}>
+                                        <option value="{{ $bt->id }}" {{ request('body_type_id') == $bt->id ? 'selected' : '' }} data-applicable-types="{{ json_encode($bt->applicable_types ?? []) }}">
                                             {{ $bt->localized_name }}
                                         </option>
                                     @endforeach
@@ -300,6 +300,7 @@
             const form = document.getElementById('carFilterForm');
             const brandSelect = document.getElementById('brandSelect');
             const modelSelect = document.getElementById('modelSelect');
+            const bodyTypeSelect = document.getElementById('bodyTypeSelect');
             const vehicleTypeBtns = document.querySelectorAll('.vehicle-type-btn');
             const vehicleTypeInput = document.getElementById('vehicleTypeInput');
             const dealTypeBtns = document.querySelectorAll('.deal-type-btn');
@@ -308,6 +309,135 @@
             const conditionBtns = document.querySelectorAll('.condition-btn');
             const conditionInput = document.getElementById('conditionInput');
             const sortSelect = document.getElementById('carSortSelect');
+
+            // Cache options
+            const allBrandOptions = brandSelect ? Array.from(brandSelect.querySelectorAll('option')) : [];
+            const allBodyTypeOptions = bodyTypeSelect ? Array.from(bodyTypeSelect.querySelectorAll('option')) : [];
+
+            function filterCategoryOptions(selectedType) {
+                const isAll = !selectedType || selectedType === 'all';
+                const isMotorcycle = selectedType === 'motorcycle';
+
+                // 1. Filter Brand Select
+                if (brandSelect) {
+                    const currentBrandVal = brandSelect.value;
+                    brandSelect.innerHTML = '';
+                    let isCurrentBrandValid = false;
+
+                    allBrandOptions.forEach(opt => {
+                        if (!opt.value) {
+                            brandSelect.appendChild(opt.cloneNode(true));
+                            return;
+                        }
+                        let applicable = [];
+                        try {
+                            applicable = JSON.parse(opt.getAttribute('data-applicable-types') || '[]');
+                        } catch (e) {
+                            applicable = [];
+                        }
+
+                        if (isAll || !applicable || applicable.length === 0 || applicable.includes('all') || applicable.includes(selectedType)) {
+                            const cloned = opt.cloneNode(true);
+                            if (opt.value === currentBrandVal) {
+                                cloned.selected = true;
+                                isCurrentBrandValid = true;
+                            }
+                            brandSelect.appendChild(cloned);
+                        }
+                    });
+
+                    if (!isCurrentBrandValid && currentBrandVal) {
+                        brandSelect.value = '';
+                        if (modelSelect) {
+                            modelSelect.innerHTML = '<option value="">Model</option>';
+                            modelSelect.disabled = true;
+                            modelSelect.classList.add('opacity-60', 'cursor-not-allowed');
+                        }
+                    }
+                }
+
+                // 2. Filter Body Type Select
+                if (bodyTypeSelect) {
+                    const currentBodyVal = bodyTypeSelect.value;
+                    bodyTypeSelect.innerHTML = '';
+                    let isCurrentBodyValid = false;
+
+                    allBodyTypeOptions.forEach(opt => {
+                        if (!opt.value) {
+                            const placeholder = opt.cloneNode(true);
+                            if (isMotorcycle) {
+                                placeholder.textContent = 'Motosiklet növü';
+                            } else {
+                                placeholder.textContent = 'Ban növü';
+                            }
+                            bodyTypeSelect.appendChild(placeholder);
+                            return;
+                        }
+                        let applicable = [];
+                        try {
+                            applicable = JSON.parse(opt.getAttribute('data-applicable-types') || '[]');
+                        } catch (e) {
+                            applicable = [];
+                        }
+
+                        if (isAll || !applicable || applicable.length === 0 || applicable.includes('all') || applicable.includes(selectedType)) {
+                            const cloned = opt.cloneNode(true);
+                            if (opt.value === currentBodyVal) {
+                                cloned.selected = true;
+                                isCurrentBodyValid = true;
+                            }
+                            bodyTypeSelect.appendChild(cloned);
+                        }
+                    });
+
+                    if (!isCurrentBodyValid && currentBodyVal) {
+                        bodyTypeSelect.value = '';
+                    }
+                }
+
+                // 3. Filter Modal Chips
+                const modalBodyTypeChips = document.querySelectorAll('.modal-body-type-chip');
+                modalBodyTypeChips.forEach(chip => {
+                    let applicable = [];
+                    try {
+                        applicable = JSON.parse(chip.getAttribute('data-applicable-types') || '[]');
+                    } catch (e) {
+                        applicable = [];
+                    }
+
+                    if (isAll || !applicable || applicable.length === 0 || applicable.includes('all') || applicable.includes(selectedType)) {
+                        chip.style.display = '';
+                    } else {
+                        chip.style.display = 'none';
+                        const input = chip.querySelector('input[type="radio"]');
+                        if (input && input.checked) {
+                            input.checked = false;
+                            chip.classList.remove('border-[var(--primary)]', 'bg-orange-50/60', 'font-semibold', 'text-[var(--primary)]');
+                            chip.classList.add('border-gray-200', 'bg-white', 'text-gray-700');
+                        }
+                    }
+                });
+
+                const modalBodyTypeLabel = document.getElementById('modalBodyTypeLabelText');
+                if (modalBodyTypeLabel) {
+                    modalBodyTypeLabel.textContent = isMotorcycle ? 'Motosiklet Növü' : 'Ban Növü (Kasa Tipi)';
+                }
+
+                const modalSteering = document.getElementById('modalSteeringWheelContainer');
+                if (modalSteering) {
+                    if (isMotorcycle) {
+                        modalSteering.style.display = 'none';
+                        const radios = modalSteering.querySelectorAll('input[type="radio"]');
+                        radios.forEach(r => r.checked = false);
+                    } else {
+                        modalSteering.style.display = '';
+                    }
+                }
+            }
+
+            // Run initial filter on page load
+            const initialVehicleType = vehicleTypeInput ? vehicleTypeInput.value : 'all';
+            filterCategoryOptions(initialVehicleType);
 
             // 0. Vehicle Type Category Cards Click
             vehicleTypeBtns.forEach(btn => {
@@ -333,6 +463,7 @@
                         activeIcon.classList.remove('bg-gray-100', 'text-gray-600');
                     }
 
+                    filterCategoryOptions(val);
                     submitCarFilter();
                 });
             });

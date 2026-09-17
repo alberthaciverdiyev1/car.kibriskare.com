@@ -16,16 +16,31 @@ class CarBrand extends Model
         'slug',
         'logo',
         'country',
+        'applicable_types',
         'is_popular',
         'sort_order',
         'is_active',
     ];
 
     protected $casts = [
+        'applicable_types' => 'array',
         'is_popular' => 'boolean',
         'is_active' => 'boolean',
         'sort_order' => 'integer',
     ];
+
+    public function scopeForVehicleType($query, ?string $type = null)
+    {
+        if (empty($type) || $type === 'all') {
+            return $query;
+        }
+
+        return $query->where(function ($q) use ($type) {
+            $q->whereJsonContains('applicable_types', $type)
+              ->orWhereJsonContains('applicable_types', 'all')
+              ->orWhereNull('applicable_types');
+        });
+    }
 
     protected static function booted(): void
     {

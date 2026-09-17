@@ -13,6 +13,7 @@ use App\Modules\Car\Enums\SteeringWheel;
 use App\Modules\Car\Enums\Transmission;
 use App\Modules\Car\Enums\VehicleType;
 use App\Modules\Car\Models\Car;
+use App\Modules\Car\Models\CarBodyType;
 use App\Modules\Car\Models\CarBrand;
 use App\Modules\Car\Models\CarModel;
 use Filament\Forms;
@@ -65,11 +66,23 @@ class CarResource extends Resource
                                         ->label('Nəqliyyat Kateqoriyası')
                                         ->options(VehicleType::options())
                                         ->default(VehicleType::Car->value)
-                                        ->required(),
+                                        ->required()
+                                        ->live()
+                                        ->afterStateUpdated(function (Forms\Set $set) {
+                                            $set('brand_id', null);
+                                            $set('model_id', null);
+                                            $set('body_type_id', null);
+                                        }),
 
                                     Forms\Components\Select::make('brand_id')
                                         ->label('Marka')
-                                        ->relationship('brand', 'name')
+                                        ->options(function (Forms\Get $get) {
+                                            $vehicleType = $get('vehicle_type') ?? VehicleType::Car->value;
+                                            return CarBrand::forVehicleType($vehicleType)
+                                                ->where('is_active', true)
+                                                ->orderBy('name')
+                                                ->pluck('name', 'id');
+                                        })
                                         ->searchable()
                                         ->preload()
                                         ->required()
@@ -86,8 +99,16 @@ class CarResource extends Resource
                                         ->required(),
 
                                     Forms\Components\Select::make('body_type_id')
-                                        ->label('Ban Növü')
-                                        ->relationship('bodyType', 'name->tr')
+                                        ->label(fn (Forms\Get $get) => $get('vehicle_type') === VehicleType::Motorcycle->value ? 'Motosiklet Növü' : 'Ban Növü')
+                                        ->options(function (Forms\Get $get) {
+                                            $vehicleType = $get('vehicle_type') ?? VehicleType::Car->value;
+                                            $locale = app()->getLocale();
+                                            return CarBodyType::forVehicleType($vehicleType)
+                                                ->where('is_active', true)
+                                                ->orderBy('sort_order')
+                                                ->get()
+                                                ->mapWithKeys(fn ($item) => [$item->id => $item->getTranslation('name', $locale) ?: $item->getTranslation('name', 'tr') ?: (is_array($item->name) ? reset($item->name) : $item->name)]);
+                                        })
                                         ->searchable()
                                         ->preload(),
                                 ]),
@@ -181,7 +202,8 @@ class CarResource extends Resource
                                         ->label('Sükan İstiqaməti')
                                         ->options(SteeringWheel::options())
                                         ->default(SteeringWheel::Right->value)
-                                        ->required(),
+                                        ->required(fn (Forms\Get $get) => $get('vehicle_type') !== VehicleType::Motorcycle->value)
+                                        ->hidden(fn (Forms\Get $get) => $get('vehicle_type') === VehicleType::Motorcycle->value),
 
                                     Forms\Components\Select::make('drivetrain')
                                         ->label('Ötürücü')
@@ -201,7 +223,8 @@ class CarResource extends Resource
                                     Forms\Components\TextInput::make('doors')
                                         ->label('Qapı Sayı')
                                         ->numeric()
-                                        ->default(4),
+                                        ->default(4)
+                                        ->hidden(fn (Forms\Get $get) => $get('vehicle_type') === VehicleType::Motorcycle->value),
 
                                     Forms\Components\TextInput::make('seats')
                                         ->label('Oturacaq Sayı')

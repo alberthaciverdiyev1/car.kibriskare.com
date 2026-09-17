@@ -27,7 +27,7 @@ class StoreCarRequest extends FormRequest
             'currency' => ['nullable', 'string', 'in:GBP,TRY,EUR,USD'],
             'fuel_type' => ['required', 'string', 'in:petrol,diesel,hybrid,plug_in_hybrid,electric,lpg'],
             'transmission' => ['required', 'string', 'in:automatic,manual,robot,cvt'],
-            'steering_wheel' => ['required', 'string', 'in:right,left'],
+            'steering_wheel' => ['nullable', 'string', 'in:right,left'],
             'drivetrain' => ['nullable', 'string', 'in:front_wheel,rear_wheel,all_wheel'],
             'engine_volume' => ['nullable', 'integer', 'min:0', 'max:12000'],
             'engine_power' => ['nullable', 'integer', 'min:0', 'max:2000'],
