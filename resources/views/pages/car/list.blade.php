@@ -47,70 +47,56 @@
                         </div>
                     </div>
 
-                    <!-- Category Navigation: Vehicle Type Cards -->
+                    <!-- Category Navigation: Minimalist & Modern Vehicle Type Tabs -->
                     <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2 sm:gap-2.5 select-none" id="vehicleTypeCardsContainer">
                         
                         <!-- 1. Bütün Elanlar -->
                         <button type="button" data-type="all"
-                                class="vehicle-type-btn p-2.5 sm:p-3 rounded-2xl border text-center flex flex-col items-center justify-center gap-1.5 cursor-pointer group {{ $selectedVehicleType === 'all' || !$selectedVehicleType ? 'border-[var(--primary)] bg-orange-50/50 text-[var(--primary)] shadow-2xs font-extrabold' : 'border-gray-200/90 bg-white hover:border-[var(--primary)] hover:bg-orange-50/20 text-gray-700 shadow-2xs font-bold' }}">
-                            <div class="icon-box w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center text-base sm:text-lg {{ $selectedVehicleType === 'all' || !$selectedVehicleType ? 'bg-[var(--primary)] text-white' : 'bg-gray-100 text-gray-600 group-hover:bg-orange-100 group-hover:text-[var(--primary)]' }}">
-                                <i class="bi bi-grid-fill"></i>
-                            </div>
-                            <span class="text-[11px] sm:text-xs leading-tight line-clamp-1">{{ __('Bütün Elanlar') }}</span>
+                                class="vehicle-type-btn h-11 px-2.5 rounded-2xl border text-center flex items-center justify-center gap-2 cursor-pointer transition duration-200 group {{ $selectedVehicleType === 'all' || !$selectedVehicleType ? 'border-[var(--primary)] bg-orange-50/80 text-[var(--primary)] font-bold shadow-xs ring-1 ring-[var(--primary)]' : 'border-gray-200/90 bg-white hover:border-gray-300 hover:bg-gray-50 text-gray-600 hover:text-gray-900 shadow-2xs font-medium' }}">
+                            <i class="bi bi-grid-fill text-base transition-transform group-hover:scale-110 {{ $selectedVehicleType === 'all' || !$selectedVehicleType ? 'text-[var(--primary)] scale-110' : 'text-gray-400 group-hover:text-gray-700' }}"></i>
+                            <span class="text-xs sm:text-[13px] truncate">{{ __('Bütün Elanlar') }}</span>
                         </button>
 
                         <!-- 2. Otomobil -->
                         <button type="button" data-type="car"
-                                class="vehicle-type-btn p-2.5 sm:p-3 rounded-2xl border text-center flex flex-col items-center justify-center gap-1.5 cursor-pointer group {{ $selectedVehicleType === 'car' ? 'border-[var(--primary)] bg-orange-50/50 text-[var(--primary)] shadow-2xs font-extrabold' : 'border-gray-200/90 bg-white hover:border-[var(--primary)] hover:bg-orange-50/20 text-gray-700 shadow-2xs font-bold' }}">
-                            <div class="icon-box w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center text-base sm:text-lg {{ $selectedVehicleType === 'car' ? 'bg-[var(--primary)] text-white' : 'bg-gray-100 text-gray-600 group-hover:bg-orange-100 group-hover:text-[var(--primary)]' }}">
-                                <i class="bi bi-car-front-fill"></i>
-                            </div>
-                            <span class="text-[11px] sm:text-xs leading-tight line-clamp-1">{{ __('Otomobil') }}</span>
+                                class="vehicle-type-btn h-11 px-2.5 rounded-2xl border text-center flex items-center justify-center gap-2 cursor-pointer transition duration-200 group {{ $selectedVehicleType === 'car' ? 'border-[var(--primary)] bg-orange-50/80 text-[var(--primary)] font-bold shadow-xs ring-1 ring-[var(--primary)]' : 'border-gray-200/90 bg-white hover:border-gray-300 hover:bg-gray-50 text-gray-600 hover:text-gray-900 shadow-2xs font-medium' }}">
+                            <i class="bi bi-car-front-fill text-base transition-transform group-hover:scale-110 {{ $selectedVehicleType === 'car' ? 'text-[var(--primary)] scale-110' : 'text-gray-400 group-hover:text-gray-700' }}"></i>
+                            <span class="text-xs sm:text-[13px] truncate">{{ __('Otomobil') }}</span>
                         </button>
 
                         <!-- 3. SUV & Pick-up -->
                         <button type="button" data-type="suv"
-                                class="vehicle-type-btn p-2.5 sm:p-3 rounded-2xl border text-center flex flex-col items-center justify-center gap-1.5 cursor-pointer group {{ $selectedVehicleType === 'suv' ? 'border-[var(--primary)] bg-orange-50/50 text-[var(--primary)] shadow-2xs font-extrabold' : 'border-gray-200/90 bg-white hover:border-[var(--primary)] hover:bg-orange-50/20 text-gray-700 shadow-2xs font-bold' }}">
-                            <div class="icon-box w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center text-base sm:text-lg {{ $selectedVehicleType === 'suv' ? 'bg-[var(--primary)] text-white' : 'bg-gray-100 text-gray-600 group-hover:bg-orange-100 group-hover:text-[var(--primary)]' }}">
-                                <i class="bi bi-truck-front-fill"></i>
-                            </div>
-                            <span class="text-[11px] sm:text-xs leading-tight line-clamp-1">{{ __('Arazi, SUV & Pick-up') }}</span>
+                                class="vehicle-type-btn h-11 px-2.5 rounded-2xl border text-center flex items-center justify-center gap-2 cursor-pointer transition duration-200 group {{ $selectedVehicleType === 'suv' ? 'border-[var(--primary)] bg-orange-50/80 text-[var(--primary)] font-bold shadow-xs ring-1 ring-[var(--primary)]' : 'border-gray-200/90 bg-white hover:border-gray-300 hover:bg-gray-50 text-gray-600 hover:text-gray-900 shadow-2xs font-medium' }}">
+                            <i class="bi bi-truck-front-fill text-base transition-transform group-hover:scale-110 {{ $selectedVehicleType === 'suv' ? 'text-[var(--primary)] scale-110' : 'text-gray-400 group-hover:text-gray-700' }}"></i>
+                            <span class="text-xs sm:text-[13px] truncate">{{ __('SUV & Pick-up') }}</span>
                         </button>
 
                         <!-- 4. Motosiklet -->
                         <button type="button" data-type="motorcycle"
-                                class="vehicle-type-btn p-2.5 sm:p-3 rounded-2xl border text-center flex flex-col items-center justify-center gap-1.5 cursor-pointer group {{ $selectedVehicleType === 'motorcycle' ? 'border-[var(--primary)] bg-orange-50/50 text-[var(--primary)] shadow-2xs font-extrabold' : 'border-gray-200/90 bg-white hover:border-[var(--primary)] hover:bg-orange-50/20 text-gray-700 shadow-2xs font-bold' }}">
-                            <div class="icon-box w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center text-base sm:text-lg {{ $selectedVehicleType === 'motorcycle' ? 'bg-[var(--primary)] text-white' : 'bg-gray-100 text-gray-600 group-hover:bg-orange-100 group-hover:text-[var(--primary)]' }}">
-                                <i class="bi bi-bicycle"></i>
-                            </div>
-                            <span class="text-[11px] sm:text-xs leading-tight line-clamp-1">{{ __('Motosiklet & Skuter') }}</span>
+                                class="vehicle-type-btn h-11 px-2.5 rounded-2xl border text-center flex items-center justify-center gap-2 cursor-pointer transition duration-200 group {{ $selectedVehicleType === 'motorcycle' ? 'border-[var(--primary)] bg-orange-50/80 text-[var(--primary)] font-bold shadow-xs ring-1 ring-[var(--primary)]' : 'border-gray-200/90 bg-white hover:border-gray-300 hover:bg-gray-50 text-gray-600 hover:text-gray-900 shadow-2xs font-medium' }}">
+                            <i class="bi bi-bicycle text-base transition-transform group-hover:scale-110 {{ $selectedVehicleType === 'motorcycle' ? 'text-[var(--primary)] scale-110' : 'text-gray-400 group-hover:text-gray-700' }}"></i>
+                            <span class="text-xs sm:text-[13px] truncate">{{ __('Motosiklet') }}</span>
                         </button>
 
                         <!-- 5. Ticari Nəqliyyat -->
                         <button type="button" data-type="commercial"
-                                class="vehicle-type-btn p-2.5 sm:p-3 rounded-2xl border text-center flex flex-col items-center justify-center gap-1.5 cursor-pointer group {{ $selectedVehicleType === 'commercial' ? 'border-[var(--primary)] bg-orange-50/50 text-[var(--primary)] shadow-2xs font-extrabold' : 'border-gray-200/90 bg-white hover:border-[var(--primary)] hover:bg-orange-50/20 text-gray-700 shadow-2xs font-bold' }}">
-                            <div class="icon-box w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center text-base sm:text-lg {{ $selectedVehicleType === 'commercial' ? 'bg-[var(--primary)] text-white' : 'bg-gray-100 text-gray-600 group-hover:bg-orange-100 group-hover:text-[var(--primary)]' }}">
-                                <i class="bi bi-truck"></i>
-                            </div>
-                            <span class="text-[11px] sm:text-xs leading-tight line-clamp-1">{{ __('Ticari Nəqliyyat') }}</span>
+                                class="vehicle-type-btn h-11 px-2.5 rounded-2xl border text-center flex items-center justify-center gap-2 cursor-pointer transition duration-200 group {{ $selectedVehicleType === 'commercial' ? 'border-[var(--primary)] bg-orange-50/80 text-[var(--primary)] font-bold shadow-xs ring-1 ring-[var(--primary)]' : 'border-gray-200/90 bg-white hover:border-gray-300 hover:bg-gray-50 text-gray-600 hover:text-gray-900 shadow-2xs font-medium' }}">
+                            <i class="bi bi-truck text-base transition-transform group-hover:scale-110 {{ $selectedVehicleType === 'commercial' ? 'text-[var(--primary)] scale-110' : 'text-gray-400 group-hover:text-gray-700' }}"></i>
+                            <span class="text-xs sm:text-[13px] truncate">{{ __('Ticari') }}</span>
                         </button>
 
                         <!-- 6. Klasik Araçlar -->
                         <button type="button" data-type="classic"
-                                class="vehicle-type-btn p-2.5 sm:p-3 rounded-2xl border text-center flex flex-col items-center justify-center gap-1.5 cursor-pointer group {{ $selectedVehicleType === 'classic' ? 'border-[var(--primary)] bg-orange-50/50 text-[var(--primary)] shadow-2xs font-extrabold' : 'border-gray-200/90 bg-white hover:border-[var(--primary)] hover:bg-orange-50/20 text-gray-700 shadow-2xs font-bold' }}">
-                            <div class="icon-box w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center text-base sm:text-lg {{ $selectedVehicleType === 'classic' ? 'bg-[var(--primary)] text-white' : 'bg-gray-100 text-gray-600 group-hover:bg-orange-100 group-hover:text-[var(--primary)]' }}">
-                                <i class="bi bi-gem"></i>
-                            </div>
-                            <span class="text-[11px] sm:text-xs leading-tight line-clamp-1">{{ __('Klasik Araçlar') }}</span>
+                                class="vehicle-type-btn h-11 px-2.5 rounded-2xl border text-center flex items-center justify-center gap-2 cursor-pointer transition duration-200 group {{ $selectedVehicleType === 'classic' ? 'border-[var(--primary)] bg-orange-50/80 text-[var(--primary)] font-bold shadow-xs ring-1 ring-[var(--primary)]' : 'border-gray-200/90 bg-white hover:border-gray-300 hover:bg-gray-50 text-gray-600 hover:text-gray-900 shadow-2xs font-medium' }}">
+                            <i class="bi bi-gem text-base transition-transform group-hover:scale-110 {{ $selectedVehicleType === 'classic' ? 'text-[var(--primary)] scale-110' : 'text-gray-400 group-hover:text-gray-700' }}"></i>
+                            <span class="text-xs sm:text-[13px] truncate">{{ __('Klasik') }}</span>
                         </button>
 
                         <!-- 7. Qəzalı & Parçalıq -->
                         <button type="button" data-type="damaged"
-                                class="vehicle-type-btn p-2.5 sm:p-3 rounded-2xl border text-center flex flex-col items-center justify-center gap-1.5 cursor-pointer group {{ $selectedVehicleType === 'damaged' ? 'border-[var(--primary)] bg-orange-50/50 text-[var(--primary)] shadow-2xs font-extrabold' : 'border-gray-200/90 bg-white hover:border-[var(--primary)] hover:bg-orange-50/20 text-gray-700 shadow-2xs font-bold' }}">
-                            <div class="icon-box w-9 h-9 sm:w-10 sm:h-10 rounded-xl flex items-center justify-center text-base sm:text-lg {{ $selectedVehicleType === 'damaged' ? 'bg-[var(--primary)] text-white' : 'bg-gray-100 text-gray-600 group-hover:bg-orange-100 group-hover:text-[var(--primary)]' }}">
-                                <i class="bi bi-tools"></i>
-                            </div>
-                            <span class="text-[11px] sm:text-xs leading-tight line-clamp-1">{{ __('Qəzalı & Parçalıq') }}</span>
+                                class="vehicle-type-btn h-11 px-2.5 rounded-2xl border text-center flex items-center justify-center gap-2 cursor-pointer transition duration-200 group {{ $selectedVehicleType === 'damaged' ? 'border-[var(--primary)] bg-orange-50/80 text-[var(--primary)] font-bold shadow-xs ring-1 ring-[var(--primary)]' : 'border-gray-200/90 bg-white hover:border-gray-300 hover:bg-gray-50 text-gray-600 hover:text-gray-900 shadow-2xs font-medium' }}">
+                            <i class="bi bi-tools text-base transition-transform group-hover:scale-110 {{ $selectedVehicleType === 'damaged' ? 'text-[var(--primary)] scale-110' : 'text-gray-400 group-hover:text-gray-700' }}"></i>
+                            <span class="text-xs sm:text-[13px] truncate">{{ __('Qəzalı') }}</span>
                         </button>
 
                         <input type="hidden" name="vehicle_type" id="vehicleTypeInput" value="{{ $selectedVehicleType }}">
@@ -447,21 +433,21 @@
                     if (vehicleTypeInput) vehicleTypeInput.value = val;
 
                     vehicleTypeBtns.forEach(b => {
-                        b.classList.remove('border-[var(--primary)]', 'bg-orange-50/50', 'text-[var(--primary)]', 'font-extrabold');
-                        b.classList.add('border-gray-200/90', 'bg-white', 'text-gray-700', 'font-bold');
-                        const iconBox = b.querySelector('.icon-box');
-                        if (iconBox) {
-                            iconBox.classList.remove('bg-[var(--primary)]', 'text-white');
-                            iconBox.classList.add('bg-gray-100', 'text-gray-600');
+                        b.classList.remove('border-[var(--primary)]', 'bg-orange-50/80', 'text-[var(--primary)]', 'font-bold', 'ring-1', 'ring-[var(--primary)]');
+                        b.classList.add('border-gray-200/90', 'bg-white', 'text-gray-600', 'font-medium');
+                        const icon = b.querySelector('i');
+                        if (icon) {
+                            icon.classList.remove('text-[var(--primary)]', 'scale-110');
+                            icon.classList.add('text-gray-400');
                         }
                     });
 
-                    this.classList.add('border-[var(--primary)]', 'bg-orange-50/50', 'text-[var(--primary)]', 'font-extrabold');
-                    this.classList.remove('border-gray-200/90', 'bg-white', 'text-gray-700', 'font-bold');
-                    const activeIcon = this.querySelector('.icon-box');
+                    this.classList.add('border-[var(--primary)]', 'bg-orange-50/80', 'text-[var(--primary)]', 'font-bold', 'ring-1', 'ring-[var(--primary)]');
+                    this.classList.remove('border-gray-200/90', 'bg-white', 'text-gray-600', 'font-medium');
+                    const activeIcon = this.querySelector('i');
                     if (activeIcon) {
-                        activeIcon.classList.add('bg-[var(--primary)]', 'text-white');
-                        activeIcon.classList.remove('bg-gray-100', 'text-gray-600');
+                        activeIcon.classList.add('text-[var(--primary)]', 'scale-110');
+                        activeIcon.classList.remove('text-gray-400');
                     }
 
                     filterCategoryOptions(val);
