@@ -22,6 +22,19 @@
                 </div>
 
                 <div class="space-y-4">
+                    <!-- Nəqliyyat Növü (Otomobil, SUV, Motosiklet, Ticari...) -->
+                    <div>
+                        <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Nəqliyyat Kateqoriyası *</label>
+                        <div class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2">
+                            @foreach($vehicleTypes as $val => $lbl)
+                                <label class="flex items-center gap-2 p-2.5 rounded-2xl border border-gray-200 hover:border-[var(--primary)] hover:bg-orange-50/40 cursor-pointer transition select-none has-checked:border-[var(--primary)] has-checked:bg-orange-50/60 has-checked:font-bold">
+                                    <input type="radio" name="vehicle_type" value="{{ $val }}" {{ $loop->first ? 'checked' : '' }} class="accent-[var(--primary)] w-3.5 h-3.5">
+                                    <span class="text-xs text-gray-800 truncate">{{ $lbl }}</span>
+                                </label>
+                            @endforeach
+                        </div>
+                    </div>
+
                     <!-- Deal Type (Satılık / Kirayə) -->
                     <div>
                         <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">Elan Növü *</label>
@@ -153,6 +166,16 @@
                     </div>
 
                     <div>
+                        <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">Plaka Növü *</label>
+                        <select name="plate_type" required
+                                class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl text-sm font-semibold text-gray-800 outline-none focus:border-[var(--primary)] focus:bg-white transition">
+                            @foreach($plateTypes as $val => $lbl)
+                                <option value="{{ $val }}" {{ $val === 'kktc' ? 'selected' : '' }}>{{ $lbl }}</option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <div>
                         <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">Vəziyyəti *</label>
                         <select name="condition" required
                                 class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl text-sm font-semibold text-gray-800 outline-none focus:border-[var(--primary)] focus:bg-white transition">
@@ -169,23 +192,34 @@
                     </div>
                 </div>
 
-                <!-- Toggles (Gömrük, Kredit, Barter, Metalik) -->
-                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 gap-3 pt-3 border-t border-gray-100">
+                <!-- Toggles (Gömrük, Kredit, Barter, Zəmanət, Razılaşma, Metalik) -->
+                <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3 pt-3 border-t border-gray-100">
                     <label class="flex items-center gap-2 p-3 rounded-2xl bg-gray-50 border border-gray-200 cursor-pointer select-none">
                         <input type="checkbox" name="is_customs_cleared" value="1" checked class="accent-[var(--primary)] w-4 h-4">
-                        <span class="text-xs font-semibold text-gray-800">KKTC Plakalı</span>
+                        <span class="text-xs font-semibold text-gray-800">KKTC Gömrüyü Ödənilib</span>
                     </label>
                     <label class="flex items-center gap-2 p-3 rounded-2xl bg-gray-50 border border-gray-200 cursor-pointer select-none">
                         <input type="checkbox" name="is_credit_available" value="1" class="accent-[var(--primary)] w-4 h-4">
-                        <span class="text-xs font-semibold text-gray-800">Kredit mümkündür</span>
+                        <span class="text-xs font-semibold text-gray-800">Kredit / Lizinq mümkündür</span>
                     </label>
                     <label class="flex items-center gap-2 p-3 rounded-2xl bg-gray-50 border border-gray-200 cursor-pointer select-none">
                         <input type="checkbox" name="is_barter_available" value="1" class="accent-[var(--primary)] w-4 h-4">
                         <span class="text-xs font-semibold text-gray-800">Barter mümkündür</span>
                     </label>
                     <label class="flex items-center gap-2 p-3 rounded-2xl bg-gray-50 border border-gray-200 cursor-pointer select-none">
+                        <input type="checkbox" name="has_warranty" value="1" class="accent-[var(--primary)] w-4 h-4">
+                        <span class="text-xs font-semibold text-gray-800">Zəmanəti var</span>
+                    </label>
+                    <label class="flex items-center gap-2 p-3 rounded-2xl bg-gray-50 border border-gray-200 cursor-pointer select-none">
+                        <input type="checkbox" name="is_negotiable" value="1" class="accent-[var(--primary)] w-4 h-4">
+                        <span class="text-xs font-semibold text-gray-800">Razılaşma payı var</span>
+                    </label>
+                    <label class="flex items-center gap-2 p-3 rounded-2xl bg-gray-50 border border-gray-200 cursor-pointer select-none">
                         <input type="checkbox" name="is_metallic" value="1" class="accent-[var(--primary)] w-4 h-4">
                         <span class="text-xs font-semibold text-gray-800">Metalik Rəng</span>
+                    </label>
+                </div>
+            </div>bold text-gray-800">Metalik Rəng</span>
                     </label>
                 </div>
             </div>

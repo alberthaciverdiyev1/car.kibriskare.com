@@ -14,6 +14,7 @@ class StoreCarRequest extends FormRequest
     public function rules(): array
     {
         return [
+            'vehicle_type' => ['nullable', 'string', 'in:car,suv,motorcycle,commercial,classic,damaged'],
             'brand_id' => ['required', 'exists:car_brands,id'],
             'model_id' => ['required', 'exists:car_models,id'],
             'body_type_id' => ['nullable', 'exists:car_body_types,id'],
@@ -34,10 +35,13 @@ class StoreCarRequest extends FormRequest
             'is_metallic' => ['nullable', 'boolean'],
             'doors' => ['nullable', 'integer', 'min:2', 'max:6'],
             'seats' => ['nullable', 'integer', 'min:1', 'max:20'],
-            'condition' => ['required', 'string', 'in:new,used,damaged,for_parts'],
+            'condition' => ['required', 'string', 'in:new,used,damaged,for_parts,classic'],
+            'plate_type' => ['nullable', 'string', 'in:kktc,foreign,z_plate,t_plate'],
             'is_customs_cleared' => ['nullable', 'boolean'],
             'is_credit_available' => ['nullable', 'boolean'],
             'is_barter_available' => ['nullable', 'boolean'],
+            'has_warranty' => ['nullable', 'boolean'],
+            'is_negotiable' => ['nullable', 'boolean'],
             'vin' => ['nullable', 'string', 'max:50'],
             'seller_type' => ['required', 'string', 'in:owner,dealer'],
             'contact_name' => ['required', 'string', 'max:100'],

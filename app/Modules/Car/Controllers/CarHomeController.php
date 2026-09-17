@@ -3,9 +3,12 @@
 namespace App\Modules\Car\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Modules\Car\Enums\Drivetrain;
 use App\Modules\Car\Enums\FuelType;
+use App\Modules\Car\Enums\PlateType;
 use App\Modules\Car\Enums\SteeringWheel;
 use App\Modules\Car\Enums\Transmission;
+use App\Modules\Car\Enums\VehicleType;
 use App\Modules\Car\Models\CarBrand;
 use App\Modules\Car\Models\CarModel;
 use App\Modules\Car\Services\CarService;
@@ -65,9 +68,29 @@ class CarHomeController extends Controller
             ? CarModel::where('brand_id', $selectedBrandId)->where('is_active', true)->orderBy('name')->get()
             : collect();
 
+        $vehicleTypes = VehicleType::options();
         $fuelTypes = FuelType::options();
         $transmissions = Transmission::options();
         $steeringWheels = SteeringWheel::options();
+        $plateTypes = PlateType::options();
+        $drivetrains = Drivetrain::options();
+
+        $colors = [
+            'Ağ' => 'Beyaz',
+            'Qara' => 'Siyah',
+            'Gümüşü' => 'Gümüş Gri',
+            'Boz' => 'Füme / Gri',
+            'Qırmızı' => 'Kırmızı',
+            'Mavi' => 'Mavi',
+            'Göy' => 'Lacivert',
+            'Yaşıl' => 'Yeşil',
+            'Sarı' => 'Sarı',
+            'Qəhvəyi' => 'Kahverengi',
+            'Bej' => 'Bej',
+            'Narıncı' => 'Turuncu',
+            'Bordo' => 'Bordo',
+            'Qızılı' => 'Altın / Şampanya',
+        ];
 
         return response()->view('pages.car.list', compact(
             'cars',
@@ -76,9 +99,13 @@ class CarHomeController extends Controller
             'bodyTypes',
             'cities',
             'models',
+            'vehicleTypes',
             'fuelTypes',
             'transmissions',
-            'steeringWheels'
+            'steeringWheels',
+            'plateTypes',
+            'drivetrains',
+            'colors'
         ))->header('Vary', 'X-Requested-With, Accept');
     }
 

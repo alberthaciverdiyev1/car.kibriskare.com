@@ -7,8 +7,10 @@ use App\Modules\Car\Enums\CarDealType;
 use App\Modules\Car\Enums\CarStatus;
 use App\Modules\Car\Enums\Drivetrain;
 use App\Modules\Car\Enums\FuelType;
+use App\Modules\Car\Enums\PlateType;
 use App\Modules\Car\Enums\SteeringWheel;
 use App\Modules\Car\Enums\Transmission;
+use App\Modules\Car\Enums\VehicleType;
 use App\Modules\Location\Models\City;
 use App\Modules\Location\Models\District;
 use App\Modules\Shared\Models\User;
@@ -27,6 +29,7 @@ class Car extends Model
     protected $fillable = [
         'user_id',
         'autosalon_id',
+        'vehicle_type',
         'brand_id',
         'model_id',
         'body_type_id',
@@ -55,9 +58,12 @@ class Car extends Model
         'doors',
         'seats',
         'condition',
+        'plate_type',
         'is_customs_cleared',
         'is_credit_available',
         'is_barter_available',
+        'has_warranty',
+        'is_negotiable',
         'vin',
         'seller_type',
         'contact_name',
@@ -82,12 +88,14 @@ class Car extends Model
     protected $casts = [
         'title' => 'array',
         'description' => 'array',
+        'vehicle_type' => VehicleType::class,
         'deal_type' => CarDealType::class,
         'fuel_type' => FuelType::class,
         'transmission' => Transmission::class,
         'drivetrain' => Drivetrain::class,
         'steering_wheel' => SteeringWheel::class,
         'condition' => CarCondition::class,
+        'plate_type' => PlateType::class,
         'status' => CarStatus::class,
         'price_gbp' => 'decimal:2',
         'price_try' => 'decimal:2',
@@ -103,6 +111,8 @@ class Car extends Model
         'is_customs_cleared' => 'boolean',
         'is_credit_available' => 'boolean',
         'is_barter_available' => 'boolean',
+        'has_warranty' => 'boolean',
+        'is_negotiable' => 'boolean',
         'is_vip' => 'boolean',
         'is_premium' => 'boolean',
         'is_urgent' => 'boolean',

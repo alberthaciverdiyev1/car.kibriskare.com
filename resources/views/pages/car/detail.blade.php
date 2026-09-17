@@ -154,6 +154,11 @@
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3 text-sm">
                         
                         <div class="flex items-center justify-between py-1.5 border-b border-gray-50">
+                            <span class="text-gray-500 font-medium">Kateqoriya</span>
+                            <span class="font-bold text-gray-900">{{ $car->vehicle_type?->label() ?? 'Otomobil' }}</span>
+                        </div>
+
+                        <div class="flex items-center justify-between py-1.5 border-b border-gray-50">
                             <span class="text-gray-500 font-medium">Marka</span>
                             <span class="font-bold text-gray-900">{{ $car->brand?->name ?? '—' }}</span>
                         </div>
@@ -219,14 +224,28 @@
                         </div>
 
                         <div class="flex items-center justify-between py-1.5 border-b border-gray-50">
-                            <span class="text-gray-500 font-medium">Gömrük / Plaka</span>
-                            <span class="font-bold {{ $car->is_customs_cleared ? 'text-emerald-600' : 'text-amber-600' }}">
-                                {{ $car->is_customs_cleared ? 'KKTC Plakalı (Gömrük ödənilib)' : 'Gömrük olunmayıb' }}
+                            <span class="text-gray-500 font-medium">Plaka Durumu</span>
+                            <span class="font-bold text-gray-900">
+                                {{ $car->plate_type?->label() ?? ($car->is_customs_cleared ? 'KKTC Plakalı' : 'Gömrüksüz') }}
                             </span>
                         </div>
 
                         <div class="flex items-center justify-between py-1.5 border-b border-gray-50">
-                            <span class="text-gray-500 font-medium">Kredit</span>
+                            <span class="text-gray-500 font-medium">Zəmanət</span>
+                            <span class="font-bold {{ $car->has_warranty ? 'text-emerald-600' : 'text-gray-500' }}">
+                                {{ $car->has_warranty ? 'Zəmanəti var' : 'Yoxdur' }}
+                            </span>
+                        </div>
+
+                        <div class="flex items-center justify-between py-1.5 border-b border-gray-50">
+                            <span class="text-gray-500 font-medium">Razılaşma (Pazarlık)</span>
+                            <span class="font-bold {{ $car->is_negotiable ? 'text-emerald-600' : 'text-gray-500' }}">
+                                {{ $car->is_negotiable ? 'Mümkündür' : 'Son qiymət' }}
+                            </span>
+                        </div>
+
+                        <div class="flex items-center justify-between py-1.5 border-b border-gray-50">
+                            <span class="text-gray-500 font-medium">Kredit / Lizinq</span>
                             <span class="font-bold {{ $car->is_credit_available ? 'text-emerald-600' : 'text-gray-500' }}">
                                 {{ $car->is_credit_available ? 'Mümkündür' : 'Yoxdur' }}
                             </span>

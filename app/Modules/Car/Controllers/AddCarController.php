@@ -8,8 +8,10 @@ use App\Modules\Car\Enums\CarDealType;
 use App\Modules\Car\Enums\CarStatus;
 use App\Modules\Car\Enums\Drivetrain;
 use App\Modules\Car\Enums\FuelType;
+use App\Modules\Car\Enums\PlateType;
 use App\Modules\Car\Enums\SteeringWheel;
 use App\Modules\Car\Enums\Transmission;
+use App\Modules\Car\Enums\VehicleType;
 use App\Modules\Car\Models\Autosalon;
 use App\Modules\Car\Models\Car;
 use App\Modules\Car\Models\CarBodyType;
@@ -39,6 +41,8 @@ class AddCarController extends Controller
         $features = CarFeature::where('is_active', true)->orderBy('sort_order')->get()->groupBy('category');
         $cities = City::where('is_active', true)->orderBy('name->tr')->get();
 
+        $vehicleTypes = VehicleType::options();
+        $plateTypes = PlateType::options();
         $fuelTypes = FuelType::options();
         $transmissions = Transmission::options();
         $steeringWheels = SteeringWheel::options();
@@ -56,6 +60,8 @@ class AddCarController extends Controller
             'bodyTypes',
             'features',
             'cities',
+            'vehicleTypes',
+            'plateTypes',
             'fuelTypes',
             'transmissions',
             'steeringWheels',
@@ -89,6 +95,7 @@ class AddCarController extends Controller
             $car = Car::create([
                 'user_id' => auth()->id(),
                 'autosalon_id' => $request->input('autosalon_id'),
+                'vehicle_type' => $validated['vehicle_type'] ?? 'car',
                 'brand_id' => $validated['brand_id'],
                 'model_id' => $validated['model_id'],
                 'body_type_id' => $validated['body_type_id'] ?? null,
@@ -125,9 +132,12 @@ class AddCarController extends Controller
                 'doors' => $validated['doors'] ?? 4,
                 'seats' => $validated['seats'] ?? 5,
                 'condition' => $validated['condition'],
+                'plate_type' => $validated['plate_type'] ?? 'kktc',
                 'is_customs_cleared' => $request->boolean('is_customs_cleared', true),
                 'is_credit_available' => $request->boolean('is_credit_available'),
                 'is_barter_available' => $request->boolean('is_barter_available'),
+                'has_warranty' => $request->boolean('has_warranty'),
+                'is_negotiable' => $request->boolean('is_negotiable'),
                 'vin' => $validated['vin'] ?? null,
                 'seller_type' => $validated['seller_type'],
                 'contact_name' => $validated['contact_name'],

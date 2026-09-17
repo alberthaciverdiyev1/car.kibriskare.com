@@ -8,8 +8,10 @@ use App\Modules\Car\Enums\CarDealType;
 use App\Modules\Car\Enums\CarStatus;
 use App\Modules\Car\Enums\Drivetrain;
 use App\Modules\Car\Enums\FuelType;
+use App\Modules\Car\Enums\PlateType;
 use App\Modules\Car\Enums\SteeringWheel;
 use App\Modules\Car\Enums\Transmission;
+use App\Modules\Car\Enums\VehicleType;
 use App\Modules\Car\Models\Car;
 use App\Modules\Car\Models\CarBrand;
 use App\Modules\Car\Models\CarModel;
@@ -58,7 +60,13 @@ class CarResource extends Resource
                         Forms\Components\Tabs\Tab::make('Əsas Məlumatlar')
                             ->icon('heroicon-o-information-circle')
                             ->schema([
-                                Forms\Components\Grid::make(3)->schema([
+                                Forms\Components\Grid::make(4)->schema([
+                                    Forms\Components\Select::make('vehicle_type')
+                                        ->label('Nəqliyyat Kateqoriyası')
+                                        ->options(VehicleType::options())
+                                        ->default(VehicleType::Car->value)
+                                        ->required(),
+
                                     Forms\Components\Select::make('brand_id')
                                         ->label('Marka')
                                         ->relationship('brand', 'name')
@@ -163,6 +171,12 @@ class CarResource extends Resource
                                 ]),
 
                                 Forms\Components\Grid::make(4)->schema([
+                                    Forms\Components\Select::make('plate_type')
+                                        ->label('Plaka Növü')
+                                        ->options(PlateType::options())
+                                        ->default(PlateType::Kktc->value)
+                                        ->required(),
+
                                     Forms\Components\Select::make('steering_wheel')
                                         ->label('Sükan İstiqaməti')
                                         ->options(SteeringWheel::options())
@@ -177,13 +191,25 @@ class CarResource extends Resource
                                     Forms\Components\TextInput::make('color')
                                         ->label('Rəng')
                                         ->placeholder('Qara, Ağ, Gümüşü, Mavi'),
+                                ]),
 
+                                Forms\Components\Grid::make(3)->schema([
                                     Forms\Components\TextInput::make('vin')
                                         ->label('VIN Kod')
                                         ->maxLength(50),
+
+                                    Forms\Components\TextInput::make('doors')
+                                        ->label('Qapı Sayı')
+                                        ->numeric()
+                                        ->default(4),
+
+                                    Forms\Components\TextInput::make('seats')
+                                        ->label('Oturacaq Sayı')
+                                        ->numeric()
+                                        ->default(5),
                                 ]),
 
-                                Forms\Components\Grid::make(4)->schema([
+                                Forms\Components\Grid::make(3)->schema([
                                     Forms\Components\Toggle::make('is_customs_cleared')
                                         ->label('KKTC Plakalı / Gömrük ödənilib')
                                         ->default(true),
@@ -194,6 +220,14 @@ class CarResource extends Resource
 
                                     Forms\Components\Toggle::make('is_barter_available')
                                         ->label('Barter / Takas mümkündür')
+                                        ->default(false),
+
+                                    Forms\Components\Toggle::make('has_warranty')
+                                        ->label('Zəmanəti var')
+                                        ->default(false),
+
+                                    Forms\Components\Toggle::make('is_negotiable')
+                                        ->label('Razılaşma payı var')
                                         ->default(false),
 
                                     Forms\Components\Toggle::make('is_metallic')

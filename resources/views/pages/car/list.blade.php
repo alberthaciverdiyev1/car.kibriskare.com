@@ -13,12 +13,52 @@
                 <!-- Main Filter Form -->
                 <form id="carFilterForm" method="GET" action="{{ route('listing') }}" class="space-y-3">
                     
+                    <!-- Top Category Navigation: Vehicle Types -->
+                    @php
+                        $selectedVehicleType = request('vehicle_type', 'all');
+                        $selectedAdType = request('adType', request('deal_type', 'all'));
+                    @endphp
+                    <div class="flex items-center gap-2 overflow-x-auto pb-1 scrollbar-none select-none" id="vehicleTypeScrollContainer">
+                        <button type="button" data-type="all"
+                                class="vehicle-type-btn shrink-0 px-4 py-2 rounded-2xl text-xs font-extrabold transition duration-150 flex items-center gap-2 border {{ $selectedVehicleType === 'all' || !$selectedVehicleType ? 'bg-[var(--primary)] text-white border-[var(--primary)] shadow-sm' : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50' }}">
+                            <i class="bi bi-grid-fill"></i>
+                            <span>{{ __('Bütün Elanlar') }}</span>
+                        </button>
+                        <button type="button" data-type="car"
+                                class="vehicle-type-btn shrink-0 px-4 py-2 rounded-2xl text-xs font-extrabold transition duration-150 flex items-center gap-2 border {{ $selectedVehicleType === 'car' ? 'bg-[var(--primary)] text-white border-[var(--primary)] shadow-sm' : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50' }}">
+                            <i class="bi bi-car-front-fill"></i>
+                            <span>{{ __('Otomobil') }}</span>
+                        </button>
+                        <button type="button" data-type="suv"
+                                class="vehicle-type-btn shrink-0 px-4 py-2 rounded-2xl text-xs font-extrabold transition duration-150 flex items-center gap-2 border {{ $selectedVehicleType === 'suv' ? 'bg-[var(--primary)] text-white border-[var(--primary)] shadow-sm' : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50' }}">
+                            <i class="bi bi-truck-front-fill"></i>
+                            <span>{{ __('Arazi, SUV & Pick-up') }}</span>
+                        </button>
+                        <button type="button" data-type="motorcycle"
+                                class="vehicle-type-btn shrink-0 px-4 py-2 rounded-2xl text-xs font-extrabold transition duration-150 flex items-center gap-2 border {{ $selectedVehicleType === 'motorcycle' ? 'bg-[var(--primary)] text-white border-[var(--primary)] shadow-sm' : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50' }}">
+                            <i class="bi bi-bicycle"></i>
+                            <span>{{ __('Motosiklet & Skuter') }}</span>
+                        </button>
+                        <button type="button" data-type="commercial"
+                                class="vehicle-type-btn shrink-0 px-4 py-2 rounded-2xl text-xs font-extrabold transition duration-150 flex items-center gap-2 border {{ $selectedVehicleType === 'commercial' ? 'bg-[var(--primary)] text-white border-[var(--primary)] shadow-sm' : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50' }}">
+                            <i class="bi bi-truck"></i>
+                            <span>{{ __('Ticari Nəqliyyat') }}</span>
+                        </button>
+                        <button type="button" data-type="classic"
+                                class="vehicle-type-btn shrink-0 px-4 py-2 rounded-2xl text-xs font-extrabold transition duration-150 flex items-center gap-2 border {{ $selectedVehicleType === 'classic' ? 'bg-[var(--primary)] text-white border-[var(--primary)] shadow-sm' : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50' }}">
+                            <i class="bi bi-gem"></i>
+                            <span>{{ __('Klasik Araçlar') }}</span>
+                        </button>
+                        <button type="button" data-type="damaged"
+                                class="vehicle-type-btn shrink-0 px-4 py-2 rounded-2xl text-xs font-extrabold transition duration-150 flex items-center gap-2 border {{ $selectedVehicleType === 'damaged' ? 'bg-[var(--primary)] text-white border-[var(--primary)] shadow-sm' : 'bg-white text-gray-700 border-gray-200 hover:bg-gray-50' }}">
+                            <i class="bi bi-tools"></i>
+                            <span>{{ __('Qəzalı & Parçalıq') }}</span>
+                        </button>
+                        <input type="hidden" name="vehicle_type" id="vehicleTypeInput" value="{{ $selectedVehicleType }}">
+                    </div>
+
                     <!-- Top Bar: Deal Type Tabs + Reset -->
-                    <div class="flex flex-wrap items-center justify-between gap-3">
-                        @php
-                            $selectedAdType = request('adType', request('deal_type', 'all'));
-                        @endphp
-                        
+                    <div class="flex flex-wrap items-center justify-between gap-3 pt-1">
                         <!-- Deal Type (Hamısı / Satılıq / Kirayə) -->
                         <div class="flex gap-1 bg-gray-100 p-1 rounded-2xl border border-gray-200/60 shadow-2xs" data-role="add-type-toggle">
                             <button type="button" data-value="all"
@@ -31,7 +71,7 @@
                             </button>
                             <button type="button" data-value="rent_daily"
                                     class="deal-type-btn px-4 sm:px-5 py-2 rounded-xl font-bold text-xs tracking-wide uppercase transition duration-200 {{ in_array($selectedAdType, ['rent_daily', 'rent', 'rent_monthly']) ? 'bg-white text-[var(--primary)] shadow-sm' : 'text-gray-600 hover:text-gray-900' }}">
-                                Kirayə
+                                Kirayə (Rent a Car)
                             </button>
                             <input type="hidden" name="adType" id="adTypeInput" value="{{ $selectedAdType }}">
                         </div>
@@ -39,8 +79,9 @@
                         <!-- Reset Button Top Right -->
                         <div class="flex items-center gap-2">
                             <button type="button" id="resetFiltersBtn" title="Filtrləri Sıfırla"
-                                    class="px-3.5 py-2 bg-white border border-gray-200/90 rounded-xl hover:bg-gray-50 text-gray-600 flex items-center justify-center transition shadow-2xs">
-                                <i class="bi bi-arrow-clockwise text-base"></i>
+                                    class="px-3.5 py-2 bg-white border border-gray-200/90 rounded-xl hover:bg-gray-50 text-gray-600 flex items-center justify-center transition shadow-2xs cursor-pointer">
+                                <i class="bi bi-arrow-clockwise text-base mr-1.5 text-[var(--primary)]"></i>
+                                <span class="text-xs font-bold">{{ __('Sıfırla') }}</span>
                             </button>
                         </div>
                     </div>
@@ -181,12 +222,30 @@
                 </form>
 
                 <!-- Results Header Bar -->
-                <div class="flex items-center justify-between mt-6 mb-4">
+                <div class="flex flex-wrap items-center justify-between gap-3 mt-6 mb-4">
                     <div class="flex items-baseline gap-2">
-                        <h2 class="text-base sm:text-lg font-extrabold text-gray-900 tracking-tight">Avtomobil Elanları</h2>
+                        <h2 class="text-base sm:text-lg font-extrabold text-gray-900 tracking-tight">{{ __('Elanlar') }}</h2>
                         <span id="carsCountBadge" class="text-xs font-bold text-gray-500 bg-gray-100 px-2.5 py-0.5 rounded-full">
-                            {{ $cars->total() }} elan
+                            {{ $cars->total() }} {{ __('elan') }}
                         </span>
+                    </div>
+
+                    <!-- Sort Dropdown -->
+                    <div class="flex items-center gap-2">
+                        <label for="carSortSelect" class="text-xs font-semibold text-gray-500 hidden sm:inline-block">{{ __('Sıralama:') }}</label>
+                        <div class="relative">
+                            <select name="sort" id="carSortSelect" form="carFilterForm"
+                                    class="h-9 pl-3 pr-8 bg-white border border-gray-200 rounded-xl text-xs font-bold text-gray-700 outline-none focus:border-[var(--primary)] cursor-pointer appearance-none shadow-2xs">
+                                <option value="latest" {{ request('sort') == 'latest' ? 'selected' : '' }}>{{ __('Ən yenilər') }}</option>
+                                <option value="price_asc" {{ request('sort') == 'price_asc' ? 'selected' : '' }}>{{ __('Qiymət: Ucuzdan bahaya') }}</option>
+                                <option value="price_desc" {{ request('sort') == 'price_desc' ? 'selected' : '' }}>{{ __('Qiymət: Bahadan ucuza') }}</option>
+                                <option value="year_desc" {{ request('sort') == 'year_desc' ? 'selected' : '' }}>{{ __('İl: Yenidən köhnəyə') }}</option>
+                                <option value="year_asc" {{ request('sort') == 'year_asc' ? 'selected' : '' }}>{{ __('İl: Köhnədən yeniyə') }}</option>
+                                <option value="mileage_asc" {{ request('sort') == 'mileage_asc' ? 'selected' : '' }}>{{ __('Yürüş: Azdan çoxa') }}</option>
+                                <option value="mileage_desc" {{ request('sort') == 'mileage_desc' ? 'selected' : '' }}>{{ __('Yürüş: Çoxdan aza') }}</option>
+                            </select>
+                            <i class="bi bi-chevron-down absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 text-[10px] pointer-events-none"></i>
+                        </div>
                     </div>
                 </div>
 
@@ -212,11 +271,34 @@
             const form = document.getElementById('carFilterForm');
             const brandSelect = document.getElementById('brandSelect');
             const modelSelect = document.getElementById('modelSelect');
+            const vehicleTypeBtns = document.querySelectorAll('.vehicle-type-btn');
+            const vehicleTypeInput = document.getElementById('vehicleTypeInput');
             const dealTypeBtns = document.querySelectorAll('.deal-type-btn');
             const adTypeInput = document.getElementById('adTypeInput');
             const resetBtn = document.getElementById('resetFiltersBtn');
             const conditionBtns = document.querySelectorAll('.condition-btn');
             const conditionInput = document.getElementById('conditionInput');
+            const sortSelect = document.getElementById('carSortSelect');
+
+            // 0. Vehicle Type Category Bar Click
+            vehicleTypeBtns.forEach(btn => {
+                btn.addEventListener('click', function() {
+                    const val = this.dataset.type;
+                    if (vehicleTypeInput) vehicleTypeInput.value = val;
+                    vehicleTypeBtns.forEach(b => {
+                        b.classList.remove('bg-[var(--primary)]', 'text-white', 'border-[var(--primary)]', 'shadow-sm');
+                        b.classList.add('bg-white', 'text-gray-700', 'border-gray-200');
+                    });
+                    this.classList.add('bg-[var(--primary)]', 'text-white', 'border-[var(--primary)]', 'shadow-sm');
+                    this.classList.remove('bg-white', 'text-gray-700', 'border-gray-200');
+                    submitCarFilter();
+                });
+            });
+
+            // 0.1 Sort Select Change
+            if (sortSelect) {
+                sortSelect.addEventListener('change', submitCarFilter);
+            }
 
             // 1. Dynamic Brand -> Models AJAX loading
             if (brandSelect && modelSelect) {

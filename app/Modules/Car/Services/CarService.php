@@ -19,6 +19,13 @@ class CarService
             ->with(['brand', 'model', 'bodyType', 'city', 'images' => fn ($q) => $q->orderBy('sort_order'), 'autosalon'])
             ->where('status', CarStatus::Active->value);
 
+        // Filter by Vehicle Type (car, suv, motorcycle, commercial, classic, damaged)
+        if ($vehicleType = $request->input('vehicle_type')) {
+            if ($vehicleType !== 'all') {
+                $query->where('vehicle_type', $vehicleType);
+            }
+        }
+
         // Filter by Deal Type
         if ($adType = $request->input('adType') ?? $request->input('deal_type')) {
             if ($adType === 'sale') {
@@ -43,9 +50,12 @@ class CarService
             $query->where('body_type_id', $bodyTypeId);
         }
 
-        // Filter by City
+        // Filter by City & District
         if ($cityId = $request->input('city_id')) {
             $query->where('city_id', $cityId);
+        }
+        if ($districtId = $request->input('district_id')) {
+            $query->where('district_id', $districtId);
         }
 
         // Filter by Fuel Type
@@ -63,9 +73,24 @@ class CarService
             $query->where('steering_wheel', $steering);
         }
 
+        // Filter by Drivetrain
+        if ($drivetrain = $request->input('drivetrain')) {
+            $query->where('drivetrain', $drivetrain);
+        }
+
+        // Filter by Plate Type (KKTC, Foreign, Z Plate, T Plate)
+        if ($plateType = $request->input('plate_type')) {
+            $query->where('plate_type', $plateType);
+        }
+
+        // Filter by Color
+        if ($color = $request->input('color')) {
+            $query->where('color', $color);
+        }
+
         // Filter by Condition
         if ($condition = $request->input('condition')) {
-            if ($condition !== 'all' && in_array($condition, ['new', 'used', 'damaged', 'for_parts'])) {
+            if ($condition !== 'all' && in_array($condition, ['new', 'used', 'damaged', 'for_parts', 'classic'])) {
                 $query->where('condition', $condition);
             }
         }
@@ -86,6 +111,22 @@ class CarService
             $query->where('mileage', '<=', (int)$mileageMax);
         }
 
+        // Filter by Engine Volume (cc) Range
+        if ($engVolMin = $request->input('engine_volume_min')) {
+            $query->where('engine_volume', '>=', (int)$engVolMin);
+        }
+        if ($engVolMax = $request->input('engine_volume_max')) {
+            $query->where('engine_volume', '<=', (int)$engVolMax);
+        }
+
+        // Filter by Engine Power (hp) Range
+        if ($engPwrMin = $request->input('engine_power_min')) {
+            $query->where('engine_power', '>=', (int)$engPwrMin);
+        }
+        if ($engPwrMax = $request->input('engine_power_max')) {
+            $query->where('engine_power', '<=', (int)$engPwrMax);
+        }
+
         // Filter by Price Range (GBP by default or current currency)
         $curr = session('currency', 'GBP');
         $priceCol = match ($curr) {
@@ -102,20 +143,40 @@ class CarService
             $query->where($priceCol, '<=', (float)$priceMax);
         }
 
-        // Commercial Flags
+        // Commercial & Special Feature Flags
         if ($request->boolean('is_barter_available') || $request->input('barter')) {
             $query->where('is_barter_available', true);
         }
         if ($request->boolean('is_credit_available') || $request->input('credit')) {
             $query->where('is_credit_available', true);
         }
+        if ($request->boolean('has_warranty') || $request->input('warranty')) {
+            $query->where('has_warranty', true);
+        }
+        if ($request->boolean('is_negotiable') || $request->input('negotiable')) {
+            $query->where('is_negotiable', true);
+        }
+        if ($request->boolean('is_customs_cleared') || $request->input('customs_cleared')) {
+            $query->where('is_customs_cleared', true);
+        }
         if ($request->input('seller_type')) {
             $query->where('seller_type', $request->input('seller_type'));
         }
 
-        // Ordering: Premium first, then Öne Çek (Urgent), then latest
+        // Sorting
+        $sort = $request->input('sort', 'latest');
+        $orderClause = match ($sort) {
+            'price_asc' => "is_premium DESC, is_urgent DESC, {$priceCol} ASC, id DESC",
+            'price_desc' => "is_premium DESC, is_urgent DESC, {$priceCol} DESC, id DESC",
+            'year_desc' => 'is_premium DESC, is_urgent DESC, year DESC, id DESC',
+            'year_asc' => 'is_premium DESC, is_urgent DESC, year ASC, id DESC',
+            'mileage_asc' => 'is_premium DESC, is_urgent DESC, mileage ASC, id DESC',
+            'mileage_desc' => 'is_premium DESC, is_urgent DESC, mileage DESC, id DESC',
+            default => 'is_premium DESC, is_urgent DESC, id DESC',
+        };
+
         return $query
-            ->orderByRaw('is_premium DESC, is_urgent DESC, id DESC')
+            ->orderByRaw($orderClause)
             ->paginate($perPage)
             ->withQueryString();
     }
