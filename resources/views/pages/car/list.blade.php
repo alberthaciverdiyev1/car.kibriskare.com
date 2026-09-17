@@ -469,7 +469,11 @@
 
                 try {
                     const res = await fetch(url, {
-                        headers: { 'X-Requested-With': 'XMLHttpRequest' }
+                        headers: {
+                            'X-Requested-With': 'XMLHttpRequest',
+                            'Accept': 'application/json'
+                        },
+                        cache: 'no-store'
                     });
                     const data = await res.json();
 
@@ -490,6 +494,17 @@
                     }
                 }
             }
+
+            // Reload page properly on browser back/forward buttons
+            window.addEventListener('popstate', function() {
+                window.location.reload();
+            });
+
+            window.addEventListener('pageshow', function(event) {
+                if (event.persisted) {
+                    window.location.reload();
+                }
+            });
 
             // Bind change on inputs
             form.querySelectorAll('select, input[type="number"]').forEach(el => {

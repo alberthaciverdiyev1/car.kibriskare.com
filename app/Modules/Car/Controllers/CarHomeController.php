@@ -41,12 +41,18 @@ class CarHomeController extends Controller
         $perPage = 30;
         $cars = $this->carService->paginate($request, $perPage);
 
-        if ($request->ajax() || $request->wantsJson()) {
+        $isAjax = $request->ajax() || ($request->hasHeader('X-Requested-With') && strtolower($request->header('X-Requested-With')) === 'xmlhttprequest');
+
+        if ($isAjax) {
             return response()->json([
                 'cars' => view('pages.car.partials.cards', compact('cars'))->render(),
                 'pagination' => view('pages.car.partials.pagination', compact('cars'))->render(),
                 'total' => $cars->total(),
-            ]);
+            ])
+            ->header('Vary', 'X-Requested-With, Accept')
+            ->header('Cache-Control', 'no-store, no-cache, must-revalidate, max-age=0')
+            ->header('Pragma', 'no-cache')
+            ->header('Expires', '0');
         }
 
         $brands = $this->carService->getAllBrands();
@@ -63,7 +69,7 @@ class CarHomeController extends Controller
         $transmissions = Transmission::options();
         $steeringWheels = SteeringWheel::options();
 
-        return view('pages.car.list', compact(
+        return response()->view('pages.car.list', compact(
             'cars',
             'brands',
             'popularBrands',
@@ -73,7 +79,7 @@ class CarHomeController extends Controller
             'fuelTypes',
             'transmissions',
             'steeringWheels'
-        ));
+        ))->header('Vary', 'X-Requested-With, Accept');
     }
 
     /**
