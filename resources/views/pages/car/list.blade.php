@@ -49,7 +49,7 @@
                         </div>
                     </div>
 
-                    <!-- 2-ROW PRIMARY FILTER CONTAINER (Matching Turbo.az Style) -->
+                    <!-- 2-ROW PRIMARY FILTER CONTAINER -->
                     <div class="bg-white p-4 sm:p-5 rounded-3xl border border-gray-200/80 shadow-sm space-y-3.5">
                         
                         <!-- ROW 1: Marka | Model | Condition Segment (Hamısı / Yeni / Sürülmüş) | Şəhər -->
@@ -119,11 +119,11 @@
                             </div>
                         </div>
 
-                        <!-- ROW 2: [Qiymət min | maks] | Currency | Kredit | Barter | Ban növü | [İl min | maks] | Actions -->
-                        <div class="flex flex-wrap lg:flex-nowrap items-center gap-3">
+                        <!-- ROW 2: [Qiymət min | maks] | Ban növü | [İl min | maks] | Actions -->
+                        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 items-center">
                             
                             <!-- 1. Qiymət min | maks (Dual Input Box) -->
-                            <div class="flex items-center h-11 border border-gray-200/90 rounded-xl bg-white overflow-hidden w-full sm:w-56 shrink-0 focus-within:border-[var(--primary)] focus-within:ring-1 focus-within:ring-[var(--primary)]">
+                            <div class="flex items-center h-11 border border-gray-200/90 rounded-xl bg-white overflow-hidden w-full focus-within:border-[var(--primary)] focus-within:ring-1 focus-within:ring-[var(--primary)]">
                                 <input type="number" name="price_min" id="priceMinInput" value="{{ request('price_min') }}" placeholder="Qiymət, min."
                                        class="w-1/2 px-3 h-full bg-transparent text-sm text-gray-800 outline-none placeholder-gray-400">
                                 <div class="h-6 w-px bg-gray-200 shrink-0"></div>
@@ -131,44 +131,8 @@
                                        class="w-1/2 px-3 h-full bg-transparent text-sm text-gray-800 outline-none placeholder-gray-400">
                             </div>
 
-                            <!-- 2. Valyuta Seçimi -->
-                            @php
-                                $currentCurr = session('currency', 'GBP');
-                            @endphp
-                            <div class="relative shrink-0">
-                                <select name="currency" id="currencySelect"
-                                        class="h-11 pl-3.5 pr-8 bg-white border border-gray-200/90 rounded-xl text-sm font-medium text-gray-800 transition outline-none focus:border-[var(--primary)] cursor-pointer appearance-none">
-                                    <option value="AZN" {{ $currentCurr === 'AZN' ? 'selected' : '' }}>AZN</option>
-                                    <option value="USD" {{ $currentCurr === 'USD' ? 'selected' : '' }}>USD</option>
-                                    <option value="EUR" {{ $currentCurr === 'EUR' ? 'selected' : '' }}>EUR</option>
-                                    <option value="GBP" {{ $currentCurr === 'GBP' ? 'selected' : '' }}>GBP</option>
-                                    <option value="TRY" {{ $currentCurr === 'TRY' ? 'selected' : '' }}>TRY</option>
-                                </select>
-                                <i class="bi bi-chevron-down absolute right-2.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs pointer-events-none"></i>
-                            </div>
-
-                            <!-- 3. Kredit Toggle -->
-                            @php
-                                $isCredit = request()->boolean('is_credit_available') || request()->filled('credit');
-                            @endphp
-                            <button type="button" id="creditToggleBtn" data-active="{{ $isCredit ? 'true' : 'false' }}"
-                                    class="h-11 px-4 rounded-xl border text-sm font-medium transition cursor-pointer select-none {{ $isCredit ? 'border-[var(--primary)] bg-emerald-50 text-[var(--primary)] font-bold' : 'border-gray-200/90 bg-white text-gray-700 hover:bg-gray-50' }}">
-                                Kredit
-                            </button>
-                            <input type="hidden" name="is_credit_available" id="creditInput" value="{{ $isCredit ? '1' : '' }}">
-
-                            <!-- 4. Barter Toggle -->
-                            @php
-                                $isBarter = request()->boolean('is_barter_available') || request()->filled('barter');
-                            @endphp
-                            <button type="button" id="barterToggleBtn" data-active="{{ $isBarter ? 'true' : 'false' }}"
-                                    class="h-11 px-4 rounded-xl border text-sm font-medium transition cursor-pointer select-none {{ $isBarter ? 'border-[var(--primary)] bg-emerald-50 text-[var(--primary)] font-bold' : 'border-gray-200/90 bg-white text-gray-700 hover:bg-gray-50' }}">
-                                Barter
-                            </button>
-                            <input type="hidden" name="is_barter_available" id="barterInput" value="{{ $isBarter ? '1' : '' }}">
-
-                            <!-- 5. Ban növü -->
-                            <div class="relative flex-1 min-w-[140px]">
+                            <!-- 2. Ban növü -->
+                            <div class="relative">
                                 <select name="body_type_id" id="bodyTypeSelect"
                                         class="w-full h-11 px-4 bg-white border border-gray-200/90 rounded-xl text-sm font-medium text-gray-800 transition outline-none focus:border-[var(--primary)] focus:ring-1 focus:ring-[var(--primary)] cursor-pointer appearance-none pr-9">
                                     <option value="">Ban növü</option>
@@ -181,8 +145,8 @@
                                 <i class="bi bi-chevron-down absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs pointer-events-none"></i>
                             </div>
 
-                            <!-- 6. İl min | maks (Dual Select Box) -->
-                            <div class="flex items-center h-11 border border-gray-200/90 rounded-xl bg-white overflow-hidden w-full sm:w-56 shrink-0 focus-within:border-[var(--primary)] focus-within:ring-1 focus-within:ring-[var(--primary)]">
+                            <!-- 3. İl min | maks (Dual Select Box) -->
+                            <div class="flex items-center h-11 border border-gray-200/90 rounded-xl bg-white overflow-hidden w-full focus-within:border-[var(--primary)] focus-within:ring-1 focus-within:ring-[var(--primary)]">
                                 <div class="relative w-1/2 h-full">
                                     <select name="year_min" id="yearMinSelect"
                                             class="w-full h-full pl-3 pr-6 bg-transparent text-sm text-gray-800 outline-none cursor-pointer appearance-none">
@@ -206,17 +170,17 @@
                                 </div>
                             </div>
 
-                            <!-- Actions: Ətraflı & Axtar -->
-                            <div class="flex items-center gap-2 ml-auto shrink-0 w-full sm:w-auto justify-end">
+                            <!-- 4. Actions: Ətraflı & Sıfırla & Axtar -->
+                            <div class="flex items-center gap-2 w-full justify-end">
                                 <button type="button" id="openFilterMoreBtn" title="Ətraflı axtarış"
-                                        class="h-11 px-3.5 bg-gray-50 hover:bg-gray-100 border border-gray-200/90 text-gray-700 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-2xs">
+                                        class="h-11 px-3 bg-gray-50 hover:bg-gray-100 border border-gray-200/90 text-gray-700 rounded-xl text-xs font-bold transition flex items-center gap-1.5 shadow-2xs">
                                     <i class="bi bi-sliders text-sm"></i>
                                     <span class="hidden sm:inline">Ətraflı</span>
                                 </button>
                                 <button type="submit"
-                                        class="h-11 px-5 bg-[var(--primary)] hover:bg-[var(--primary-hover)] text-white rounded-xl text-sm font-bold transition shadow-sm flex items-center gap-2">
+                                        class="h-11 flex-1 px-4 bg-[var(--primary)] hover:bg-[var(--primary-hover)] text-white rounded-xl text-sm font-bold transition shadow-sm flex items-center justify-center gap-2">
                                     <i class="bi bi-search"></i>
-                                    <span class="hidden sm:inline">Elanları göstər</span>
+                                    <span>Elanları göstər</span>
                                 </button>
                             </div>
 
@@ -262,10 +226,6 @@
             const resetBtn = document.getElementById('resetFiltersBtn');
             const conditionBtns = document.querySelectorAll('.condition-btn');
             const conditionInput = document.getElementById('conditionInput');
-            const creditToggleBtn = document.getElementById('creditToggleBtn');
-            const creditInput = document.getElementById('creditInput');
-            const barterToggleBtn = document.getElementById('barterToggleBtn');
-            const barterInput = document.getElementById('barterInput');
 
             // 1. Dynamic Brand -> Models AJAX loading
             if (brandSelect && modelSelect) {
@@ -324,44 +284,7 @@
                 });
             });
 
-            // 3. Kredit & Barter Toggles
-            if (creditToggleBtn && creditInput) {
-                creditToggleBtn.addEventListener('click', function() {
-                    const isActive = this.dataset.active === 'true';
-                    const newState = !isActive;
-                    this.dataset.active = newState ? 'true' : 'false';
-                    creditInput.value = newState ? '1' : '';
-
-                    if (newState) {
-                        this.classList.add('border-[var(--primary)]', 'bg-emerald-50', 'text-[var(--primary)]', 'font-bold');
-                        this.classList.remove('border-gray-200/90', 'bg-white', 'text-gray-700');
-                    } else {
-                        this.classList.remove('border-[var(--primary)]', 'bg-emerald-50', 'text-[var(--primary)]', 'font-bold');
-                        this.classList.add('border-gray-200/90', 'bg-white', 'text-gray-700');
-                    }
-                    submitCarFilter();
-                });
-            }
-
-            if (barterToggleBtn && barterInput) {
-                barterToggleBtn.addEventListener('click', function() {
-                    const isActive = this.dataset.active === 'true';
-                    const newState = !isActive;
-                    this.dataset.active = newState ? 'true' : 'false';
-                    barterInput.value = newState ? '1' : '';
-
-                    if (newState) {
-                        this.classList.add('border-[var(--primary)]', 'bg-emerald-50', 'text-[var(--primary)]', 'font-bold');
-                        this.classList.remove('border-gray-200/90', 'bg-white', 'text-gray-700');
-                    } else {
-                        this.classList.remove('border-[var(--primary)]', 'bg-emerald-50', 'text-[var(--primary)]', 'font-bold');
-                        this.classList.add('border-gray-200/90', 'bg-white', 'text-gray-700');
-                    }
-                    submitCarFilter();
-                });
-            }
-
-            // 4. Deal Type Toggle
+            // 3. Deal Type Toggle
             dealTypeBtns.forEach(btn => {
                 btn.addEventListener('click', function() {
                     const val = this.dataset.value;
@@ -376,14 +299,14 @@
                 });
             });
 
-            // 5. Reset Button
+            // 4. Reset Button
             if (resetBtn) {
                 resetBtn.addEventListener('click', function() {
                     window.location.href = `/${document.documentElement.lang || 'tr'}/ilanlar`;
                 });
             }
 
-            // 6. Modal Filter Controls
+            // 5. Modal Filter Controls
             const modal = document.getElementById('filterMoreModal');
             const modalCard = document.getElementById('filterMoreModalCard');
             const openModalBtn = document.getElementById('openFilterMoreBtn');
@@ -432,7 +355,7 @@
                 });
             }
 
-            // 7. AJAX form submission and live updates
+            // 6. AJAX form submission and live updates
             async function submitCarFilter() {
                 const formData = new FormData(form);
                 
