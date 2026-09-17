@@ -79,18 +79,13 @@
                                 <i class="bi bi-chevron-down absolute right-3.5 top-1/2 -translate-y-1/2 text-gray-400 text-xs pointer-events-none"></i>
                             </div>
 
-                            <!-- 3. Condition Segment: [ Hamısı | Yeni | Sürülmüş ] -->
+                            <!-- 3. Condition Segment: [ Yeni | Sürülmüş ] -->
                             @php
-                                $currentCondition = request('condition', 'all');
-                                if (empty($currentCondition)) $currentCondition = 'all';
+                                $currentCondition = request('condition');
                             @endphp
                             <div class="flex h-11 border border-gray-200/90 rounded-xl overflow-hidden bg-white p-0.5 select-none" id="conditionSegmentGroup">
-                                <button type="button" data-condition="all"
-                                        class="condition-btn flex-1 flex items-center justify-center font-semibold text-xs sm:text-sm rounded-lg transition-colors {{ $currentCondition === 'all' ? 'bg-[#ca1016] text-white shadow-xs' : 'text-gray-600 hover:text-gray-900' }}">
-                                    Hamısı
-                                </button>
                                 <button type="button" data-condition="new"
-                                        class="condition-btn flex-1 flex items-center justify-center font-semibold text-xs sm:text-sm rounded-lg border-l border-gray-100 transition-colors {{ $currentCondition === 'new' ? 'bg-[#ca1016] text-white shadow-xs' : 'text-gray-600 hover:text-gray-900' }}">
+                                        class="condition-btn flex-1 flex items-center justify-center font-semibold text-xs sm:text-sm rounded-lg transition-colors {{ $currentCondition === 'new' ? 'bg-[#ca1016] text-white shadow-xs' : 'text-gray-600 hover:text-gray-900' }}">
                                     Yeni
                                 </button>
                                 <button type="button" data-condition="used"
@@ -265,17 +260,24 @@
                 modelSelect.addEventListener('change', submitCarFilter);
             }
 
-            // 2. Condition Segment (Hamısı / Yeni / Sürülmüş)
+            // 2. Condition Segment (Yeni / Sürülmüş toggle)
             conditionBtns.forEach(btn => {
                 btn.addEventListener('click', function() {
                     const cond = this.dataset.condition;
-                    conditionInput.value = cond;
+                    const isAlreadyActive = this.classList.contains('bg-[#ca1016]');
+
                     conditionBtns.forEach(b => {
                         b.classList.remove('bg-[#ca1016]', 'text-white', 'shadow-xs');
                         b.classList.add('text-gray-600');
                     });
-                    this.classList.add('bg-[#ca1016]', 'text-white', 'shadow-xs');
-                    this.classList.remove('text-gray-600');
+
+                    if (isAlreadyActive) {
+                        conditionInput.value = '';
+                    } else {
+                        conditionInput.value = cond;
+                        this.classList.add('bg-[#ca1016]', 'text-white', 'shadow-xs');
+                        this.classList.remove('text-gray-600');
+                    }
                     submitCarFilter();
                 });
             });

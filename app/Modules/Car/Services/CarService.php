@@ -65,7 +65,9 @@ class CarService
 
         // Filter by Condition
         if ($condition = $request->input('condition')) {
-            $query->where('condition', $condition);
+            if ($condition !== 'all' && in_array($condition, ['new', 'used', 'damaged', 'for_parts'])) {
+                $query->where('condition', $condition);
+            }
         }
 
         // Filter by Year Range
