@@ -182,7 +182,7 @@
                     </div>
 
                     <!-- Category Navigation: Vehicle Type Cards (Strictly Single Row - 6 Columns) -->
-                    <div class="grid grid-cols-6 gap-1.5 sm:gap-2.5 md:gap-3 select-none pt-1" id="vehicleTypeCardsContainer">
+                    <div class="grid grid-cols-6 gap-1.5 sm:gap-2.5 md:gap-3 select-none pt-1" id="vehicleTypeCardsContainer" style="display: grid !important; grid-template-columns: repeat(6, minmax(0, 1fr)) !important;">
                         
                         <!-- 1. Otomobil -->
                         <button type="button" data-type="car"
