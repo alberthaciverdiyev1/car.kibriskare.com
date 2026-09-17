@@ -325,36 +325,6 @@
                         @endif
                     </div>
 
-                    <!-- Loan / Credit Calculator -->
-                    <div class="pt-4 border-t border-gray-100 space-y-3">
-                        <div class="flex items-center justify-between text-xs font-bold text-gray-800">
-                            <span class="flex items-center gap-1.5">
-                                <i class="bi bi-calculator text-[var(--primary)]"></i> Avto-Kredit Kalkulyatoru
-                            </span>
-                            <span class="text-[var(--primary)]" id="calcMonthlyPayment">£ 0 / ay</span>
-                        </div>
-
-                        <div class="space-y-2 text-xs">
-                            <div>
-                                <div class="flex justify-between text-gray-500 mb-1">
-                                    <span>İlkin ödəniş (30%):</span>
-                                    <span id="downPaymentText">£ {{ number_format($car->price_gbp * 0.3) }}</span>
-                                </div>
-                                <input type="range" id="downPaymentRange" min="10" max="70" value="30" step="5"
-                                       class="w-full accent-[var(--primary)] cursor-pointer">
-                            </div>
-
-                            <div>
-                                <div class="flex justify-between text-gray-500 mb-1">
-                                    <span>Kredit müddəti:</span>
-                                    <span id="loanMonthsText">36 ay</span>
-                                </div>
-                                <input type="range" id="loanMonthsRange" min="12" max="60" value="36" step="6"
-                                       class="w-full accent-[var(--primary)] cursor-pointer">
-                            </div>
-                        </div>
-                    </div>
-
                     <!-- Safety Note -->
                     <div class="pt-3 border-t border-gray-100 flex items-start gap-2.5 text-[11px] text-gray-500 leading-tight">
                         <i class="bi bi-shield-lock text-gray-400 text-sm mt-0.5"></i>
@@ -458,34 +428,6 @@
                 phoneText.textContent = fullPhone;
                 window.location.href = `tel:${fullPhone}`;
             }
-        }
-
-        // Loan Calculator
-        const carPrice = {{ (float)$car->price_gbp }};
-        const downRange = document.getElementById('downPaymentRange');
-        const monthsRange = document.getElementById('loanMonthsRange');
-
-        function updateLoanCalc() {
-            if (!downRange || !monthsRange || carPrice <= 0) return;
-            const downPercent = parseInt(downRange.value);
-            const months = parseInt(monthsRange.value);
-
-            const downAmount = (carPrice * downPercent) / 100;
-            const loanAmount = carPrice - downAmount;
-            const annualInterest = 0.09; // 9% annual interest estimate
-            const monthlyRate = annualInterest / 12;
-
-            const monthlyPayment = (loanAmount * monthlyRate * Math.pow(1 + monthlyRate, months)) / (Math.pow(1 + monthlyRate, months) - 1);
-
-            document.getElementById('downPaymentText').textContent = `£ ${Math.round(downAmount).toLocaleString()} (${downPercent}%)`;
-            document.getElementById('loanMonthsText').textContent = `${months} ay`;
-            document.getElementById('calcMonthlyPayment').textContent = `£ ${Math.round(monthlyPayment).toLocaleString()} / ay`;
-        }
-
-        if (downRange && monthsRange) {
-            downRange.addEventListener('input', updateLoanCalc);
-            monthsRange.addEventListener('input', updateLoanCalc);
-            updateLoanCalc();
         }
     </script>
 @endsection
