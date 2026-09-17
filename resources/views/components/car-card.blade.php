@@ -50,8 +50,8 @@
         <!-- Premium / Önə Çək / Status Badges -->
         <div class="absolute top-2.5 left-2.5 flex flex-col gap-1 z-10">
             @if($car->is_premium)
-                <span class="bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 text-slate-950 text-[11px] font-extrabold px-2.5 py-0.5 rounded-lg shadow-sm flex items-center gap-1.5 border border-amber-300/80 tracking-wider">
-                    <i class="bi bi-gem text-[10px] text-slate-950"></i> PREMIUM
+                <span class="bg-[#ffd700] text-gray-950 text-[11px] font-black px-2.5 py-0.5 rounded-lg shadow-xs flex items-center gap-1.5 border border-yellow-400 tracking-wider">
+                    <i class="bi bi-gem text-[10px] text-gray-950"></i> PREMIUM
                 </span>
             @endif
 
