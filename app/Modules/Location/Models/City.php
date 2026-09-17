@@ -1,0 +1,56 @@
+<?php
+
+namespace App\Modules\Location\Models;
+
+use App\Modules\Property\Models\Property;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
+
+/**
+ * @property int $id
+ * @property array<string, string> $name
+ * @property string $slug
+ * @property int $sort_order
+ * @property bool $is_active
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property \Illuminate\Support\Carbon|null $deleted_at
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Modules\Location\Models\District> $districts
+ * @property-read \Illuminate\Database\Eloquent\Collection<int, \App\Modules\Property\Models\Property> $properties
+ */
+use App\Modules\Shared\Concerns\HasLocalizedName;
+
+class City extends Model
+{
+    use HasFactory, SoftDeletes, HasLocalizedName;
+
+    protected $fillable = [
+        'name',
+        'slug',
+        'sort_order',
+        'is_active',
+    ];
+
+    protected $casts = [
+        'name' => 'array',
+        'is_active' => 'boolean',
+        'sort_order' => 'integer',
+    ];
+
+    public function districts(): HasMany
+    {
+        return $this->hasMany(District::class)->orderBy('sort_order', 'asc');
+    }
+
+    public function activeDistricts(): HasMany
+    {
+        return $this->hasMany(District::class)->where('is_active', true)->orderBy('sort_order', 'asc');
+    }
+
+    public function properties(): HasMany
+    {
+        return $this->hasMany(Property::class);
+    }
+}

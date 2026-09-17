@@ -1,0 +1,253 @@
+@extends('layouts.app')
+
+@section('title', ($agent->user?->name ?? __('agency.agent_default_title')) . ' - ' . __('agency.agent_profile') . ' - KibrisKare.com')
+
+@section('content')
+<div class="w-full pt-4 pb-16">
+    @include('components.breadcrumb', ['items' => $breadcrumbs ?? []])
+    @include('components.scroll-top')
+
+    {{-- ==================== AGENT PROFILE CARD ==================== --}}
+    <div class="bg-white rounded-3xl shadow-sm border border-gray-100 mt-4 sm:mt-6 overflow-hidden">
+        {{-- Banner strip --}}
+        <div class="h-32 sm:h-44 relative overflow-hidden bg-gradient-to-r from-orange-500 to-amber-600 z-0">
+            @if($agent->banner || $agent->banner_url)
+                <img src="{{ $agent->banner_url }}" alt="{{ $agent->user?->name }} banner" class="w-full h-full object-cover">
+                <div class="absolute inset-0 bg-black/15"></div>
+            @endif
+        </div>
+
+        <div class="px-6 sm:px-8 pb-6 sm:pb-8 relative z-10">
+            {{-- Avatar + Name --}}
+            <div class="flex flex-col sm:flex-row sm:items-end gap-4 -mt-10 sm:-mt-12 relative z-10">
+                <div class="w-20 h-20 sm:w-24 sm:h-24 rounded-2xl border-4 border-white shadow-lg overflow-hidden bg-white flex-shrink-0 relative z-20">
+                    @if($agent->avatar_url)
+                        <img src="{{ $agent->avatar_url }}" alt="{{ $agent->user?->name }}" loading="lazy" decoding="async" class="w-full h-full object-cover">
+                    @else
+                        <div class="w-full h-full bg-orange-500 text-white font-black text-3xl sm:text-4xl flex items-center justify-center">
+                            {{ strtoupper(substr($agent->user?->name ?? 'R', 0, 1)) }}
+                        </div>
+                    @endif
+                </div>
+
+                <div class="flex-1 min-w-0 pb-1">
+                    <div class="flex flex-wrap items-center gap-2">
+                        <h1 class="text-xl sm:text-2xl lg:text-3xl font-bold text-[color:var(--text-color)] leading-tight">
+                            {{ $agent->user?->name ?? __('agency.agent_default_title') }}
+                        </h1>
+                        @if($agent->is_active)
+                            <span class="bg-orange-50 text-orange-600 text-[11px] sm:text-xs font-semibold px-2.5 py-1 rounded-full flex items-center gap-1.5 border border-orange-100">
+                                <i class="bi bi-patch-check-fill"></i>
+                                {{ __('agency.verified_agent') }}
+                            </span>
+                        @endif
+                    </div>
+                    <p class="text-sm text-[color:var(--grey-text)] mt-1 flex flex-wrap items-center">
+                        <span class="font-medium text-[color:var(--text-color)]">{{ $agent->position ?? __('agency.agent_independent_subtitle') }}</span>
+                        @if($agent->agency)
+                            <span class="mx-1 text-gray-300">•</span>
+                            <a href="{{ route('agencies.show.byId', $agent->agency->id) }}" class="text-[color:var(--primary)] font-semibold hover:underline">
+                                {{ $agent->agency->name }}
+                            </a>
+                        @endif
+                        <span class="mx-1 text-gray-300">•</span>
+                        <span class="text-[color:var(--primary)] font-semibold">{{ $properties->total() }}</span>
+                        {{ __('agency.active_listings_suffix') }}
+                    </p>
+                </div>
+
+                {{-- Contact CTAs --}}
+                @if($agent->phone || $agent->whatsapp)
+                <div class="flex flex-wrap items-center gap-2 sm:gap-3 pb-1">
+                    <button type="button"
+                        onclick="revealAgentPhone(event, this, {{ $agent->id }}, 'call')"
+                        class="js-btn-show-agent-phone flex items-center gap-2 px-5 py-2.5 sm:py-3 bg-orange-500 hover:bg-orange-600 text-white font-semibold rounded-2xl shadow-md transition duration-200 text-sm sm:text-base cursor-pointer">
+                        <i class="bi bi-telephone-fill text-sm"></i>
+                        <span class="js-agent-phone-btn-text">{{ __('property.show_phone') }}</span>
+                        <span class="js-agent-phone-number hidden font-mono tracking-wider font-bold"></span>
+                    </button>
+
+                    @if($agent->whatsapp || $agent->phone)
+                        <button type="button"
+                            onclick="revealAgentPhone(event, this, {{ $agent->id }}, 'whatsapp')"
+                            class="js-btn-agent-whatsapp flex items-center gap-2 px-5 py-2.5 sm:py-3 bg-emerald-500 hover:bg-emerald-600 text-white font-semibold rounded-2xl shadow-md transition duration-200 text-sm sm:text-base cursor-pointer">
+                            <i class="bi bi-whatsapp text-base"></i>
+                            <span>WhatsApp</span>
+                        </button>
+                    @endif
+                </div>
+                @endif
+            </div>
+
+            {{-- Real data summary + Contact Info --}}
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-6 mt-6 pt-6 border-t border-gray-100 text-sm">
+                <div class="md:col-span-2">
+                    <h3 class="font-semibold text-[color:var(--text-color)] mb-3 flex items-center gap-2">
+                        <i class="bi bi-person-lines-fill text-[var(--primary)]"></i>
+                        {{ __('agency.about_agent') }}
+                    </h3>
+                    <div class="space-y-2.5 text-[color:var(--grey-text)] leading-relaxed">
+                        <p>
+                            {{ $agent->user?->name ?? __('agency.agent_default_title') }}
+                            {{ $agent->position ? __('agency.works_as_position') : __('agency.works_as_independent') }}
+                            @if($agent->agency)
+                                — <a href="{{ route('agencies.show.byId', $agent->agency->id) }}" class="text-[color:var(--primary)] font-semibold hover:underline">{{ $agent->agency->name }}</a>
+                                {{ __('agency.agency_member') }}.
+                            @else
+                                .
+                            @endif
+                        </p>
+                        <p>
+                            {{ __('agency.currently_managing_listings') }}
+                            <strong class="text-[color:var(--text-color)]">{{ $properties->total() }}</strong>
+                            {{ __('agency.active_listings_managed') }}.
+                            @if($agent->phone)
+                                {{ __('agency.contact_direct_call_or_wa') }}.
+                            @endif
+                        </p>
+                        @if($agent->created_at)
+                            <p class="text-xs text-gray-400 flex items-center gap-1.5 pt-1">
+                                <i class="bi bi-calendar3"></i>
+                                {{ __('agency.joined_platform') }}:
+                                {{ $agent->created_at->format('d.m.Y') }}
+                            </p>
+                        @endif
+                    </div>
+                </div>
+                <div class="space-y-2.5 text-[color:var(--grey-text)] md:border-l md:pl-6 border-gray-100">
+                    @if($agent->agency && $agent->agency->address)
+                        <p class="flex items-start gap-2.5">
+                            <i class="bi bi-geo-alt-fill text-[var(--primary)] mt-0.5"></i>
+                            <span>{{ $agent->agency->address }}</span>
+                        </p>
+                    @endif
+                    @if($agent->user?->email)
+                        <p class="flex items-start gap-2.5">
+                            <i class="bi bi-envelope-fill text-[var(--primary)] mt-0.5"></i>
+                            <a href="mailto:{{ $agent->user->email }}" class="hover:text-[var(--primary)] transition break-all">{{ $agent->user->email }}</a>
+                        </p>
+                    @endif
+                    @if($agent->phone)
+                        <p class="flex items-start gap-2.5">
+                            <i class="bi bi-telephone-fill text-[var(--primary)] mt-0.5"></i>
+                            <a href="tel:{{ $agent->phone }}" class="hover:text-[var(--primary)] transition">{{ $agent->phone }}</a>
+                        </p>
+                    @endif
+                    @if($agent->agency)
+                        <p class="flex items-start gap-2.5">
+                            <i class="bi bi-building text-[var(--primary)] mt-0.5"></i>
+                            <a href="{{ route('agencies.show.byId', $agent->agency->id) }}" class="hover:text-[var(--primary)] transition font-medium">{{ $agent->agency->name }}</a>
+                        </p>
+                    @endif
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{-- ==================== AGENT PROPERTIES LIST ==================== --}}
+    <div class="mt-10 sm:mt-12">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 mb-6">
+            <div>
+                <h2 class="text-xl sm:text-2xl font-semibold text-[color:var(--text-color)]">
+                    {{ __('agency.agent_listings') }}
+                </h2>
+                <p class="text-xs sm:text-sm text-[color:var(--grey-text)] mt-0.5">
+                    {{ $agent->user?->name }} {{ __('agency.all_listings_posted_by') }}
+                </p>
+            </div>
+            <span class="text-xs sm:text-sm font-semibold bg-gray-100 text-gray-700 px-3 py-1.5 rounded-xl self-start sm:self-auto">
+                {{ __('agency.total_label') }} <strong class="text-[color:var(--primary)]">{{ $properties->total() }}</strong> {{ __('agency.listings_count_suffix') }}
+            </span>
+        </div>
+
+        @if($properties->isEmpty())
+            <div class="bg-white rounded-3xl p-12 text-center border border-gray-100 shadow-sm">
+                <div class="w-16 h-16 bg-orange-50 text-[var(--primary)] rounded-full flex items-center justify-center mx-auto text-2xl mb-4">
+                    <i class="bi bi-house-door"></i>
+                </div>
+                <h3 class="text-base font-semibold text-gray-800">{{ __('agency.no_agent_listings_title') }}</h3>
+                <p class="text-xs text-gray-500 mt-1 max-w-sm mx-auto">
+                    {{ __('agency.no_agent_listings_desc') }}
+                </p>
+                <a href="{{ route('agencies.list') }}" class="inline-flex items-center gap-2 mt-5 px-5 py-2.5 bg-gray-100 hover:bg-gray-200 text-gray-700 text-xs font-semibold rounded-xl transition">
+                    <i class="bi bi-arrow-left"></i> {{ __('agency.browse_other_agencies_agents') }}
+                </a>
+            </div>
+        @else
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-6">
+                @foreach($properties as $property)
+                    <x-property-card :property="$property" />
+                @endforeach
+            </div>
+
+            @if($properties->hasPages())
+                <div class="mt-8 flex justify-center">
+                    {{ $properties->links() }}
+                </div>
+            @endif
+        @endif
+    </div>
+</div>
+@endsection
+
+@push('scripts')
+    <script>
+    window.revealedAgentPhones = window.revealedAgentPhones || {};
+
+    async function revealAgentPhone(e, btn, agentId, intent) {
+        if (e) e.preventDefault();
+        intent = intent || 'call';
+
+        if (window.revealedAgentPhones[agentId]) {
+            const data = window.revealedAgentPhones[agentId];
+            if (intent === 'whatsapp' && data.whatsapp_url) {
+                window.open(data.whatsapp_url, '_blank');
+            } else if (data.call_url) {
+                window.location.href = data.call_url;
+            }
+            return;
+        }
+
+        const btnTexts = document.querySelectorAll('.js-agent-phone-btn-text');
+        btnTexts.forEach(t => t.textContent = '...');
+
+        try {
+            const token = document.querySelector('meta[name="csrf-token"]')?.getAttribute('content') || '{{ csrf_token() }}';
+            const currentLocale = document.documentElement.lang || '{{ app()->getLocale() }}';
+            const revealUrl = '/' + currentLocale + '/agent/' + agentId + '/reveal-phone';
+
+            const res = await fetch(revealUrl, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Accept': 'application/json',
+                    'X-CSRF-TOKEN': token,
+                    'X-Requested-With': 'XMLHttpRequest'
+                }
+            });
+
+            if (!res.ok) throw new Error('HTTP ' + res.status);
+            const data = await res.json();
+
+            if (data.success && data.phone) {
+                window.revealedAgentPhones[agentId] = data;
+
+                document.querySelectorAll('.js-agent-phone-btn-text').forEach(t => t.classList.add('hidden'));
+                document.querySelectorAll('.js-agent-phone-number').forEach(el => {
+                    el.textContent = data.phone;
+                    el.classList.remove('hidden');
+                });
+
+                if (intent === 'whatsapp' && data.whatsapp_url) {
+                    window.open(data.whatsapp_url, '_blank');
+                } else if (intent === 'call' && data.call_url) {
+                    window.location.href = data.call_url;
+                }
+            }
+        } catch (err) {
+            console.error('reveal-agent-phone error:', err);
+            btnTexts.forEach(t => t.textContent = "{{ __('property.show_phone') }}");
+        }
+    }
+    </script>
+@endpush

@@ -1,0 +1,47 @@
+@import 'tailwindcss';
+
+@source '../../vendor/laravel/framework/src/Illuminate/Pagination/resources/views/*.blade.php';
+@source '../../storage/framework/views/*.php';
+
+@theme {
+    --font-sans: 'Instrument Sans', ui-sans-serif, system-ui, sans-serif, 'Apple Color Emoji', 'Segoe UI Emoji',
+        'Segoe UI Symbol', 'Noto Color Emoji';
+
+    --color-orange-50: #f0f5f2;
+    --color-orange-100: #ddeae1;
+    --color-orange-200: #bed6c6;
+    --color-orange-300: #8eb79b;
+    --color-orange-400: #4F7A61;
+    --color-orange-500: #3D704D;
+    --color-orange-600: #0E241B;
+    --color-orange-700: #0a1b14;
+    --color-orange-800: #07130e;
+    --color-orange-900: #040c09;
+    --color-orange-950: #020605;
+}
+
+/* Modern sleek scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background: #f8fafc;
+}
+
+::-webkit-scrollbar-thumb {
+  background: #cbd5e1;
+  border-radius: 9999px;
+  border: 2px solid #f8fafc;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #3D704D;
+}
+
+/* Firefox */
+html {
+  scrollbar-width: thin;
+  scrollbar-color: #cbd5e1 #f8fafc;
+}

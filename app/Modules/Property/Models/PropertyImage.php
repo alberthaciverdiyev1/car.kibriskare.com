@@ -1,0 +1,78 @@
+<?php
+
+namespace App\Modules\Property\Models;
+
+use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+
+/**
+ * @property int $id
+ * @property int $property_id
+ * @property string $url
+ * @property int $sort_order
+ * @property \Illuminate\Support\Carbon|null $created_at
+ * @property \Illuminate\Support\Carbon|null $updated_at
+ * @property-read \App\Modules\Property\Models\Property $property
+ */
+class PropertyImage extends Model
+{
+    use HasFactory;
+
+    /**
+     * Elanda şəkil yoxdursa istifadə olunan standart şəkil.
+     */
+    public const FALLBACK_IMAGE = 'https://images.unsplash.com/photo-1545324418-cc1a3fa10c00?auto=format&fit=crop&w=800&q=80';
+
+    protected $fillable = [
+        'property_id',
+        'url',
+        'thumbnail_url',
+        'sort_order',
+    ];
+
+    public function property(): BelongsTo
+    {
+        return $this->belongsTo(Property::class);
+    }
+
+    /**
+     * Get full image URL whether it's an external URL or uploaded local storage file
+     */
+    public function getUrlAttribute($value): string
+    {
+        if (empty($value)) {
+            return self::FALLBACK_IMAGE;
+        }
+
+        if (str_starts_with($value, 'http://') || str_starts_with($value, 'https://') || str_starts_with($value, '/')) {
+            return $value;
+        }
+
+        return asset('storage/' . $value);
+    }
+
+    /**
+     * Get thumbnail image URL; falls back to full URL if thumbnail is not available
+     */
+    public function getThumbnailUrlAttribute($value): string
+    {
+        if (empty($value)) {
+            return $this->url;
+        }
+
+        if (str_starts_with($value, 'http://') || str_starts_with($value, 'https://') || str_starts_with($value, '/')) {
+            return $value;
+        }
+
+        return asset('storage/' . $value);
+    }
+
+    /**
+     * Helper accessor for $image->thumbnail
+     */
+    public function getThumbnailAttribute(): string
+    {
+        return $this->thumbnail_url;
+    }
+}
