@@ -84,8 +84,8 @@
                     @endif
                 </div>
                 @if($car->autosalon)
-                    <span class="text-[11px] font-semibold text-emerald-700 bg-emerald-50 px-2 py-0.5 rounded-md flex items-center gap-1">
-                        <i class="bi bi-shield-check text-xs"></i> {{ Str::limit($car->autosalon->name, 18) }}
+                    <span title="{{ $car->autosalon->name }}" class="text-emerald-700 bg-emerald-50 w-6 h-6 rounded-md flex items-center justify-center shrink-0">
+                        <i class="bi bi-shield-check text-sm"></i>
                     </span>
                 @endif
             </div>
