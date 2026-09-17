@@ -13,11 +13,41 @@
                 <!-- Main Filter Form -->
                 <form id="carFilterForm" method="GET" action="{{ route('listing') }}" class="space-y-3">
                     
-                    <!-- Top Category Navigation: Vehicle Type Cards -->
                     @php
                         $selectedVehicleType = request('vehicle_type', 'all');
                         $selectedAdType = request('adType', request('deal_type', 'all'));
                     @endphp
+
+                    <!-- Top Bar: Deal Type Tabs + Reset -->
+                    <div class="flex flex-wrap items-center justify-between gap-3 pt-1">
+                        <!-- Deal Type (Hamısı / Satılıq / Kirayə) -->
+                        <div class="flex gap-1 bg-gray-100 p-1 rounded-2xl border border-gray-200/60 shadow-2xs" data-role="add-type-toggle">
+                            <button type="button" data-value="all"
+                                    class="deal-type-btn px-4 sm:px-5 py-2 rounded-xl font-bold text-xs tracking-wide uppercase transition duration-200 {{ $selectedAdType === 'all' || !$selectedAdType ? 'bg-white text-[var(--primary)] shadow-sm' : 'text-gray-600 hover:text-gray-900' }}">
+                                Hamısı
+                            </button>
+                            <button type="button" data-value="sale"
+                                    class="deal-type-btn px-4 sm:px-5 py-2 rounded-xl font-bold text-xs tracking-wide uppercase transition duration-200 {{ $selectedAdType === 'sale' ? 'bg-white text-[var(--primary)] shadow-sm' : 'text-gray-600 hover:text-gray-900' }}">
+                                Satılıq
+                            </button>
+                            <button type="button" data-value="rent_daily"
+                                    class="deal-type-btn px-4 sm:px-5 py-2 rounded-xl font-bold text-xs tracking-wide uppercase transition duration-200 {{ in_array($selectedAdType, ['rent_daily', 'rent', 'rent_monthly']) ? 'bg-white text-[var(--primary)] shadow-sm' : 'text-gray-600 hover:text-gray-900' }}">
+                                Kirayə (Rent a Car)
+                            </button>
+                            <input type="hidden" name="adType" id="adTypeInput" value="{{ $selectedAdType }}">
+                        </div>
+
+                        <!-- Reset Button Top Right -->
+                        <div class="flex items-center gap-2">
+                            <button type="button" id="resetFiltersBtn" title="Filtrləri Sıfırla"
+                                    class="px-3.5 py-2 bg-white border border-gray-200/90 rounded-xl hover:bg-gray-50 text-gray-600 flex items-center justify-center transition shadow-2xs cursor-pointer">
+                                <i class="bi bi-arrow-clockwise text-base mr-1.5 text-[var(--primary)]"></i>
+                                <span class="text-xs font-bold">{{ __('Sıfırla') }}</span>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Category Navigation: Vehicle Type Cards -->
                     <div class="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-7 gap-2 sm:gap-2.5 select-none" id="vehicleTypeCardsContainer">
                         
                         <!-- 1. Bütün Elanlar -->
@@ -84,35 +114,6 @@
                         </button>
 
                         <input type="hidden" name="vehicle_type" id="vehicleTypeInput" value="{{ $selectedVehicleType }}">
-                    </div>
-
-                    <!-- Top Bar: Deal Type Tabs + Reset -->
-                    <div class="flex flex-wrap items-center justify-between gap-3 pt-1">
-                        <!-- Deal Type (Hamısı / Satılıq / Kirayə) -->
-                        <div class="flex gap-1 bg-gray-100 p-1 rounded-2xl border border-gray-200/60 shadow-2xs" data-role="add-type-toggle">
-                            <button type="button" data-value="all"
-                                    class="deal-type-btn px-4 sm:px-5 py-2 rounded-xl font-bold text-xs tracking-wide uppercase transition duration-200 {{ $selectedAdType === 'all' || !$selectedAdType ? 'bg-white text-[var(--primary)] shadow-sm' : 'text-gray-600 hover:text-gray-900' }}">
-                                Hamısı
-                            </button>
-                            <button type="button" data-value="sale"
-                                    class="deal-type-btn px-4 sm:px-5 py-2 rounded-xl font-bold text-xs tracking-wide uppercase transition duration-200 {{ $selectedAdType === 'sale' ? 'bg-white text-[var(--primary)] shadow-sm' : 'text-gray-600 hover:text-gray-900' }}">
-                                Satılıq
-                            </button>
-                            <button type="button" data-value="rent_daily"
-                                    class="deal-type-btn px-4 sm:px-5 py-2 rounded-xl font-bold text-xs tracking-wide uppercase transition duration-200 {{ in_array($selectedAdType, ['rent_daily', 'rent', 'rent_monthly']) ? 'bg-white text-[var(--primary)] shadow-sm' : 'text-gray-600 hover:text-gray-900' }}">
-                                Kirayə (Rent a Car)
-                            </button>
-                            <input type="hidden" name="adType" id="adTypeInput" value="{{ $selectedAdType }}">
-                        </div>
-
-                        <!-- Reset Button Top Right -->
-                        <div class="flex items-center gap-2">
-                            <button type="button" id="resetFiltersBtn" title="Filtrləri Sıfırla"
-                                    class="px-3.5 py-2 bg-white border border-gray-200/90 rounded-xl hover:bg-gray-50 text-gray-600 flex items-center justify-center transition shadow-2xs cursor-pointer">
-                                <i class="bi bi-arrow-clockwise text-base mr-1.5 text-[var(--primary)]"></i>
-                                <span class="text-xs font-bold">{{ __('Sıfırla') }}</span>
-                            </button>
-                        </div>
                     </div>
 
                     <!-- 2-ROW PRIMARY FILTER CONTAINER -->
