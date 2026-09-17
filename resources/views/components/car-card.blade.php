@@ -76,15 +76,6 @@
                 <i class="fa-regular fa-heart text-sm"></i>
             </button>
         </div>
-
-        <!-- Customs Badge (Bottom Overlay) -->
-        @if($car->is_customs_cleared)
-            <div class="absolute bottom-2.5 left-2.5 z-10">
-                <span class="bg-neutral-900/80 backdrop-blur-xs text-white text-[10px] font-semibold px-2 py-0.5 rounded-md">
-                    KKTC Plakalı
-                </span>
-            </div>
-        @endif
     </div>
 
     <!-- Content -->
