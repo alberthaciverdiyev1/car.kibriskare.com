@@ -36,14 +36,14 @@
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
                     <div class="flex flex-wrap items-center gap-2 mb-2">
-                        @if($car->is_vip)
-                            <span class="bg-amber-500 text-white text-xs font-bold px-2.5 py-0.5 rounded-lg shadow-sm flex items-center gap-1">
-                                <i class="bi bi-star-fill text-[10px]"></i> VIP
-                            </span>
-                        @endif
                         @if($car->is_premium)
                             <span class="bg-blue-600 text-white text-xs font-bold px-2.5 py-0.5 rounded-lg shadow-sm flex items-center gap-1">
                                 <i class="bi bi-gem text-[10px]"></i> PREMIUM
+                            </span>
+                        @endif
+                        @if($car->is_urgent)
+                            <span class="bg-amber-500 text-white text-xs font-bold px-2.5 py-0.5 rounded-lg shadow-sm flex items-center gap-1">
+                                <i class="bi bi-lightning-charge-fill text-[10px]"></i> ÖNƏ ÇƏKİLMİŞ
                             </span>
                         @endif
                         <span class="bg-gray-100 text-gray-700 text-xs font-semibold px-2.5 py-0.5 rounded-lg">

@@ -111,9 +111,9 @@ class CarService
             $query->where('seller_type', $request->input('seller_type'));
         }
 
-        // Ordering: VIP first, then latest
+        // Ordering: Premium first, then Öne Çek (Urgent), then latest
         return $query
-            ->orderByRaw('is_vip DESC, is_premium DESC, id DESC')
+            ->orderByRaw('is_premium DESC, is_urgent DESC, id DESC')
             ->paginate($perPage)
             ->withQueryString();
     }

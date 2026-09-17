@@ -47,15 +47,17 @@
             </button>
         @endif
 
-        <!-- VIP / Premium / Status Badges -->
+        <!-- Premium / Önə Çək / Status Badges -->
         <div class="absolute top-2.5 left-2.5 flex flex-col gap-1 z-10">
-            @if($car->is_vip)
-                <span class="bg-amber-500 text-white text-[11px] font-bold px-2.5 py-0.5 rounded-lg shadow-sm flex items-center gap-1">
-                    <i class="bi bi-star-fill text-[10px]"></i> VIP
-                </span>
-            @elseif($car->is_premium)
+            @if($car->is_premium)
                 <span class="bg-blue-600 text-white text-[11px] font-bold px-2.5 py-0.5 rounded-lg shadow-sm flex items-center gap-1">
                     <i class="bi bi-gem text-[10px]"></i> PREMIUM
+                </span>
+            @endif
+
+            @if($car->is_urgent)
+                <span class="bg-amber-500 text-white text-[10px] font-bold px-2 py-0.5 rounded-md shadow-xs flex items-center gap-1">
+                    <i class="bi bi-lightning-charge-fill text-[9px]"></i> ÖNƏ ÇƏKİLMİŞ
                 </span>
             @endif
 

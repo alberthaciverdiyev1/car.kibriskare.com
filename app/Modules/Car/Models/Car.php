@@ -184,9 +184,14 @@ class Car extends Model
         return $query->where('status', CarStatus::Active->value);
     }
 
-    public function scopeVip(Builder $query): Builder
+    public function scopePremium(Builder $query): Builder
     {
-        return $query->where('is_vip', true);
+        return $query->where('is_premium', true);
+    }
+
+    public function scopeUrgent(Builder $query): Builder
+    {
+        return $query->where('is_urgent', true);
     }
 
     public function scopeSale(Builder $query): Builder

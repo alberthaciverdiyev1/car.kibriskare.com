@@ -283,12 +283,12 @@ class CarResource extends Resource
                                         ->default(CarStatus::Active->value)
                                         ->required(),
 
-                                    Forms\Components\Toggle::make('is_vip')
-                                        ->label('VIP Elan')
-                                        ->default(false),
-
                                     Forms\Components\Toggle::make('is_premium')
                                         ->label('Premium Elan')
+                                        ->default(false),
+
+                                    Forms\Components\Toggle::make('is_urgent')
+                                        ->label('Önə Çək (Öne Çıkarılmış)')
                                         ->default(false),
                                 ]),
 
@@ -346,8 +346,12 @@ class CarResource extends Resource
                     ->formatStateUsing(fn ($state) => $state instanceof CarStatus ? $state->label() : $state)
                     ->color(fn ($state) => $state instanceof CarStatus ? $state->color() : 'gray'),
 
-                Tables\Columns\IconColumn::make('is_vip')
-                    ->label('VIP')
+                Tables\Columns\IconColumn::make('is_premium')
+                    ->label('Premium')
+                    ->boolean(),
+
+                Tables\Columns\IconColumn::make('is_urgent')
+                    ->label('Önə Çək')
                     ->boolean(),
 
                 Tables\Columns\TextColumn::make('city.name.tr')
@@ -369,8 +373,11 @@ class CarResource extends Resource
                     ->label('Elan Növü')
                     ->options(CarDealType::options()),
 
-                Tables\Filters\TernaryFilter::make('is_vip')
-                    ->label('VIP Elanlar'),
+                Tables\Filters\TernaryFilter::make('is_premium')
+                    ->label('Premium Elanlar'),
+
+                Tables\Filters\TernaryFilter::make('is_urgent')
+                    ->label('Önə Çəkilmiş Elanlar'),
             ])
             ->actions([
                 Tables\Actions\EditAction::make(),
