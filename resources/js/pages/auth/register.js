@@ -43,7 +43,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 fieldAgencyAddress.classList.add('hidden');
 
                 labelName.innerHTML = (i18n.label_user || 'Ad və Soyadınız') + ' <span class="text-rose-500">*</span>';
-                roleInfoText.innerHTML = i18n.role_info_user || 'Fərdi istifadəçi olaraq elanlar yerləşdirə, axtarışları və bəyəndiyiniz mənzilləri sevimlilər siyahısına əlavə edə bilərsiniz.';
+                roleInfoText.innerHTML = i18n.role_info_user || 'Fərdi istifadəçi olaraq avtomobil elanları yerləşdirə, axtarışları və bəyəndiyiniz avtomobilləri sevimlilər siyahısına əlavə edə bilərsiniz.';
                 registerBtnText.textContent = i18n.btn_user || 'İstifadəçi Kimi Qeydiyyatdan Keç';
             } else if (role === 'agent') {
                 fieldAgencyName.classList.add('hidden');
@@ -55,9 +55,9 @@ document.addEventListener('DOMContentLoaded', function () {
                 fieldAgencySelect.classList.remove('hidden');
                 fieldAgencyAddress.classList.add('hidden');
 
-                labelName.innerHTML = (i18n.label_agent || 'Rieltorun Ad və Soyadı') + ' <span class="text-rose-500">*</span>';
-                roleInfoText.innerHTML = i18n.role_info_agent || '<strong>Rieltor Hesabı:</strong> Qeydiyyatdan dərhal sonra Rieltor İdarəetmə Panelinə yönləndiriləcəksiniz və elanlarınızı vahid paneldən idarə edə biləcəksiniz.';
-                registerBtnText.textContent = i18n.btn_agent || 'Rieltor Kimi Qeydiyyatdan Keç';
+                labelName.innerHTML = (i18n.label_agent || 'Satıcının Ad və Soyadı') + ' <span class="text-rose-500">*</span>';
+                roleInfoText.innerHTML = i18n.role_info_agent || '<strong>Satıcı Hesabı:</strong> Qeydiyyatdan dərhal sonra Satıcı İdarəetmə Panelinə yönləndiriləcəksiniz və elanlarınızı vahid paneldən idarə edə biləcəksiniz.';
+                registerBtnText.textContent = i18n.btn_agent || 'Satıcı Kimi Qeydiyyatdan Keç';
             } else if (role === 'agency') {
                 fieldAgencyName.classList.remove('hidden');
                 inputAgencyName.required = true;
@@ -69,8 +69,8 @@ document.addEventListener('DOMContentLoaded', function () {
                 fieldAgencyAddress.classList.remove('hidden');
 
                 labelName.innerHTML = (i18n.label_agency || 'Məsul Şəxsin Ad və Soyadı') + ' <span class="text-rose-500">*</span>';
-                roleInfoText.innerHTML = i18n.role_info_agency || '<strong>Agentlik Hesabı:</strong> Qeydiyyatdan dərhal sonra Agentlik İdarəetmə Panelinə yönləndiriləcəksiniz, şirkət profilini və agentlərinizi idarə edə biləcəksiniz.';
-                registerBtnText.textContent = i18n.btn_agency || 'Agentlik Kimi Qeydiyyatdan Keç';
+                roleInfoText.innerHTML = i18n.role_info_agency || '<strong>Avtosalon Hesabı:</strong> Qeydiyyatdan dərhal sonra Avtosalon İdarəetmə Panelinə yönləndiriləcəksiniz, şirkət profilini və satıcılarınızı idarə edə biləcəksiniz.';
+                registerBtnText.textContent = i18n.btn_agency || 'Avtosalon Kimi Qeydiyyatdan Keç';
             }
         });
     });
