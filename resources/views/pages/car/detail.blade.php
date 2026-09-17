@@ -35,24 +35,20 @@
         <div class="bg-white p-4 sm:p-6 rounded-3xl border border-gray-200/80 shadow-2xs mb-6">
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    <div class="flex flex-wrap items-center gap-2 mb-2">
-                        @if($car->is_premium)
-                            <span class="bg-blue-600 text-white text-xs font-bold px-2.5 py-0.5 rounded-lg shadow-sm flex items-center gap-1">
-                                <i class="bi bi-gem text-[10px]"></i> PREMIUM
-                            </span>
-                        @endif
-                        @if($car->is_urgent)
-                            <span class="bg-amber-500 text-white text-xs font-bold px-2.5 py-0.5 rounded-lg shadow-sm flex items-center gap-1">
-                                <i class="bi bi-lightning-charge-fill text-[10px]"></i> ÖNƏ ÇƏKİLMİŞ
-                            </span>
-                        @endif
-                        <span class="bg-gray-100 text-gray-700 text-xs font-semibold px-2.5 py-0.5 rounded-lg">
-                            {{ $car->deal_type->label() }}
-                        </span>
-                        <span class="bg-neutral-900 text-white text-xs font-semibold px-2.5 py-0.5 rounded-lg">
-                            {{ $car->steering_wheel->value === 'right' ? '🇬🇧 Sağ Sükan' : 'Sol Sükan' }}
-                        </span>
-                    </div>
+                    @if($car->is_premium || $car->deal_type->value === 'rent_daily')
+                        <div class="flex flex-wrap items-center gap-2 mb-2">
+                            @if($car->is_premium)
+                                <span class="bg-blue-600 text-white text-xs font-bold px-2.5 py-0.5 rounded-lg shadow-sm flex items-center gap-1">
+                                    <i class="bi bi-gem text-[10px]"></i> PREMIUM
+                                </span>
+                            @endif
+                            @if($car->deal_type->value === 'rent_daily')
+                                <span class="bg-emerald-600 text-white text-xs font-bold px-2.5 py-0.5 rounded-lg shadow-sm">
+                                    KİRAYƏ
+                                </span>
+                            @endif
+                        </div>
+                    @endif
 
                     <h1 class="text-xl sm:text-2xl lg:text-3xl font-extrabold text-gray-900 tracking-tight">
                         {{ $car->display_title }}
