@@ -79,8 +79,10 @@ class CarHomeController extends Controller
     /**
      * AJAX endpoint to fetch models for a specific brand.
      */
-    public function modelsByBrand(int $brandId): JsonResponse
+    public function modelsByBrand(Request $request, $param1 = null, $param2 = null): JsonResponse
     {
+        $brandId = (int) ($param2 ?: ($param1 ?: $request->route('brandId')));
+
         $models = CarModel::where('brand_id', $brandId)
             ->where('is_active', true)
             ->orderBy('is_popular', 'desc')

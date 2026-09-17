@@ -33,10 +33,10 @@ document.addEventListener('DOMContentLoaded', function () {
             btn.onclick = function (e) {
                 e.stopPropagation();
                 const cardWrapper = btn.closest('.favorite-card-wrapper');
-                const card = btn.closest('[data-property-id]');
-                const propertyId = card ? parseInt(card.getAttribute('data-property-id')) : null;
+                const card = btn.closest('[data-car-id]') || btn.closest('[data-fav-id]') || cardWrapper;
+                const carId = card ? parseInt(card.getAttribute('data-car-id') || card.getAttribute('data-fav-id')) : (btn.getAttribute('data-fav-btn') ? parseInt(btn.getAttribute('data-fav-btn')) : null);
 
-                if (propertyId) {
+                if (carId) {
                     const csrf = window.KibrisKare?.csrfToken() || '';
                     fetch(R.favoritesToggle || '/api/favorites/toggle', {
                         method: 'POST',
@@ -46,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function () {
                             'X-Requested-With': 'XMLHttpRequest',
                             'Accept': 'application/json'
                         },
-                        body: JSON.stringify({ property_id: propertyId })
+                        body: JSON.stringify({ car_id: carId, id: carId })
                     })
                     .then(r => r.json())
                     .then(data => {

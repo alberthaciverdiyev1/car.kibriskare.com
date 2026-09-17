@@ -18,24 +18,18 @@ class FavoriteCompareController extends Controller
      */
     public function toggleFavorite(Request $request): JsonResponse
     {
-        $id = (int) ($request->input('car_id') ?: ($request->input('property_id') ?: $request->input('id')));
-        
-        $isCar = $id && Car::where('id', $id)->exists();
-        $isProperty = ! $isCar && $id && Property::where('id', $id)->exists();
+        $id = (int) ($request->input('car_id') ?: ($request->input('id') ?: $request->input('property_id')));
 
-        if (! $isCar && ! $isProperty) {
-            return response()->json(['success' => false, 'message' => 'Item not found'], 404);
+        $car = $id ? Car::find($id) : null;
+
+        if (! $car) {
+            return response()->json(['success' => false, 'message' => 'Car not found'], 404);
         }
 
         $userId = auth()->id();
         $sessionId = $request->hasSession() ? $request->session()->getId() : 'default-session';
 
-        $query = Favorite::query();
-        if ($isCar) {
-            $query->where('car_id', $id);
-        } else {
-            $query->where('property_id', $id);
-        }
+        $query = Favorite::query()->where('car_id', $id);
 
         if ($userId) {
             $query->where('user_id', $userId);
@@ -52,8 +46,7 @@ class FavoriteCompareController extends Controller
             Favorite::create([
                 'user_id' => $userId,
                 'session_id' => $userId ? null : $sessionId,
-                'car_id' => $isCar ? $id : null,
-                'property_id' => $isProperty ? $id : null,
+                'car_id' => $id,
             ]);
             $isFavorite = true;
         }
@@ -68,8 +61,7 @@ class FavoriteCompareController extends Controller
             $countQuery->where('session_id', $sessionId);
         }
 
-        $ids = (clone $countQuery)->selectRaw('COALESCE(car_id, property_id) as target_id')
-            ->pluck('target_id')
+        $ids = $countQuery->pluck('car_id')
             ->filter()
             ->values()
             ->toArray();
@@ -98,8 +90,7 @@ class FavoriteCompareController extends Controller
             $query->where('session_id', $sessionId);
         }
 
-        $ids = $query->selectRaw('COALESCE(car_id, property_id) as target_id')
-            ->pluck('target_id')
+        $ids = $query->pluck('car_id')
             ->filter()
             ->values()
             ->toArray();
@@ -141,24 +132,18 @@ class FavoriteCompareController extends Controller
      */
     public function toggleCompare(Request $request): JsonResponse
     {
-        $id = (int) ($request->input('car_id') ?: ($request->input('property_id') ?: $request->input('id')));
-        
-        $isCar = $id && Car::where('id', $id)->exists();
-        $isProperty = ! $isCar && $id && Property::where('id', $id)->exists();
+        $id = (int) ($request->input('car_id') ?: ($request->input('id') ?: $request->input('property_id')));
 
-        if (! $isCar && ! $isProperty) {
-            return response()->json(['success' => false, 'message' => 'Item not found'], 404);
+        $car = $id ? Car::find($id) : null;
+
+        if (! $car) {
+            return response()->json(['success' => false, 'message' => 'Car not found'], 404);
         }
 
         $userId = auth()->id();
         $sessionId = $request->hasSession() ? $request->session()->getId() : 'default-session';
 
-        $query = Compare::query();
-        if ($isCar) {
-            $query->where('car_id', $id);
-        } else {
-            $query->where('property_id', $id);
-        }
+        $query = Compare::query()->where('car_id', $id);
 
         if ($userId) {
             $query->where('user_id', $userId);
@@ -182,7 +167,7 @@ class FavoriteCompareController extends Controller
             if ($countQuery->count() >= 4) {
                 return response()->json([
                     'success' => false,
-                    'message' => 'Ən çox 4 elan müqayisə edilə bilər.',
+                    'message' => 'Ən çox 4 avtomobil müqayisə edilə bilər.',
                     'limit_reached' => true,
                 ], 422);
             }
@@ -190,8 +175,7 @@ class FavoriteCompareController extends Controller
             Compare::create([
                 'user_id' => $userId,
                 'session_id' => $userId ? null : $sessionId,
-                'car_id' => $isCar ? $id : null,
-                'property_id' => $isProperty ? $id : null,
+                'car_id' => $id,
             ]);
             $isCompared = true;
         }
@@ -206,8 +190,7 @@ class FavoriteCompareController extends Controller
             $countQuery->where('session_id', $sessionId);
         }
 
-        $ids = (clone $countQuery)->selectRaw('COALESCE(car_id, property_id) as target_id')
-            ->pluck('target_id')
+        $ids = $countQuery->pluck('car_id')
             ->filter()
             ->values()
             ->toArray();
@@ -236,8 +219,7 @@ class FavoriteCompareController extends Controller
             $query->where('session_id', $sessionId);
         }
 
-        $ids = $query->selectRaw('COALESCE(car_id, property_id) as target_id')
-            ->pluck('target_id')
+        $ids = $query->pluck('car_id')
             ->filter()
             ->values()
             ->toArray();

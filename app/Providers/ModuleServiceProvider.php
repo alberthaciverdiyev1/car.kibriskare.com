@@ -29,6 +29,21 @@ class ModuleServiceProvider extends ServiceProvider
         Route::middleware('web')->group(function () {
             Route::get('/lang/{lang}', [\App\Modules\Shared\Controllers\LocaleController::class, 'switchLanguage'])->name('lang.switch');
             Route::get('/currency/{code}', [\App\Modules\Shared\Controllers\LocaleController::class, 'switchCurrency'])->name('currency.switch');
+
+            // Telegram Webhook (Prefikssiz birbaşa kökdə)
+            Route::post('/api/telegram/webhook', [\App\Http\Controllers\TelegramWebhookController::class, 'handle'])->name('telegram.webhook.root');
+
+            // AJAX Models by Brand (Prefikssiz birbaşa kökdə)
+            Route::get('/api/brands/{brandId}/models', [\App\Modules\Car\Controllers\CarHomeController::class, 'modelsByBrand'])->name('api.brands.models.root');
+
+            // Favoritlər & Müqayisə Kök API-ləri
+            Route::post('/api/favorites/toggle', [\App\Modules\Car\Controllers\FavoriteCompareController::class, 'toggleFavorite'])->name('favorites.toggle.root');
+            Route::get('/api/favorites/ids', [\App\Modules\Car\Controllers\FavoriteCompareController::class, 'getFavorites'])->name('favorites.ids.root');
+            Route::post('/api/favorites/clear', [\App\Modules\Car\Controllers\FavoriteCompareController::class, 'clearFavorites'])->name('favorites.clear.root');
+
+            Route::post('/api/compares/toggle', [\App\Modules\Car\Controllers\FavoriteCompareController::class, 'toggleCompare'])->name('compares.toggle.root');
+            Route::get('/api/compares/ids', [\App\Modules\Car\Controllers\FavoriteCompareController::class, 'getCompares'])->name('compares.ids.root');
+            Route::post('/api/compares/clear', [\App\Modules\Car\Controllers\FavoriteCompareController::class, 'clearCompares'])->name('compares.clear.root');
         });
 
         // 2. Bütün Modul Marşrutları ({locale} prefiksi ilə: /tr/..., /az/..., /en/..., /ru/...)
