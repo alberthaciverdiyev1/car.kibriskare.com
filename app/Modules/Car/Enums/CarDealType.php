@@ -12,7 +12,7 @@ enum CarDealType: string
     {
         return match ($this) {
             self::Sale => 'Satılıq',
-            self::RentDaily => 'Günlük Kirayə (Rent a Car)',
+            self::RentDaily => 'Kirayə',
             self::RentMonthly => 'Aylıq Kirayə',
         };
     }

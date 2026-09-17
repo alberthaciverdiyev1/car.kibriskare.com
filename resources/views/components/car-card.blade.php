@@ -59,9 +59,9 @@
                 </span>
             @endif
 
-            @if($car->deal_type->value === 'rent_daily')
+            @if(in_array($car->deal_type->value, ['rent_daily', 'rent_monthly', 'rent']))
                 <span class="bg-emerald-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-md shadow-xs">
-                    GÜNLÜK KİRAYƏ
+                    KİRAYƏ
                 </span>
             @endif
         </div>
@@ -75,17 +75,14 @@
             </button>
         </div>
 
-        <!-- Steering Wheel & Customs Badges (Bottom Overlay) -->
-        <div class="absolute bottom-2.5 left-2.5 flex gap-1 z-10">
-            <span class="bg-neutral-900/80 backdrop-blur-xs text-white text-[10px] font-semibold px-2 py-0.5 rounded-md">
-                {{ $car->steering_wheel->value === 'right' ? '🇬🇧 Sağ Sükan' : 'Sol Sükan' }}
-            </span>
-            @if($car->is_customs_cleared)
+        <!-- Customs Badge (Bottom Overlay) -->
+        @if($car->is_customs_cleared)
+            <div class="absolute bottom-2.5 left-2.5 z-10">
                 <span class="bg-neutral-900/80 backdrop-blur-xs text-white text-[10px] font-semibold px-2 py-0.5 rounded-md">
                     KKTC Plakalı
                 </span>
-            @endif
-        </div>
+            </div>
+        @endif
     </div>
 
     <!-- Content -->

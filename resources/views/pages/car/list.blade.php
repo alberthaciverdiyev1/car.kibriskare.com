@@ -19,7 +19,7 @@
                             $selectedAdType = request('adType', request('deal_type', 'all'));
                         @endphp
                         
-                        <!-- Deal Type (Hamısı / Satılıq / Günlük Kirayə / Aylıq Kirayə) -->
+                        <!-- Deal Type (Hamısı / Satılıq / Kirayə) -->
                         <div class="flex gap-1 bg-gray-100 p-1 rounded-2xl border border-gray-200/60 shadow-2xs" data-role="add-type-toggle">
                             <button type="button" data-value="all"
                                     class="deal-type-btn px-4 sm:px-5 py-2 rounded-xl font-bold text-xs tracking-wide uppercase transition duration-200 {{ $selectedAdType === 'all' || !$selectedAdType ? 'bg-white text-[var(--primary)] shadow-sm' : 'text-gray-600 hover:text-gray-900' }}">
@@ -30,12 +30,8 @@
                                 Satılıq
                             </button>
                             <button type="button" data-value="rent_daily"
-                                    class="deal-type-btn px-4 sm:px-5 py-2 rounded-xl font-bold text-xs tracking-wide uppercase transition duration-200 {{ $selectedAdType === 'rent_daily' ? 'bg-white text-[var(--primary)] shadow-sm' : 'text-gray-600 hover:text-gray-900' }}">
-                                Günlük Kirayə (Rent a Car)
-                            </button>
-                            <button type="button" data-value="rent"
-                                    class="deal-type-btn px-4 sm:px-5 py-2 rounded-xl font-bold text-xs tracking-wide uppercase transition duration-200 {{ $selectedAdType === 'rent' ? 'bg-white text-[var(--primary)] shadow-sm' : 'text-gray-600 hover:text-gray-900' }}">
-                                Aylıq Kirayə
+                                    class="deal-type-btn px-4 sm:px-5 py-2 rounded-xl font-bold text-xs tracking-wide uppercase transition duration-200 {{ in_array($selectedAdType, ['rent_daily', 'rent', 'rent_monthly']) ? 'bg-white text-[var(--primary)] shadow-sm' : 'text-gray-600 hover:text-gray-900' }}">
+                                Kirayə
                             </button>
                             <input type="hidden" name="adType" id="adTypeInput" value="{{ $selectedAdType }}">
                         </div>
