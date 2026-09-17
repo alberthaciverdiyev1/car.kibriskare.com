@@ -38,8 +38,8 @@
                     @if($car->is_premium || $car->deal_type->value === 'rent_daily')
                         <div class="flex flex-wrap items-center gap-2 mb-2">
                             @if($car->is_premium)
-                                <span class="bg-blue-600 text-white text-xs font-bold px-2.5 py-0.5 rounded-lg shadow-sm flex items-center gap-1">
-                                    <i class="bi bi-gem text-[10px]"></i> PREMIUM
+                                <span class="bg-gradient-to-r from-amber-400 via-yellow-400 to-amber-500 text-slate-950 text-xs font-extrabold px-3 py-1 rounded-lg shadow-sm flex items-center gap-1.5 border border-amber-300/80 tracking-wider">
+                                    <i class="bi bi-gem text-[11px] text-slate-950"></i> PREMIUM
                                 </span>
                             @endif
                             @if($car->deal_type->value === 'rent_daily')
