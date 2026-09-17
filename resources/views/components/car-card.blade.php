@@ -62,11 +62,20 @@
             @endif
         </div>
 
-        <!-- Top Right Actions: Favorite & Compare -->
+        <!-- Top Right Actions: Compare & Favorite -->
         <div class="absolute top-2.5 right-2.5 flex gap-1.5 z-10">
             <button type="button"
-                    onclick="event.stopPropagation(); toggleFavorite({{ $car->id }}, this)"
-                    class="w-8 h-8 rounded-xl bg-white/90 hover:bg-white text-gray-700 hover:text-rose-500 backdrop-blur-xs flex items-center justify-center transition shadow-sm">
+                    title="{{ __('compare.compare') ?? 'Müqayisə et' }}"
+                    data-compare-btn="{{ $car->id }}"
+                    onclick="event.stopPropagation(); toggleCompare(this, {{ $car->id }})"
+                    class="w-8 h-8 rounded-xl bg-white/90 hover:bg-white text-gray-700 hover:text-[var(--primary)] backdrop-blur-xs flex items-center justify-center transition shadow-sm cursor-pointer">
+                <i class="bi bi-arrow-left-right text-xs"></i>
+            </button>
+            <button type="button"
+                    title="{{ __('property.add_to_favorites') ?? 'Seçilmişlərə əlavə et' }}"
+                    data-fav-btn="{{ $car->id }}"
+                    onclick="event.stopPropagation(); toggleFavorite(this, {{ $car->id }})"
+                    class="w-8 h-8 rounded-xl bg-white/90 hover:bg-white text-gray-700 hover:text-rose-500 backdrop-blur-xs flex items-center justify-center transition shadow-sm cursor-pointer">
                 <i class="fa-regular fa-heart text-sm"></i>
             </button>
         </div>

@@ -50,9 +50,27 @@
                         </div>
                     @endif
 
-                    <h1 class="text-xl sm:text-2xl lg:text-3xl font-extrabold text-gray-900 tracking-tight">
-                        {{ $car->display_title }}
-                    </h1>
+                    <div class="flex flex-wrap items-center justify-between gap-3">
+                        <h1 class="text-xl sm:text-2xl lg:text-3xl font-extrabold text-gray-900 tracking-tight">
+                            {{ $car->display_title }}
+                        </h1>
+                        <div class="flex items-center gap-2 shrink-0">
+                            <button type="button"
+                                    onclick="event.stopPropagation(); toggleCompare(this, {{ $car->id }})"
+                                    data-compare-btn="{{ $car->id }}"
+                                    class="w-9 h-9 rounded-2xl bg-gray-50 hover:bg-orange-50 hover:text-[var(--primary)] text-gray-600 border border-gray-100 flex items-center justify-center transition cursor-pointer shadow-2xs"
+                                    title="{{ __('compare.compare') ?? 'Müqayisə et' }}">
+                                <i class="bi bi-arrow-left-right text-sm"></i>
+                            </button>
+                            <button type="button"
+                                    onclick="event.stopPropagation(); toggleFavorite(this, {{ $car->id }})"
+                                    data-fav-btn="{{ $car->id }}"
+                                    class="w-9 h-9 rounded-2xl bg-gray-50 hover:bg-rose-50 hover:text-rose-500 text-gray-600 border border-gray-100 flex items-center justify-center transition cursor-pointer shadow-2xs"
+                                    title="{{ __('property.add_to_favorites') ?? 'Seçilmişlərə əlavə et' }}">
+                                <i class="fa-regular fa-heart text-sm"></i>
+                            </button>
+                        </div>
+                    </div>
 
                     <div class="flex flex-wrap items-center gap-4 text-xs text-gray-500 mt-2.5">
                         <span class="flex items-center gap-1">
