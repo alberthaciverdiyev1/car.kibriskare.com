@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # ==============================================================================
-# Laravel Deployment Script - KibrisKare.com
+# Laravel Deployment Script - araba.kibriskare.com
 # ==============================================================================
 set -e
 
@@ -114,7 +114,7 @@ fi
 
 # 13. Warm up OPcache and Guest Cache with a curl request
 echo "☕ Warming up OPcache & homepage guest cache..."
-curl -sL https://kibriskare.com > /dev/null || true
+curl -sL https://araba.kibriskare.com > /dev/null || true
 
 # 14. Final Permission Lock (ensuring cache created by curl / warm-up is writable)
 chown -R www-data:www-data storage bootstrap/cache 2>/dev/null || sudo chown -R www-data:www-data storage bootstrap/cache 2>/dev/null || true

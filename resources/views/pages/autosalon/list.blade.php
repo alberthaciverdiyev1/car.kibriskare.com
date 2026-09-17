@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', __('navbar.autosalons') . ' - KibrisKare.com')
+@section('title', __('navbar.autosalons') . ' - araba.kibriskare.com')
 @section('meta_description', 'Kuzey Kıbrıs (KKTC) genelindeki tüm yetkili ve güvenilir avtosalonlar, araba galerileri ve rent a car şirketleri.')
 
 @section('content')

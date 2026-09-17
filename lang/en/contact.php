@@ -46,5 +46,5 @@ return [
     'message_sent_success' => 'Your message has been sent successfully!',
     'error_occurred' => 'An error occurred, please try again.',
     'network_error' => 'A network error occurred.',
-    'map_office_popup' => 'KibrisKare.com Head Office',
+    'map_office_popup' => 'araba.kibriskare.com Head Office',
 ];

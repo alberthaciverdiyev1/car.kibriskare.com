@@ -36,7 +36,7 @@ class User extends Authenticatable implements FilamentUser
 
     protected $connection = 'pgsql';
 
-    public const ADMIN_EMAIL = 'admin@kibriskare.com';
+    public const ADMIN_EMAIL = 'admin@araba.kibriskare.com';
 
     /**
      * Kütləvi doldurula bilən sütunlar

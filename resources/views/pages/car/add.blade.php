@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Avtomobil Elanı Yerləşdir - KibrisKare.com')
+@section('title', 'Avtomobil Elanı Yerləşdir - araba.kibriskare.com')
 
 @section('content')
     <div class="max-w-4xl mx-auto px-4 py-8">

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', __('faq.page_title') . ' - KibrisKare.com')
+@section('title', __('faq.page_title') . ' - araba.kibriskare.com')
 
 @section('content')
 @php
@@ -130,11 +130,11 @@
                             </div>
                         </a>
 
-                        <a href="mailto:{{ $siteSetting?->email ?: 'info@kibriskare.com' }}" class="flex items-center gap-3 p-3 rounded-xl bg-gray-50 hover:bg-orange-50/60 transition group">
+                        <a href="mailto:{{ $siteSetting?->email ?: 'info@araba.kibriskare.com' }}" class="flex items-center gap-3 p-3 rounded-xl bg-gray-50 hover:bg-orange-50/60 transition group">
                             <i class="bi bi-envelope-fill text-orange-500 text-sm"></i>
                             <div class="flex-1 min-w-0">
                                 <span class="block text-[11px] text-gray-400">Email</span>
-                                <span class="font-semibold text-gray-900 group-hover:text-orange-600 transition">{{ $siteSetting?->email ?: 'info@kibriskare.com' }}</span>
+                                <span class="font-semibold text-gray-900 group-hover:text-orange-600 transition">{{ $siteSetting?->email ?: 'info@araba.kibriskare.com' }}</span>
                             </div>
                         </a>
                     </div>

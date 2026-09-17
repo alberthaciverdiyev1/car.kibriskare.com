@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @php
-    $resolvedBlogTitle = ($blog->meta_title ?: $blog->title) . ' - KibrisKare.com';
+    $resolvedBlogTitle = ($blog->meta_title ?: $blog->title) . ' - araba.kibriskare.com';
     $resolvedBlogDescription = $blog->meta_description ?: ($blog->excerpt ?: \Illuminate\Support\Str::limit(strip_tags($blog->content), 160));
     $coverImgUrl = $blog->cover_image ? (filter_var($blog->cover_image, FILTER_VALIDATE_URL) ? $blog->cover_image : asset('storage/' . ltrim($blog->cover_image, '/'))) : null;
 @endphp

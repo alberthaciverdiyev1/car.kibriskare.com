@@ -46,5 +46,5 @@ return [
     'message_sent_success' => 'Mesajınız başarıyla gönderildi!',
     'error_occurred' => 'Bir hata oluştu, lütfen tekrar deneyin.',
     'network_error' => 'Ağ hatası oluştu.',
-    'map_office_popup' => 'KibrisKare.com Genel Merkezi',
+    'map_office_popup' => 'araba.kibriskare.com Genel Merkezi',
 ];

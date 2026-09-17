@@ -33,7 +33,7 @@ class AdminPanelProvider extends PanelProvider
             ->login()
             ->profile(EditProfile::class, isSimple: false)
             ->darkMode(false)
-            ->brandName('KibrisKare.com')
+            ->brandName('araba.kibriskare.com')
             ->brandLogo(asset('images/kibriskarelogo1.png'))
             ->brandLogoHeight('2.2rem')
             ->colors([

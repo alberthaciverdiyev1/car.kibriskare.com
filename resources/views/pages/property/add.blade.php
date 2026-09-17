@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', __('add_property.page_title') . ' - KibrisKare.com')
+@section('title', __('add_property.page_title') . ' - araba.kibriskare.com')
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/add-property.css') }}">

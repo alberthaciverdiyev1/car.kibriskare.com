@@ -60,11 +60,11 @@ class ManageSiteSettings extends Page implements HasForms
                                     TextInput::make('email')
                                         ->label('Əsas E-poçt')
                                         ->email()
-                                        ->placeholder('info@kibriskare.com'),
+                                        ->placeholder('info@araba.kibriskare.com'),
                                     TextInput::make('support_email')
                                         ->label('Dəstək E-poçtu')
                                         ->email()
-                                        ->placeholder('support@kibriskare.com'),
+                                        ->placeholder('support@araba.kibriskare.com'),
                                 ]),
 
                                 Section::make('Ofis Ünvanı (4 Dildə)')
@@ -184,7 +184,7 @@ class ManageSiteSettings extends Page implements HasForms
 
                                 TextInput::make('copyright_text')
                                     ->label('Müəllif Hüququ (Copyright)')
-                                    ->placeholder('KibrisKare.com'),
+                                    ->placeholder('araba.kibriskare.com'),
                             ]),
 
                         Tabs\Tab::make('Hüquqi Sənədlər & Şərtlər')
@@ -308,18 +308,18 @@ class ManageSiteSettings extends Page implements HasForms
                                         Tabs::make('WhatsAppMsgTabs')->tabs([
                                             Tabs\Tab::make('Əmlak Mesajı')->schema([
                                                 Grid::make(2)->schema([
-                                                    TextInput::make('whatsapp_property_message.tr')->label('Mesaj (Türkcə)')->placeholder('Merhaba, KibrisKare.com ilanınızla ilgili bilgi almak istiyorum: {title}'),
-                                                    TextInput::make('whatsapp_property_message.az')->label('Mesaj (Azərbaycanca)')->placeholder('Salam, KibrisKare.com elanınızla bağlı məlumat almaq istəyirəm: {title}'),
-                                                    TextInput::make('whatsapp_property_message.en')->label('Mesaj (İngiliscə)')->placeholder('Hello, I would like to get information regarding your KibrisKare.com listing: {title}'),
-                                                    TextInput::make('whatsapp_property_message.ru')->label('Mesaj (Rusca)')->placeholder('Здравствуйте, хочу получить информацию по вашему объявлению на KibrisKare.com: {title}'),
+                                                    TextInput::make('whatsapp_property_message.tr')->label('Mesaj (Türkcə)')->placeholder('Merhaba, araba.kibriskare.com ilanınızla ilgili bilgi almak istiyorum: {title}'),
+                                                    TextInput::make('whatsapp_property_message.az')->label('Mesaj (Azərbaycanca)')->placeholder('Salam, araba.kibriskare.com elanınızla bağlı məlumat almaq istəyirəm: {title}'),
+                                                    TextInput::make('whatsapp_property_message.en')->label('Mesaj (İngiliscə)')->placeholder('Hello, I would like to get information regarding your araba.kibriskare.com listing: {title}'),
+                                                    TextInput::make('whatsapp_property_message.ru')->label('Mesaj (Rusca)')->placeholder('Здравствуйте, хочу получить информацию по вашему объявлению на araba.kibriskare.com: {title}'),
                                                 ]),
                                             ]),
                                             Tabs\Tab::make('Otaq Yoldaşı Mesajı')->schema([
                                                 Grid::make(2)->schema([
-                                                    TextInput::make('whatsapp_roommate_message.tr')->label('Mesaj (Türkcə)')->placeholder('Merhaba, KibrisKare.com oda arkadaşı ilanınızla ilgili yazıyorum: {title}'),
-                                                    TextInput::make('whatsapp_roommate_message.az')->label('Mesaj (Azərbaycanca)')->placeholder('Salam, KibrisKare.com otaq yoldaşı elanınızla bağlı yazıram: {title}'),
-                                                    TextInput::make('whatsapp_roommate_message.en')->label('Mesaj (İngiliscə)')->placeholder('Hello, I am contacting you regarding your roommate listing on KibrisKare.com: {title}'),
-                                                    TextInput::make('whatsapp_roommate_message.ru')->label('Mesaj (Rusca)')->placeholder('Здравствуйте, пишу по поводу вашего объявления о поиске соседа на KibrisKare.com: {title}'),
+                                                    TextInput::make('whatsapp_roommate_message.tr')->label('Mesaj (Türkcə)')->placeholder('Merhaba, araba.kibriskare.com oda arkadaşı ilanınızla ilgili yazıyorum: {title}'),
+                                                    TextInput::make('whatsapp_roommate_message.az')->label('Mesaj (Azərbaycanca)')->placeholder('Salam, araba.kibriskare.com otaq yoldaşı elanınızla bağlı yazıram: {title}'),
+                                                    TextInput::make('whatsapp_roommate_message.en')->label('Mesaj (İngiliscə)')->placeholder('Hello, I am contacting you regarding your roommate listing on araba.kibriskare.com: {title}'),
+                                                    TextInput::make('whatsapp_roommate_message.ru')->label('Mesaj (Rusca)')->placeholder('Здравствуйте, пишу по поводу вашего объявления о поиске соседа на araba.kibriskare.com: {title}'),
                                                 ]),
                                             ]),
                                         ]),

@@ -115,7 +115,7 @@
                         @php
                             $wa = preg_replace('/[^0-9]/', '', $listing->contact_whatsapp);
                             $waTpl = \App\Modules\Shared\Models\SiteSetting::current()?->getTrans('whatsapp_roommate_message') 
-                                ?: 'Merhaba, KibrisKare.com oda arkadaşı ilanınızla ilgili yazıyorum: {title}';
+                                ?: 'Merhaba, araba.kibriskare.com oda arkadaşı ilanınızla ilgili yazıyorum: {title}';
                             $waMsg = str_replace('{title}', $listing->title, $waTpl);
                         @endphp
                         <a href="https://wa.me/{{ $wa }}?text={{ urlencode($waMsg) }}"

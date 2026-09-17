@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', $title . ' - KibrisKare.com')
+@section('title', $title . ' - araba.kibriskare.com')
 
 @section('content')
 <main class="w-full pb-20 bg-gray-50/50 min-h-screen">
@@ -21,7 +21,7 @@
                     </h1>
                     <p class="text-xs sm:text-sm text-gray-500 mt-2 flex items-center gap-2">
                         <i class="fa-regular fa-clock text-gray-400"></i>
-                        <span>{{ __('contact.support_desc') ?? 'KibrisKare.com' }} &bull; {{ date('Y') }}</span>
+                        <span>{{ __('contact.support_desc') ?? 'araba.kibriskare.com' }} &bull; {{ date('Y') }}</span>
                     </p>
                 </div>
 
@@ -58,7 +58,7 @@
                                 1. {{ __('footer.user_agreement') }} Şartları
                             </h2>
                             <p>
-                                KibrisKare.com platformuna hoş geldiniz. Bu Kullanıcı Sözleşmesi ("Sözleşme"), KibrisKare.com ("Platform") web sitesi ve mobil uygulamalarını kullanan tüm ziyaretçiler ve kayıtlı üyeler ("Kullanıcı") için geçerlidir.
+                                araba.kibriskare.com platformuna hoş geldiniz. Bu Kullanıcı Sözleşmesi ("Sözleşme"), araba.kibriskare.com ("Platform") web sitesi ve mobil uygulamalarını kullanan tüm ziyaretçiler ve kayıtlı üyeler ("Kullanıcı") için geçerlidir.
                             </p>
                             <p>
                                 Platforma erişim sağlayarak veya üye olarak, bu sözleşmede yer alan tüm şartları ve kuralları peşinen kabul etmiş sayılırsınız.
@@ -81,7 +81,7 @@
                                 3. Fikri Mülkiyet ve Haklar
                             </h2>
                             <p>
-                                KibrisKare.com'da yer alan logo, tasarım, metin, yazılım ve veri tabanının tüm fikri ve sınai mülkiyet hakları saklıdır. İzinsiz kopyalanamaz veya çoğaltılamaz.
+                                araba.kibriskare.com'da yer alan logo, tasarım, metin, yazılım ve veri tabanının tüm fikri ve sınai mülkiyet hakları saklıdır. İzinsiz kopyalanamaz veya çoğaltılamaz.
                             </p>
                         </div>
                     @elseif($activeDoc === 'privacy_policy')
@@ -90,7 +90,7 @@
                                 1. Kişisel Verilerin Korunması ve Gizlilik
                             </h2>
                             <p>
-                                KibrisKare.com olarak kullanıcılarımızın kişisel verilerinin gizliliğine ve güvenliğine en üst düzeyde önem vermekteyiz. Bu Gizlilik Politikası, hangi verilerin toplandığını, nasıl kullanıldığını ve korunduğunu açıklamaktadır.
+                                araba.kibriskare.com olarak kullanıcılarımızın kişisel verilerinin gizliliğine ve güvenliğine en üst düzeyde önem vermekteyiz. Bu Gizlilik Politikası, hangi verilerin toplandığını, nasıl kullanıldığını ve korunduğunu açıklamaktadır.
                             </p>
                         </div>
 
@@ -119,7 +119,7 @@
                                 1. Genel Kullanım Koşulları
                             </h2>
                             <p>
-                                Bu kullanım koşulları, KibrisKare.com platformunu ziyaret eden ve ilan yayınlayan tüm gerçek ve tüzel kişiler için bağlayıcıdır.
+                                Bu kullanım koşulları, araba.kibriskare.com platformunu ziyaret eden ve ilan yayınlayan tüm gerçek ve tüzel kişiler için bağlayıcıdır.
                             </p>
                         </div>
 
@@ -139,7 +139,7 @@
                                 3. Sorumluluk Reddi
                             </h2>
                             <p>
-                                KibrisKare.com bir ilan ve bilgi paylaşım platformudur. Alıcı ve satıcı arasındaki ticari ve hukuki işlemlerden tarafların kendileri sorumludur.
+                                araba.kibriskare.com bir ilan ve bilgi paylaşım platformudur. Alıcı ve satıcı arasındaki ticari ve hukuki işlemlerden tarafların kendileri sorumludur.
                             </p>
                         </div>
                     @endif
@@ -150,7 +150,7 @@
             <div class="mt-12 pt-8 border-t border-gray-100 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-gray-500">
                 <div class="flex items-center gap-2">
                     <i class="fa-solid fa-shield-halved text-orange-500 text-base"></i>
-                    <span>{{ __('footer.all_rights_reserved') }} &bull; KibrisKare.com</span>
+                    <span>{{ __('footer.all_rights_reserved') }} &bull; araba.kibriskare.com</span>
                 </div>
                 <div>
                     <a href="{{ route('contact') }}" class="text-orange-600 hover:text-orange-700 font-semibold underline">

@@ -15,7 +15,7 @@
                 {{-- Sağ: brend loqolu reklam kartı (yerli assetlər) --}}
                 <div class="absolute inset-0 bg-orange-400"></div>
                 <div class="relative h-full flex flex-col items-center justify-center text-center px-5 py-6">
-                    <img src="{{ asset('images/kibriskarelogo.png') }}" alt="KibrisKare.com" loading="lazy" decoding="async"
+                    <img src="{{ asset('images/kibriskarelogo.png') }}" alt="araba.kibriskare.com" loading="lazy" decoding="async"
                          class="w-28 mb-5 drop-shadow-sm">
                     <p class="text-white font-bold text-xl leading-snug">{!! __('ads.post_free_title') !!}</p>
                     <p class="text-orange-100 text-xs mt-2 leading-relaxed">{{ __('ads.post_free_desc') }}</p>

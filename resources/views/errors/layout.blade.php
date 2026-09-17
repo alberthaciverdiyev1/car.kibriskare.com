@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', ($badge ?? 'Xəta') . ' - ' . ($title ?? 'KibrisKare.com'))
+@section('title', ($badge ?? 'Xəta') . ' - ' . ($title ?? 'araba.kibriskare.com'))
 
 @section('content')
 <div class="min-h-[75vh] flex items-center justify-center px-4 py-12 sm:py-20">

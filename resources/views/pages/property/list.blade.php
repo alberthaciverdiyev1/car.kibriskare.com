@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @if(isset($pageTitle) && $pageTitle)
-    @section('title', $pageTitle . ' - KibrisKare.com')
+    @section('title', $pageTitle . ' - araba.kibriskare.com')
 @endif
 
 @if(isset($metaDescription) && $metaDescription)

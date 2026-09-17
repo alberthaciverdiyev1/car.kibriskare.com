@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', ($agency->name ?? '') . ' - ' . __('agency.agency_default_subtitle') . ' - KibrisKare.com')
+@section('title', ($agency->name ?? '') . ' - ' . __('agency.agency_default_subtitle') . ' - araba.kibriskare.com')
 
 @section('content')
 <div class="w-full pb-16">

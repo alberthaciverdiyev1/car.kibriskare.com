@@ -11,12 +11,12 @@ class AgencyRealtorLoginTest extends TestCase
 {
     public function test_newly_created_realtor_can_login_to_agency_panel(): void
     {
-        $owner = User::where('email', 'agency@kibriskare.com')->firstOrFail();
+        $owner = User::where('email', 'agency@araba.kibriskare.com')->firstOrFail();
 
         // Simulate what CreateAgent does
         $user = User::create([
             'name' => 'Login Test Rieltor',
-            'email' => 'login.rieltor.' . time() . '@kibriskare.com',
+            'email' => 'login.rieltor.' . time() . '@araba.kibriskare.com',
             'password' => Hash::make('password123'),
         ]);
 
@@ -42,8 +42,8 @@ class AgencyRealtorLoginTest extends TestCase
 
     public function test_edit_page_shows_linked_user_as_readonly(): void
     {
-        $this->actingAs(User::where('email', 'agency@kibriskare.com')->firstOrFail());
-        $own = Agent::where('agency_id', \App\Modules\Shared\Models\User::where('email', 'agency@kibriskare.com')->firstOrFail()->tenantAgency()->id)->first();
+        $this->actingAs(User::where('email', 'agency@araba.kibriskare.com')->firstOrFail());
+        $own = Agent::where('agency_id', \App\Modules\Shared\Models\User::where('email', 'agency@araba.kibriskare.com')->firstOrFail()->tenantAgency()->id)->first();
         $this->assertNotNull($own);
 
         $response = $this->get('/agency/agents/' . $own->id . '/edit');

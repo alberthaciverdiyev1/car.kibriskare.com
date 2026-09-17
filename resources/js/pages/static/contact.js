@@ -26,7 +26,7 @@ document.addEventListener('DOMContentLoaded', function () {
             iconAnchor: [18, 36]
         });
 
-        const popupTitle = i18n.mapPopupTitle || 'KibrisKare.com';
+        const popupTitle = i18n.mapPopupTitle || 'araba.kibriskare.com';
         const popupAddr = i18n.mapPopupAddress || '';
         L.marker([defaultLat, defaultLng], { icon: customIcon })
             .addTo(map)

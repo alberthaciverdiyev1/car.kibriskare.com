@@ -73,7 +73,7 @@ class PropertyService
     public function storeImages(Property $property, array $photos): void
     {
         foreach ($photos as $order => $photo) {
-            // Şəkli "KibrisKare.com" watermark ilə yaddaşa yazırıq
+            // Şəkli "araba.kibriskare.com" watermark ilə yaddaşa yazırıq
             $path = $this->imageOptimizer->saveWithWatermark($photo, 'properties');
             
             // Həmin şəkildən kiçik həcmli WebP thumbnail yaradırıq (5-20 KB)

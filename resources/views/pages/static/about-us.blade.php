@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', __('about.page_title') . ' - KibrisKare.com')
+@section('title', __('about.page_title') . ' - araba.kibriskare.com')
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/about-us.css') }}">

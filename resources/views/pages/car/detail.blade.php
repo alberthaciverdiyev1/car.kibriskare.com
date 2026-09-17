@@ -311,7 +311,7 @@
                         @if($whatsapp)
                             @php
                                 $cleanWa = preg_replace('/[^0-9]/', '', $whatsapp);
-                                $waMsg = urlencode("Salam, KibrisKare.com saytındakı {$car->display_title} elanı ilə bağlı yazıram: " . url()->current());
+                                $waMsg = urlencode("Salam, araba.kibriskare.com saytındakı {$car->display_title} elanı ilə bağlı yazıram: " . url()->current());
                             @endphp
                             <a href="https://wa.me/{{ $cleanWa }}?text={{ $waMsg }}" target="_blank" rel="noopener"
                                class="w-full py-3 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-2xl text-sm transition shadow-sm flex items-center justify-center gap-2">

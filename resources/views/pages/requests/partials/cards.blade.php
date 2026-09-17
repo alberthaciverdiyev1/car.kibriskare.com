@@ -38,8 +38,8 @@
                      loading="lazy" />
             @else
                 <div class="flex flex-col items-center justify-center select-none py-6 px-4">
-                    <img src="{{ asset('images/kibriskarelogo1.png') }}" alt="KibrisKare.com" class="h-10 sm:h-12 w-auto object-contain transition-transform duration-500 group-hover:scale-105" />
-                    <span class="text-[11px] font-semibold text-gray-500 tracking-wider mt-1.5">KibrisKare.com</span>
+                    <img src="{{ asset('images/kibriskarelogo1.png') }}" alt="araba.kibriskare.com" class="h-10 sm:h-12 w-auto object-contain transition-transform duration-500 group-hover:scale-105" />
+                    <span class="text-[11px] font-semibold text-gray-500 tracking-wider mt-1.5">araba.kibriskare.com</span>
                 </div>
             @endif
 

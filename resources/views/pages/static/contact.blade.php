@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', __('contact.page_title') . ' - KibrisKare.com')
+@section('title', __('contact.page_title') . ' - araba.kibriskare.com')
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('vendor/leaflet/leaflet.css') }}" />
@@ -69,8 +69,8 @@
                 </div>
                 <h3 class="font-semibold text-gray-900 text-base mb-1">{{ __('contact.email') }}</h3>
                 <p class="text-xs text-gray-500 mb-3">{{ __('contact.email_desc') }}</p>
-                <a href="mailto:{{ $siteSetting?->email ?: 'info@kibriskare.com' }}" class="text-sm font-semibold text-blue-600 hover:underline mt-auto break-all">
-                    {{ $siteSetting?->email ?: 'info@kibriskare.com' }}
+                <a href="mailto:{{ $siteSetting?->email ?: 'info@araba.kibriskare.com' }}" class="text-sm font-semibold text-blue-600 hover:underline mt-auto break-all">
+                    {{ $siteSetting?->email ?: 'info@araba.kibriskare.com' }}
                 </a>
                 @if($siteSetting?->support_email && $siteSetting->support_email !== $siteSetting->email)
                     <a href="mailto:{{ $siteSetting->support_email }}" class="text-xs text-gray-500 hover:text-blue-600 mt-1 break-all">
@@ -251,7 +251,7 @@
             error: "{{ __('contact.error_occurred') }}",
             network: "{{ __('contact.network_error') }}",
             send: "{{ __('contact.send_message') }}",
-            mapPopupTitle: "{{ $siteSetting?->copyright_text ?: 'KibrisKare.com' }}",
+            mapPopupTitle: "{{ $siteSetting?->copyright_text ?: 'araba.kibriskare.com' }}",
             mapPopupAddress: "{{ addslashes($siteSetting?->getTrans('address') ?: __('contact.office_address')) }}"
         }
     };

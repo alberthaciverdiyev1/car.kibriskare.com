@@ -34,7 +34,7 @@ class FilamentPagesSmokeTest extends TestCase
 
     public function test_agency_property_view_page_renders(): void
     {
-        $user = User::where('email', 'agency@kibriskare.com')->first();
+        $user = User::where('email', 'agency@araba.kibriskare.com')->first();
         $this->assertNotNull($user, 'Agency owner not seeded');
 
         $prop = Property::where('agency_id', $user->agencies()->first()?->id)->first();

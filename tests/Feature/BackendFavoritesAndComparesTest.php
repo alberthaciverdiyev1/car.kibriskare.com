@@ -53,7 +53,7 @@ class BackendFavoritesAndComparesTest extends TestCase
         if (! $user) {
             $user = User::create([
                 'name' => 'Comp User',
-                'email' => 'comp_user_' . time() . '@kibriskare.com',
+                'email' => 'comp_user_' . time() . '@araba.kibriskare.com',
                 'password' => bcrypt('password123'),
             ]);
         }

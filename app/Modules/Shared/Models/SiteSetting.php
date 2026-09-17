@@ -134,8 +134,8 @@ class SiteSetting extends Model
                 'phone' => '+90 (548) 888-8888',
                 'phone_secondary' => '+90 (392) 815 00 00',
                 'whatsapp' => '+905488888888',
-                'email' => 'info@kibriskare.com',
-                'support_email' => 'support@kibriskare.com',
+                'email' => 'info@araba.kibriskare.com',
+                'support_email' => 'support@araba.kibriskare.com',
                 'address' => [
                     'tr' => 'Girne, Kuzey Kıbrıs Türk Cumhuriyeti',
                     'az' => 'Girnə, Şimali Kipr',
@@ -166,7 +166,7 @@ class SiteSetting extends Model
                     'en' => 'Discover thousands of properties for sale and rent across Northern Cyprus on a single platform. Trusted agencies and owner listings.',
                     'ru' => 'Откройте для себя тысячи объявлений о продаже и аренде недвижимости по всему Северному Кипру на единой платформе.',
                 ],
-                'copyright_text' => 'KibrisKare.com',
+                'copyright_text' => 'araba.kibriskare.com',
             ]);
         }
 

@@ -9,7 +9,7 @@
                 <a href="{{ route('home') }}" class="flex items-center space-x-2.5">
                     <img class="h-9 w-auto object-contain" width="36" height="36" src="{{ asset('images/kibriskarelogo1.png') }}" alt="KibrisKare" />
                     <div class="leading-tight">
-                        <div class="text-xl font-bold text-white tracking-tight">{{ $siteSetting?->copyright_text ?: 'KibrisKare.com' }}</div>
+                        <div class="text-xl font-bold text-white tracking-tight">{{ $siteSetting?->copyright_text ?: 'araba.kibriskare.com' }}</div>
                         <div class="text-[8px] text-emerald-400 underline underline-offset-4 uppercase tracking-[0.15em] font-semibold">
                             {{ $siteSetting?->getTrans('tagline') ?: __('footer.tagline') }}
                         </div>
@@ -107,7 +107,7 @@
         <!-- Bottom Bar -->
         <div class="flex flex-col sm:flex-row items-center justify-between gap-4 text-xs">
             <div>
-                &copy; {{ date('Y') }} <span class="text-white font-semibold">{{ $siteSetting?->copyright_text ?: 'KibrisKare.com' }}</span> — {{ __('footer.all_rights_reserved') }}
+                &copy; {{ date('Y') }} <span class="text-white font-semibold">{{ $siteSetting?->copyright_text ?: 'araba.kibriskare.com' }}</span> — {{ __('footer.all_rights_reserved') }}
             </div>
             <div class="flex flex-wrap items-center gap-x-6 gap-y-2">
                 <a href="{{ route('user-agreement') }}" class="hover:text-white transition">{{ __('footer.user_agreement') }}</a>

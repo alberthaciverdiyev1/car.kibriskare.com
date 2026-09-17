@@ -9,7 +9,7 @@ class FinalNavCheckTest extends TestCase
 {
     public function test_agency_nav_has_realtors_item(): void
     {
-        $this->actingAs(User::where('email', 'agency@kibriskare.com')->firstOrFail());
+        $this->actingAs(User::where('email', 'agency@araba.kibriskare.com')->firstOrFail());
         $this->get('/agency')
             ->assertOk()
             ->assertSee('Rieltorlarım')

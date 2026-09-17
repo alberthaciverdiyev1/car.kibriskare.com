@@ -6,5 +6,5 @@ return [
     'post_free_btn' => 'İlan Ver',
     'find_home_title' => 'Hayalinizdeki evi<br>hemen bulun',
     'find_home_desc' => 'Yüzlerce ilan arasından dilediğinizi seçin',
-    'find_home_alt' => 'KibrisKare.com — Hayalinizdeki evi bulun',
+    'find_home_alt' => 'araba.kibriskare.com — Hayalinizdeki evi bulun',
 ];

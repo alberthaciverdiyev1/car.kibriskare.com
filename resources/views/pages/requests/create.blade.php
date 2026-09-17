@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', __('requests.post_request_title') . ' - KibrisKare.com')
+@section('title', __('requests.post_request_title') . ' - araba.kibriskare.com')
 
 @push('styles')
 <link rel="stylesheet" href="{{ asset('css/requests-create.css') }}">

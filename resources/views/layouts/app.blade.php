@@ -10,7 +10,7 @@
         $curPageSeo = $currentPageSeo ?? \App\Modules\Shared\Models\PageSeo::findForCurrentRoute();
         $seoConf = $seoSetting ?? \App\Modules\Shared\Models\SeoSetting::current();
 
-        $resolvedTitle = View::hasSection('title') ? View::getSection('title') : ($title ?? ($curPageSeo?->getTrans('title') ?: ($seoConf?->getTrans('default_meta_title') ?: 'KibrisKare.com')));
+        $resolvedTitle = View::hasSection('title') ? View::getSection('title') : ($title ?? ($curPageSeo?->getTrans('title') ?: ($seoConf?->getTrans('default_meta_title') ?: 'araba.kibriskare.com')));
         $resolvedH1 = ($h1 ?? null) ?: (View::hasSection('h1') ? View::getSection('h1') : ($curPageSeo?->getTrans('h1') ?: ($resolvedTitle ?: '')));
         $resolvedDescription = ($metaDescription ?? null) ?: (View::hasSection('meta_description') ? View::getSection('meta_description') : ($curPageSeo?->getTrans('description') ?: ($seoConf?->getTrans('default_meta_description') ?: '')));
         $resolvedKeywords = ($metaKeywords ?? null) ?: (View::hasSection('meta_keywords') ? View::getSection('meta_keywords') : ($curPageSeo?->getTrans('keywords') ?: ($seoConf?->getTrans('default_meta_keywords') ?: '')));

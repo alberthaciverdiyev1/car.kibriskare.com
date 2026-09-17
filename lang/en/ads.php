@@ -6,5 +6,5 @@ return [
     'post_free_btn' => 'Post Ad',
     'find_home_title' => 'Find your<br>ideal home',
     'find_home_desc' => 'Choose from hundreds of listings',
-    'find_home_alt' => 'KibrisKare.com — Find your ideal home',
+    'find_home_alt' => 'araba.kibriskare.com — Find your ideal home',
 ];

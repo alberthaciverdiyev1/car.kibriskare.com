@@ -15,10 +15,10 @@ class LegalPagesSeeder extends Seeder
         // 1. KULLANICI SÖZLEŞMESİ (USER AGREEMENT)
         $userAgreement = [
             'tr' => '<h2>1. Taraflar ve Kapsam</h2>
-<p>İşbu Kullanıcı Sözleşmesi ("Sözleşme"), <strong>KibrisKare.com</strong> ("Platform / Site") ile Platform\'a üye olan veya ziyaretçi olarak erişim sağlayan gerçek veya tüzel kişiler ("Kullanıcı / Üye") arasında akdedilmiştir. Platform\'u kullanan her kişi, bu sözleşmede belirtilen şartları okumuş, anlamış ve kabul etmiş sayılır.</p>
+<p>İşbu Kullanıcı Sözleşmesi ("Sözleşme"), <strong>araba.kibriskare.com</strong> ("Platform / Site") ile Platform\'a üye olan veya ziyaretçi olarak erişim sağlayan gerçek veya tüzel kişiler ("Kullanıcı / Üye") arasında akdedilmiştir. Platform\'u kullanan her kişi, bu sözleşmede belirtilen şartları okumuş, anlamış ve kabul etmiş sayılır.</p>
 
 <h2>2. Hizmetlerin Tanımı</h2>
-<p>KibrisKare.com; Kuzey Kıbrıs Türk Cumhuriyeti (KKTC) sınırları dahilinde satılık ve kiralık gayrimenkul (konut, villa, arsa, ticari mülk vb.) ilanlarının, gayrimenkul taleplerinin ("Arıyorum") ve oda arkadaşı ilanlarının yayınlandığı, alıcı, satıcı, kiracı ve yetkili emlak danışmanlarını bir araya getiren bağımsız bir çevrim içi ilan ve bilgi platformudur.</p>
+<p>araba.kibriskare.com; Kuzey Kıbrıs Türk Cumhuriyeti (KKTC) sınırları dahilinde satılık ve kiralık gayrimenkul (konut, villa, arsa, ticari mülk vb.) ilanlarının, gayrimenkul taleplerinin ("Arıyorum") ve oda arkadaşı ilanlarının yayınlandığı, alıcı, satıcı, kiracı ve yetkili emlak danışmanlarını bir araya getiren bağımsız bir çevrim içi ilan ve bilgi platformudur.</p>
 
 <h2>3. Üyelik ve Hesap Güvenliği</h2>
 <ul>
@@ -38,19 +38,19 @@ class LegalPagesSeeder extends Seeder
 <p>Platform, kullanıcılarının gizliliğini ve veri güvenliğini korumak amacıyla ilan detaylarında yer alan telefon numaralarını botlara ve kötü niyetli veri çekme (scraping) yazılımlarına karşı maskeli olarak sunar. Telefon gösterim işlemleri güvenlik ve istatistik amacıyla kayıt altına alınmaktadır.</p>
 
 <h2>6. Fikri ve Sınai Mülkiyet Hakları</h2>
-<p>KibrisKare.com platformunda yer alan marka, logo, arayüz tasarımı, yazılım kodları, veri tabanı yapısı ve tüm içeriklerin fikri mülkiyet hakları KibrisKare\'ye aittir. Yazılı izin olmaksızın kısmen veya tamamen kopyalanamaz, çoğaltılamaz ve dağıtılamaz.</p>
+<p>araba.kibriskare.com platformunda yer alan marka, logo, arayüz tasarımı, yazılım kodları, veri tabanı yapısı ve tüm içeriklerin fikri mülkiyet hakları KibrisKare\'ye aittir. Yazılı izin olmaksızın kısmen veya tamamen kopyalanamaz, çoğaltılamaz ve dağıtılamaz.</p>
 
 <h2>7. Sorumluluk Sınırları</h2>
-<p>KibrisKare.com, 6563 sayılı Elektronik Ticaretin Düzenlenmesi Hakkında Kanun ve ilgili mevzuat uyarınca "Aracı Hizmet Sağlayıcı" konumundadır. Platform, kullanıcılar veya emlak ofisleri arasında gerçekleşen alım-satım, kiralama, kapora veya sözleşme süreçlerinin tarafı değildir ve bunlardan doğabilecek uyuşmazlıklardan sorumlu tutulamaz.</p>
+<p>araba.kibriskare.com, 6563 sayılı Elektronik Ticaretin Düzenlenmesi Hakkında Kanun ve ilgili mevzuat uyarınca "Aracı Hizmet Sağlayıcı" konumundadır. Platform, kullanıcılar veya emlak ofisleri arasında gerçekleşen alım-satım, kiralama, kapora veya sözleşme süreçlerinin tarafı değildir ve bunlardan doğabilecek uyuşmazlıklardan sorumlu tutulamaz.</p>
 
 <h2>8. Uyuşmazlıkların Çözümü ve Yetkili Mahkeme</h2>
 <p>İşbu Sözleşme\'nin uygulanmasından doğabilecek her türlü hukuki ihtilafta Kuzey Kıbrıs Türk Cumhuriyeti (KKTC) Mahkemeleri ve İcra Daireleri münhasıran yetkilidir.</p>',
 
             'az' => '<h2>1. Tərəflər və Əhatə Dairəsi</h2>
-<p>Bu İstifadəçi Razılaşması ("Razılaşma"), <strong>KibrisKare.com</strong> ("Platforma / Sayt") ilə Platformaya üzv olan və ya qonaq kimi daxil olan fiziki və ya hüquqi şəxslər ("İstifadəçi / Üzv") arasında bağlanmışdır. Platformadan istifadə edən hər bir şəxs bu qaydaları oxumuş və qəbul etmiş sayılır.</p>
+<p>Bu İstifadəçi Razılaşması ("Razılaşma"), <strong>araba.kibriskare.com</strong> ("Platforma / Sayt") ilə Platformaya üzv olan və ya qonaq kimi daxil olan fiziki və ya hüquqi şəxslər ("İstifadəçi / Üzv") arasında bağlanmışdır. Platformadan istifadə edən hər bir şəxs bu qaydaları oxumuş və qəbul etmiş sayılır.</p>
 
 <h2>2. Xidmətlərin Təsviri</h2>
-<p>KibrisKare.com; Şimali Kipr Türk Cümhuriyyətində (KKTC) satılıq və kirayə daşınmaz əmlak elanlarının, müştəri tələblərinin ("Axtarıram") və otaq yoldaşı elanlarının yerləşdirildiyi, alıcı, satıcı, kirayəçi və rieltorları birləşdirən onlayn əmlak platformasıdır.</p>
+<p>araba.kibriskare.com; Şimali Kipr Türk Cümhuriyyətində (KKTC) satılıq və kirayə daşınmaz əmlak elanlarının, müştəri tələblərinin ("Axtarıram") və otaq yoldaşı elanlarının yerləşdirildiyi, alıcı, satıcı, kirayəçi və rieltorları birləşdirən onlayn əmlak platformasıdır.</p>
 
 <h2>3. Qeydiyyat və Hesab Təhlükəsizliyi</h2>
 <ul>
@@ -70,10 +70,10 @@ class LegalPagesSeeder extends Seeder
 <p>Bu Razılaşmadan irəli gələn bütün hüquqi mübahisələrin həllində Şimali Kipr Türk Cümhuriyyəti (KKTC) Məhkəmələri səlahiyyətlidir.</p>',
 
             'en' => '<h2>1. Parties and Scope</h2>
-<p>This User Agreement ("Agreement") is concluded between <strong>KibrisKare.com</strong> ("Platform") and individuals or entities accessing the Platform as registered members or visitors ("User / Member"). By using the Platform, you acknowledge that you have read, understood, and agreed to all the terms stated herein.</p>
+<p>This User Agreement ("Agreement") is concluded between <strong>araba.kibriskare.com</strong> ("Platform") and individuals or entities accessing the Platform as registered members or visitors ("User / Member"). By using the Platform, you acknowledge that you have read, understood, and agreed to all the terms stated herein.</p>
 
 <h2>2. Description of Services</h2>
-<p>KibrisKare.com is an independent online real estate marketplace connecting property buyers, sellers, tenants, and verified real estate agents across Northern Cyprus (TRNC) for properties for sale, rent, property requests, and shared accommodation.</p>
+<p>araba.kibriskare.com is an independent online real estate marketplace connecting property buyers, sellers, tenants, and verified real estate agents across Northern Cyprus (TRNC) for properties for sale, rent, property requests, and shared accommodation.</p>
 
 <h2>3. Membership and Account Security</h2>
 <ul>
@@ -93,10 +93,10 @@ class LegalPagesSeeder extends Seeder
 <p>Any legal disputes arising from the use of this Platform shall be subject to the exclusive jurisdiction of the Courts and Execution Offices of the Turkish Republic of Northern Cyprus (TRNC).</p>',
 
             'ru' => '<h2>1. Стороны и предмет соглашения</h2>
-<p>Настоящее Пользовательское соглашение ("Соглашение") регулирует отношения между порталом <strong>KibrisKare.com</strong> ("Платформа") и физическими или юридическими лицами ("Пользователь"), использующими сервисы сайта. Использование Платформы означает полное согласие со всеми условиями настоящего Соглашения.</p>
+<p>Настоящее Пользовательское соглашение ("Соглашение") регулирует отношения между порталом <strong>araba.kibriskare.com</strong> ("Платформа") и физическими или юридическими лицами ("Пользователь"), использующими сервисы сайта. Использование Платформы означает полное согласие со всеми условиями настоящего Соглашения.</p>
 
 <h2>2. Описание сервисов</h2>
-<p>KibrisKare.com — это независимая онлайн-платформа недвижимости на Северном Кипре (ТРСК), предоставляющая каталог объявлений о продаже, аренде жилой и коммерческой недвижимости, земельных участков, а также раздел заявок на поиск недвижимости.</p>
+<p>araba.kibriskare.com — это независимая онлайн-платформа недвижимости на Северном Кипре (ТРСК), предоставляющая каталог объявлений о продаже, аренде жилой и коммерческой недвижимости, земельных участков, а также раздел заявок на поиск недвижимости.</p>
 
 <h2>3. Регистрация и безопасность учетной записи</h2>
 <ul>
@@ -119,7 +119,7 @@ class LegalPagesSeeder extends Seeder
         // 2. GİZLİLİK POLİTİKASI (PRIVACY POLICY)
         $privacyPolicy = [
             'tr' => '<h2>1. Giriş ve Veri Sorumlusu</h2>
-<p><strong>KibrisKare.com</strong> olarak, web sitemizi ve mobil hizmetlerimizi kullanan tüm ziyaretçi ve üyelerimizin kişisel verilerinin korunmasına ve mahremiyetine azami özen göstermekteyiz. Bu Gizlilik Politikası, hangi verileri topladığımızı, bu verilerin nasıl işlendiğini, korunduğunu ve haklarınızı açıklamaktadır.</p>
+<p><strong>araba.kibriskare.com</strong> olarak, web sitemizi ve mobil hizmetlerimizi kullanan tüm ziyaretçi ve üyelerimizin kişisel verilerinin korunmasına ve mahremiyetine azami özen göstermekteyiz. Bu Gizlilik Politikası, hangi verileri topladığımızı, bu verilerin nasıl işlendiğini, korunduğunu ve haklarınızı açıklamaktadır.</p>
 
 <h2>2. Toplanan Kişisel Veriler</h2>
 <ul>
@@ -145,10 +145,10 @@ class LegalPagesSeeder extends Seeder
 <p>Kişisel verileriniz, kanunen yetkili resmi merciler ve mahkemeler haricinde hiçbir üçüncü taraf reklam veya pazarlama şirketine satılmaz veya izinsiz devredilmez.</p>
 
 <h2>6. Kullanıcı Hakları ve İletişim</h2>
-<p>Kullanıcılar diledikleri zaman hesaplarındaki verileri güncelleme, düzeltme veya silinmesini talep etme hakkına sahiptir. Gizlilik ile ilgili talepleriniz için <strong>info@kibriskare.com</strong> üzerinden bizimle iletişime geçebilirsiniz.</p>',
+<p>Kullanıcılar diledikleri zaman hesaplarındaki verileri güncelleme, düzeltme veya silinmesini talep etme hakkına sahiptir. Gizlilik ile ilgili talepleriniz için <strong>info@araba.kibriskare.com</strong> üzerinden bizimle iletişime geçebilirsiniz.</p>',
 
             'az' => '<h2>1. Giriş və Məxfilik Öhdəliyi</h2>
-<p><strong>KibrisKare.com</strong> istifadəçilərimizin fərdi məlumatlarının qorunmasına və təhlükəsizliyinə yüksək önəm verir. Bu Məxfilik Siyasəti məlumatlarınızın necə toplanıldığını və qorunduğunu izah edir.</p>
+<p><strong>araba.kibriskare.com</strong> istifadəçilərimizin fərdi məlumatlarının qorunmasına və təhlükəsizliyinə yüksək önəm verir. Bu Məxfilik Siyasəti məlumatlarınızın necə toplanıldığını və qorunduğunu izah edir.</p>
 
 <h2>2. Toplanan Məlumatlar</h2>
 <ul>
@@ -168,7 +168,7 @@ class LegalPagesSeeder extends Seeder
 <p>Toplanan bütün məlumatlar SSL şifrələmə və müasir təhlükəsizlik protokolları ilə qorunur. Məlumatlar üçüncü tərəflərə ötürülmür.</p>',
 
             'en' => '<h2>1. Introduction and Data Protection</h2>
-<p>At <strong>KibrisKare.com</strong>, we are committed to protecting the privacy and personal data of our users and visitors. This Privacy Policy outlines how your personal information is collected, processed, and safeguarded.</p>
+<p>At <strong>araba.kibriskare.com</strong>, we are committed to protecting the privacy and personal data of our users and visitors. This Privacy Policy outlines how your personal information is collected, processed, and safeguarded.</p>
 
 <h2>2. Information We Collect</h2>
 <ul>
@@ -189,7 +189,7 @@ class LegalPagesSeeder extends Seeder
 <p>We implement robust technical and administrative security measures, including SSL/TLS encryption and strict access controls, to prevent unauthorized access, alteration, or disclosure of your data.</p>',
 
             'ru' => '<h2>1. Общие положения</h2>
-<p>Портал <strong>KibrisKare.com</strong> уделяет приоритетное внимание защите персональных данных своих пользователей. Настоящая Политика конфиденциальности описывает порядок сбора, обработки и защиты вашей информации.</p>
+<p>Портал <strong>araba.kibriskare.com</strong> уделяет приоритетное внимание защите персональных данных своих пользователей. Настоящая Политика конфиденциальности описывает порядок сбора, обработки и защиты вашей информации.</p>
 
 <h2>2. Собираемые данные</h2>
 <ul>
@@ -212,7 +212,7 @@ class LegalPagesSeeder extends Seeder
         // 3. KULLANIM KOŞULLARI (TERMS OF USE)
         $termsOfUse = [
             'tr' => '<h2>1. Genel Kurallar</h2>
-<p>KibrisKare.com web sitesini ziyaret eden veya platformda işlem yapan tüm kullanıcılar, yürürlükteki mevzuata, genel ahlak ve dürüstlük kurallarına uymakla yükümlüdür.</p>
+<p>araba.kibriskare.com web sitesini ziyaret eden veya platformda işlem yapan tüm kullanıcılar, yürürlükteki mevzuata, genel ahlak ve dürüstlük kurallarına uymakla yükümlüdür.</p>
 
 <h2>2. İlan Verme ve Yayın Kuralları</h2>
 <ul>
@@ -233,10 +233,10 @@ class LegalPagesSeeder extends Seeder
 <p>Platformda kurumsal üyelik açan emlak ofisleri ve bağımsız danışmanlar, KKTC Emlakçılar Birliği ve ilgili yasal mevzuat kapsamındaki yetki ve lisans kurallarına riayet etmekle yükümlüdür.</p>
 
 <h2>5. Platformun Hak ve Yetkileri</h2>
-<p>KibrisKare.com, kurallara aykırı olduğunu tespit ettiği ilanları yayından kaldırma, düzeltme talep etme veya kural ihlali yapan kullanıcı hesaplarını geçici/kalıcı olarak askıya alma hakkını saklı tutar.</p>',
+<p>araba.kibriskare.com, kurallara aykırı olduğunu tespit ettiği ilanları yayından kaldırma, düzeltme talep etme veya kural ihlali yapan kullanıcı hesaplarını geçici/kalıcı olarak askıya alma hakkını saklı tutar.</p>',
 
             'az' => '<h2>1. Ümumi Qaydalar</h2>
-<p>KibrisKare.com saytına daxil olan və xidmətlərdən istifadə edən hər bir istifadəçi qanunvericiliyə və platformanın ümumi istifadə qaydalarına riayət etməlidir.</p>
+<p>araba.kibriskare.com saytına daxil olan və xidmətlərdən istifadə edən hər bir istifadəçi qanunvericiliyə və platformanın ümumi istifadə qaydalarına riayət etməlidir.</p>
 
 <h2>2. Elan Yerləşdirmə Qaydaları</h2>
 <ul>
@@ -250,7 +250,7 @@ class LegalPagesSeeder extends Seeder
 <p>Bu bölmədən yalnız real əmlak axtarışı və tələblər üçün istifadə edilə bilər. Reklam xarakterli məlumatların paylaşılması qadağandır.</p>',
 
             'en' => '<h2>1. General Conditions</h2>
-<p>All users accessing and utilizing the services of KibrisKare.com agree to adhere to all applicable laws, regulations, and these Terms of Use.</p>
+<p>All users accessing and utilizing the services of araba.kibriskare.com agree to adhere to all applicable laws, regulations, and these Terms of Use.</p>
 
 <h2>2. Property Listing Rules</h2>
 <ul>
@@ -265,7 +265,7 @@ class LegalPagesSeeder extends Seeder
 <p>The "Requests / Looking For" section must only be used for genuine property search inquiries and shared living arrangements. Commercial spam or irrelevant advertising is prohibited.</p>',
 
             'ru' => '<h2>1. Общие условия</h2>
-<p>Пользователи сайта KibrisKare.com обязуются соблюдать действующее законодательство и настоящие Правила использования.</p>
+<p>Пользователи сайта araba.kibriskare.com обязуются соблюдать действующее законодательство и настоящие Правила использования.</p>
 
 <h2>2. Правила публикации объявлений</h2>
 <ul>

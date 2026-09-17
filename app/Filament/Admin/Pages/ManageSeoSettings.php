@@ -214,7 +214,7 @@ class ManageSeoSettings extends Page implements HasForms
 
                                 TextInput::make('og_image')
                                     ->label('Standart Sosial Şəbəkə Şəkli (OG:Image URL)')
-                                    ->placeholder('https://kibriskare.com/images/og-share.jpg'),
+                                    ->placeholder('https://araba.kibriskare.com/images/og-share.jpg'),
                             ]),
                     ]),
             ])

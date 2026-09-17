@@ -9,10 +9,10 @@ use Illuminate\Support\Str;
 
 class ImageOptimizerService
 {
-    public const WATERMARK_TEXT = 'KibrisKare.com';
+    public const WATERMARK_TEXT = 'araba.kibriskare.com';
 
     /**
-     * Şəkli watermark (KibrisKare.com) ilə yaddaşa yazır.
+     * Şəkli watermark (araba.kibriskare.com) ilə yaddaşa yazır.
      *
      * @param  string|UploadedFile  $source
      * @param  string  $directory  Storage qovluğu (məs: 'properties')
@@ -102,7 +102,7 @@ class ImageOptimizerService
     }
 
     /**
-     * Mövcud faylın üzərinə in-place watermark (KibrisKare.com) tətbiq edir.
+     * Mövcud faylın üzərinə in-place watermark (araba.kibriskare.com) tətbiq edir.
      */
     public function addWatermarkToFile(string $filePath, string $text = self::WATERMARK_TEXT): bool
     {

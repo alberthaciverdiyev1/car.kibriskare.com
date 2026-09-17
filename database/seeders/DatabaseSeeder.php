@@ -16,7 +16,7 @@ class DatabaseSeeder extends Seeder
     {
         // 1. Admin User
         $admin = User::firstOrCreate(
-            ['email' => 'admin@kibriskare.com'],
+            ['email' => 'admin@araba.kibriskare.com'],
             [
                 'name' => 'Super Admin',
                 'password' => Hash::make('password'),
@@ -25,7 +25,7 @@ class DatabaseSeeder extends Seeder
 
         // 2. Agency Owner User
         $agencyOwner = User::firstOrCreate(
-            ['email' => 'agency@kibriskare.com'],
+            ['email' => 'agency@araba.kibriskare.com'],
             [
                 'name' => 'Fox Real Estate',
                 'password' => Hash::make('password'),
