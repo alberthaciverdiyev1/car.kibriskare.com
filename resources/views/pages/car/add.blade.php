@@ -176,11 +176,17 @@
                     <div>
                         <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">{{ __('car.plate_type') }} *</label>
                         <select name="plate_type" required
-                                class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl text-sm font-semibold text-gray-800 outline-none focus:border-[var(--primary)] focus:bg-white transition">
+                                class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl text-sm font-semibold text-gray-800 outline-none focus:border-[var(--primary)] focus:bg-white">
                             @foreach($plateTypes as $val => $lbl)
                                 <option value="{{ $val }}" {{ old('plate_type', $car?->plate_type?->value ?? 'kktc') === $val ? 'selected' : '' }}>{{ __($lbl) }}</option>
                             @endforeach
                         </select>
+                        <div class="mt-2">
+                            <label class="flex items-center gap-2 cursor-pointer select-none">
+                                <input type="checkbox" name="is_plate_masked" value="1" {{ old('is_plate_masked', $car?->is_plate_masked ?? false) ? 'checked' : '' }} class="accent-[var(--primary)] w-4 h-4 rounded">
+                                <span class="text-xs font-semibold text-gray-700">{{ __('Nömrə nişanını gizlə (Məxfilik qorunsun)') }}</span>
+                            </label>
+                        </div>
                     </div>
 
                     <div>

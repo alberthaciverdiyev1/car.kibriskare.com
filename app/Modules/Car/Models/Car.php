@@ -44,6 +44,11 @@ class Car extends Model
         'price_try',
         'price_eur',
         'price_usd',
+        'old_price_gbp',
+        'old_price_try',
+        'old_price_eur',
+        'old_price_usd',
+        'price_dropped_at',
         'main_currency',
         'year',
         'mileage',
@@ -66,6 +71,7 @@ class Car extends Model
         'is_heavy_damaged',
         'inspection_pdf',
         'plate_type',
+        'is_plate_masked',
         'import_origin',
         'road_tax_valid_until',
         'inspection_valid_until',
@@ -108,6 +114,7 @@ class Car extends Model
         'steering_wheel' => SteeringWheel::class,
         'condition' => CarCondition::class,
         'plate_type' => PlateType::class,
+        'is_plate_masked' => 'boolean',
         'import_origin' => ImportOrigin::class,
         'damage_parts' => 'array',
         'status' => CarStatus::class,
@@ -115,6 +122,11 @@ class Car extends Model
         'price_try' => 'decimal:2',
         'price_eur' => 'decimal:2',
         'price_usd' => 'decimal:2',
+        'old_price_gbp' => 'decimal:2',
+        'old_price_try' => 'decimal:2',
+        'old_price_eur' => 'decimal:2',
+        'old_price_usd' => 'decimal:2',
+        'price_dropped_at' => 'datetime',
         'year' => 'integer',
         'mileage' => 'integer',
         'engine_volume' => 'integer',
@@ -279,6 +291,77 @@ class Car extends Model
         };
 
         return number_format((float)$amount, 0, '.', ',') . ' ' . $symbol;
+    }
+
+    public function hasPriceDrop(): bool
+    {
+        $curr = session('currency', $this->main_currency ?: 'GBP');
+        $oldPrice = match ($curr) {
+            'TRY' => $this->old_price_try,
+            'EUR' => $this->old_price_eur,
+            'USD' => $this->old_price_usd,
+            default => $this->old_price_gbp,
+        };
+        $currPrice = match ($curr) {
+            'TRY' => $this->price_try ?? $this->price_gbp,
+            'EUR' => $this->price_eur ?? $this->price_gbp,
+            'USD' => $this->price_usd ?? $this->price_gbp,
+            default => $this->price_gbp,
+        };
+
+        return !empty($oldPrice) && (float)$oldPrice > (float)$currPrice;
+    }
+
+    public function getFormattedOldPriceAttribute(): ?string
+    {
+        if (!$this->hasPriceDrop()) {
+            return null;
+        }
+
+        $curr = session('currency', $this->main_currency ?: 'GBP');
+        $oldPrice = match ($curr) {
+            'TRY' => $this->old_price_try,
+            'EUR' => $this->old_price_eur,
+            'USD' => $this->old_price_usd,
+            default => $this->old_price_gbp,
+        };
+
+        $symbol = match ($curr) {
+            'TRY' => '₺',
+            'EUR' => '€',
+            'USD' => '$',
+            default => '£',
+        };
+
+        return number_format((float)$oldPrice, 0, '.', ',') . ' ' . $symbol;
+    }
+
+    public function getPriceDropPercentageAttribute(): ?int
+    {
+        if (!$this->hasPriceDrop()) {
+            return null;
+        }
+
+        $curr = session('currency', $this->main_currency ?: 'GBP');
+        $oldPrice = (float) match ($curr) {
+            'TRY' => $this->old_price_try,
+            'EUR' => $this->old_price_eur,
+            'USD' => $this->old_price_usd,
+            default => $this->old_price_gbp,
+        };
+        $currPrice = (float) match ($curr) {
+            'TRY' => $this->price_try ?? $this->price_gbp,
+            'EUR' => $this->price_eur ?? $this->price_gbp,
+            'USD' => $this->price_usd ?? $this->price_gbp,
+            default => $this->price_gbp,
+        };
+
+        if ($oldPrice <= 0) {
+            return null;
+        }
+
+        $diff = round((($oldPrice - $currPrice) / $oldPrice) * 100);
+        return $diff > 0 ? (int)$diff : null;
     }
 
     public function getEngineVolumeLAttribute(): string

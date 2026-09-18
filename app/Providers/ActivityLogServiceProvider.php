@@ -134,7 +134,8 @@ class ActivityLogServiceProvider extends ServiceProvider
             // CREATED
             $modelClass::created(function ($model) use ($modelName) {
                 try {
-                    $identity = $model->title ?? $model->name ?? $model->email ?? ('#' . $model->id);
+                    $raw = $model->title ?? $model->name ?? $model->email ?? ('#' . $model->id);
+                    $identity = is_array($raw) ? ($raw[app()->getLocale()] ?? reset($raw) ?? ('#' . $model->id)) : (string)$raw;
 
                     ActivityLog::logAsync(
                         action: 'model_created',
@@ -153,7 +154,8 @@ class ActivityLogServiceProvider extends ServiceProvider
             // UPDATED
             $modelClass::updated(function ($model) use ($modelName) {
                 try {
-                    $identity = $model->title ?? $model->name ?? $model->email ?? ('#' . $model->id);
+                    $raw = $model->title ?? $model->name ?? $model->email ?? ('#' . $model->id);
+                    $identity = is_array($raw) ? ($raw[app()->getLocale()] ?? reset($raw) ?? ('#' . $model->id)) : (string)$raw;
 
                     $changes = [];
                     foreach ($model->getChanges() as $key => $value) {
@@ -187,7 +189,8 @@ class ActivityLogServiceProvider extends ServiceProvider
             // DELETED
             $modelClass::deleted(function ($model) use ($modelName) {
                 try {
-                    $identity = $model->title ?? $model->name ?? $model->email ?? ('#' . $model->id);
+                    $raw = $model->title ?? $model->name ?? $model->email ?? ('#' . $model->id);
+                    $identity = is_array($raw) ? ($raw[app()->getLocale()] ?? reset($raw) ?? ('#' . $model->id)) : (string)$raw;
 
                     ActivityLog::logAsync(
                         action: 'model_deleted',

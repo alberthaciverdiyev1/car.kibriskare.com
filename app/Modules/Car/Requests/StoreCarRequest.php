@@ -44,6 +44,7 @@ class StoreCarRequest extends FormRequest
             'is_heavy_damaged' => ['nullable', 'boolean'],
             'inspection_pdf' => ['nullable', 'file', 'mimes:pdf,jpg,jpeg,png', 'max:15360'],
             'plate_type' => ['nullable', 'string', 'in:kktc,foreign,z_plate,t_plate'],
+            'is_plate_masked' => ['nullable', 'boolean'],
             'import_origin' => ['nullable', 'string', 'in:japan,uk,kktc_dealer,europe,turkey,other'],
             'road_tax_valid_until' => ['nullable', 'date'],
             'inspection_valid_until' => ['nullable', 'date'],

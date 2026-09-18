@@ -143,6 +143,7 @@ class AddCarController extends Controller
                 'tramer_currency' => $validated['tramer_currency'] ?? 'GBP',
                 'is_heavy_damaged' => $request->boolean('is_heavy_damaged'),
                 'plate_type' => $validated['plate_type'] ?? 'kktc',
+                'is_plate_masked' => $request->boolean('is_plate_masked'),
                 'import_origin' => $validated['import_origin'] ?? null,
                 'road_tax_valid_until' => $validated['road_tax_valid_until'] ?? null,
                 'inspection_valid_until' => $validated['inspection_valid_until'] ?? null,
@@ -266,7 +267,27 @@ class AddCarController extends Controller
 
         $mainCurrency = $validated['currency'] ?? ($car->main_currency ?: 'GBP');
         $prices = $this->currencyService->calculateAllCurrencies((float)$validated['price'], $mainCurrency);
-        $baseGbp = $prices['GBP'] ?? (float)$validated['price'];
+        $newPriceGbp = $prices['GBP'] ?? (float)$validated['price'];
+
+        $oldPriceGbp = $car->old_price_gbp;
+        $oldPriceTry = $car->old_price_try;
+        $oldPriceEur = $car->old_price_eur;
+        $oldPriceUsd = $car->old_price_usd;
+        $priceDroppedAt = $car->price_dropped_at;
+
+        if ($newPriceGbp < (float)$car->price_gbp) {
+            $oldPriceGbp = $car->price_gbp;
+            $oldPriceTry = $car->price_try;
+            $oldPriceEur = $car->price_eur;
+            $oldPriceUsd = $car->price_usd;
+            $priceDroppedAt = now();
+        } elseif ($newPriceGbp > (float)$car->price_gbp) {
+            $oldPriceGbp = null;
+            $oldPriceTry = null;
+            $oldPriceEur = null;
+            $oldPriceUsd = null;
+            $priceDroppedAt = null;
+        }
 
         $car->update([
             'vehicle_type' => $validated['vehicle_type'] ?? $car->vehicle_type->value,
@@ -276,10 +297,15 @@ class AddCarController extends Controller
             'city_id' => $validated['city_id'],
             'district_id' => $validated['district_id'] ?? null,
             'deal_type' => $validated['deal_type'],
-            'price_gbp' => $prices['GBP'] ?? $baseGbp,
+            'price_gbp' => $newPriceGbp,
             'price_try' => $prices['TRY'] ?? null,
             'price_eur' => $prices['EUR'] ?? null,
             'price_usd' => $prices['USD'] ?? null,
+            'old_price_gbp' => $oldPriceGbp,
+            'old_price_try' => $oldPriceTry,
+            'old_price_eur' => $oldPriceEur,
+            'old_price_usd' => $oldPriceUsd,
+            'price_dropped_at' => $priceDroppedAt,
             'main_currency' => $mainCurrency,
             'year' => $validated['year'],
             'mileage' => $validated['mileage'],
@@ -300,6 +326,7 @@ class AddCarController extends Controller
             'tramer_currency' => $validated['tramer_currency'] ?? 'GBP',
             'is_heavy_damaged' => $request->boolean('is_heavy_damaged'),
             'plate_type' => $validated['plate_type'] ?? 'kktc',
+            'is_plate_masked' => $request->boolean('is_plate_masked'),
             'import_origin' => $validated['import_origin'] ?? null,
             'road_tax_valid_until' => $validated['road_tax_valid_until'] ?? null,
             'inspection_valid_until' => $validated['inspection_valid_until'] ?? null,

@@ -23,7 +23,7 @@
                         <!-- Deal Type (Hamısı / Satılıq / Kirayə) -->
                         <div class="flex gap-1 bg-gray-100 p-1 rounded-2xl border border-gray-200/60 shadow-2xs" data-role="add-type-toggle">
                             <button type="button" data-value="all"
-                                    class="deal-type-btn px-4 sm:px-5 py-2 rounded-xl font-bold text-xs tracking-wide uppercase {{ $selectedAdType === 'all' || !$selectedAdType ? 'bg-white text-[var(--primary)] shadow-sm' : 'text-gray-600 hover:text-gray-900' }}">
+                                    class="deal-type-btn px-4 sm:px-5 py-2 rounded-xl font-bold text-xs tracking-wide uppercase {{ $selectedAdType === 'all' || (!$selectedAdType && !request('is_urgent')) ? 'bg-white text-[var(--primary)] shadow-sm' : 'text-gray-600 hover:text-gray-900' }}">
                                 {{ __('listing.all') }}
                             </button>
                             <button type="button" data-value="sale"
@@ -34,11 +34,20 @@
                                     class="deal-type-btn px-4 sm:px-5 py-2 rounded-xl font-bold text-xs tracking-wide uppercase {{ in_array($selectedAdType, ['rent', 'rent_daily', 'rent_monthly']) ? 'bg-white text-[var(--primary)] shadow-sm' : 'text-gray-600 hover:text-gray-900' }}">
                                 {{ __('listing.rent') }} (Rent a Car)
                             </button>
+                            <button type="button" data-value="urgent"
+                                    class="deal-type-btn px-4 sm:px-5 py-2 rounded-xl font-bold text-xs tracking-wide uppercase {{ $selectedAdType === 'urgent' || request('is_urgent') ? 'bg-rose-600 text-white shadow-sm' : 'text-rose-600 hover:text-rose-700' }}">
+                                <i class="bi bi-lightning-charge-fill mr-0.5"></i> {{ __('Təcili') }}
+                            </button>
                             <input type="hidden" name="adType" id="adTypeInput" value="{{ $selectedAdType }}">
                         </div>
 
-                        <!-- Reset Button Top Right -->
+                        <!-- Action Buttons Top Right: Save Search & Reset -->
                         <div class="flex items-center gap-2">
+                            <button type="button" id="btnOpenSaveSearch" title="{{ __('Axtarışı Saxla') }}"
+                                    class="px-3.5 py-2 bg-white border border-gray-200/90 rounded-xl hover:bg-gray-50 text-gray-700 flex items-center justify-center shadow-2xs cursor-pointer">
+                                <i class="bi bi-bookmark-plus text-base mr-1.5 text-blue-600"></i>
+                                <span class="text-xs font-bold">{{ __('Axtarışı Saxla') }}</span>
+                            </button>
                             <button type="button" id="resetFiltersBtn" title="{{ __('listing.reset') }}"
                                     class="px-3.5 py-2 bg-white border border-gray-200/90 rounded-xl hover:bg-gray-50 text-gray-600 flex items-center justify-center shadow-2xs cursor-pointer">
                                 <i class="bi bi-arrow-clockwise text-base mr-1.5 text-[var(--primary)]"></i>
@@ -279,6 +288,9 @@
 
         <!-- Detailed Modal Filter -->
         @include('pages.car.partials.filter-more')
+
+        <!-- Saved Search Modal -->
+        @include('components.modals.saved-search-modal')
     </div>
 
     <!-- Client-side script for dynamic filtering & models loading -->
@@ -590,11 +602,16 @@
                     const val = this.dataset.value;
                     adTypeInput.value = val;
                     dealTypeBtns.forEach(b => {
-                        b.classList.remove('bg-white', 'text-[var(--primary)]', 'shadow-sm');
-                        b.classList.add('text-gray-600');
+                        b.classList.remove('bg-white', 'text-[var(--primary)]', 'shadow-sm', 'bg-rose-600', 'text-white');
+                        b.classList.add(b.dataset.value === 'urgent' ? 'text-rose-600' : 'text-gray-600');
                     });
-                    this.classList.add('bg-white', 'text-[var(--primary)]', 'shadow-sm');
-                    this.classList.remove('text-gray-600');
+                    if (val === 'urgent') {
+                        this.classList.add('bg-rose-600', 'text-white', 'shadow-sm');
+                        this.classList.remove('text-rose-600');
+                    } else {
+                        this.classList.add('bg-white', 'text-[var(--primary)]', 'shadow-sm');
+                        this.classList.remove('text-gray-600');
+                    }
                     submitCarFilter();
                 });
             });
@@ -993,6 +1010,11 @@
                     formData.set('sort', sortSelect.value);
                 }
                 
+                if (adTypeInput && adTypeInput.value === 'urgent') {
+                    formData.set('is_urgent', '1');
+                    formData.delete('adType');
+                }
+
                 // Append modal form fields into form data
                 if (modal) {
                     modal.querySelectorAll('input[type="radio"]:checked, input[type="checkbox"]:checked').forEach(input => {
@@ -1001,7 +1023,7 @@
                             formData.set(input.name, input.value);
                         }
                     });
-                    modal.querySelectorAll('input[type="number"]').forEach(input => {
+                    modal.querySelectorAll('input[type="number"], input[type="text"]').forEach(input => {
                         if (input.id === 'modal_price_min' || input.id === 'modal_price_max') return;
                         if (input.value) {
                             formData.set(input.name, input.value);
@@ -1138,6 +1160,134 @@
                         console.error('Pagination AJAX error:', err);
                     } finally {
                         if (wrapper) wrapper.classList.remove('opacity-50', 'pointer-events-none');
+                    }
+                });
+            }
+
+            // 7. Saved Searches Logic
+            const savedModal = document.getElementById('savedSearchModal');
+            const btnOpenSaveSearch = document.getElementById('btnOpenSaveSearch');
+            const closeSavedSearchModalBtn = document.getElementById('closeSavedSearchModalBtn');
+            const closeSavedSearchFooterBtn = document.getElementById('closeSavedSearchFooterBtn');
+            const btnSubmitSaveSearch = document.getElementById('btnSubmitSaveSearch');
+            const savedSearchTitleInput = document.getElementById('savedSearchTitleInput');
+            const savedSearchesList = document.getElementById('savedSearchesList');
+            const savedSearchesCountBadge = document.getElementById('savedSearchesCountBadge');
+
+            function escapeHtml(text) {
+                if (!text) return '';
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+
+            function openSavedSearchModal() {
+                if (!savedModal) return;
+                savedModal.classList.remove('hidden');
+                loadSavedSearches();
+            }
+
+            function closeSavedSearchModal() {
+                if (!savedModal) return;
+                savedModal.classList.add('hidden');
+            }
+
+            if (btnOpenSaveSearch) btnOpenSaveSearch.addEventListener('click', openSavedSearchModal);
+            if (closeSavedSearchModalBtn) closeSavedSearchModalBtn.addEventListener('click', closeSavedSearchModal);
+            if (closeSavedSearchFooterBtn) closeSavedSearchFooterBtn.addEventListener('click', closeSavedSearchModal);
+            if (savedModal) {
+                savedModal.addEventListener('click', (e) => {
+                    if (e.target === savedModal) closeSavedSearchModal();
+                });
+            }
+
+            async function loadSavedSearches() {
+                if (!savedSearchesList) return;
+                try {
+                    const res = await fetch('/api/saved-searches', {
+                        headers: { 'Accept': 'application/json' }
+                    });
+                    const data = await res.json();
+                    if (data.searches) {
+                        if (savedSearchesCountBadge) {
+                            savedSearchesCountBadge.textContent = `${data.searches.length} axtarış`;
+                        }
+                        if (data.searches.length === 0) {
+                            savedSearchesList.innerHTML = `<div class="text-xs text-gray-400 py-3 text-center border border-dashed border-gray-200 rounded-lg">Hələ heç bir axtarış saxlanılmayıb.</div>`;
+                            return;
+                        }
+                        savedSearchesList.innerHTML = data.searches.map(s => `
+                            <div class="p-3 bg-white border border-gray-200 rounded-xl flex items-center justify-between gap-3 shadow-2xs">
+                                <div class="min-w-0">
+                                    <div class="text-xs font-bold text-gray-900 truncate">${escapeHtml(s.title)}</div>
+                                    <div class="text-[11px] text-gray-400 truncate mt-0.5">${new Date(s.created_at).toLocaleDateString()}</div>
+                                </div>
+                                <div class="flex items-center gap-1.5 shrink-0">
+                                    <a href="/${document.documentElement.lang || 'tr'}/ilanlar?${s.url_query}" class="px-2.5 py-1 bg-blue-50 text-blue-700 hover:bg-blue-100 rounded-lg text-xs font-bold">Tətbiq Et</a>
+                                    <button type="button" onclick="deleteSavedSearch(${s.id})" class="w-7 h-7 text-gray-400 hover:text-rose-600 hover:bg-rose-50 rounded-lg flex items-center justify-center cursor-pointer">
+                                        <i class="bi bi-trash3 text-xs"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        `).join('');
+                    }
+                } catch (err) {
+                    console.error('Failed to load saved searches:', err);
+                }
+            }
+
+            window.deleteSavedSearch = async function(id) {
+                if (!confirm('Bu axtarışı silmək istədiyinizdən əminsiniz?')) return;
+                try {
+                    const res = await fetch(`/api/saved-searches/${id}`, {
+                        method: 'DELETE',
+                        headers: {
+                            'Accept': 'application/json',
+                            'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || ''
+                        }
+                    });
+                    const data = await res.json();
+                    if (data.success) {
+                        loadSavedSearches();
+                    }
+                } catch (e) {
+                    console.error(e);
+                }
+            };
+
+            if (btnSubmitSaveSearch) {
+                btnSubmitSaveSearch.addEventListener('click', async function() {
+                    const title = savedSearchTitleInput ? savedSearchTitleInput.value.trim() : '';
+                    if (!title) {
+                        alert('Zəhmət olmasa axtarış üçün ad daxil edin.');
+                        return;
+                    }
+
+                    const currentParams = window.location.search.replace(/^\?/, '');
+                    try {
+                        const res = await fetch('/api/saved-searches', {
+                            method: 'POST',
+                            headers: {
+                                'Content-Type': 'application/json',
+                                'Accept': 'application/json',
+                                'X-CSRF-TOKEN': document.querySelector('meta[name="csrf-token"]')?.content || ''
+                            },
+                            body: JSON.stringify({
+                                title: title,
+                                url_query: currentParams
+                            })
+                        });
+                        const data = await res.json();
+                        if (data.success) {
+                            savedSearchTitleInput.value = '';
+                            loadSavedSearches();
+                        } else if (data.require_auth) {
+                            window.location.href = `/${document.documentElement.lang || 'tr'}/login`;
+                        } else {
+                            alert(data.message || 'Xəta baş verdi');
+                        }
+                    } catch (err) {
+                        console.error(err);
                     }
                 });
             }

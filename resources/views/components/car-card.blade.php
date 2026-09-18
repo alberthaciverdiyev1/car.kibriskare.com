@@ -47,11 +47,30 @@
             </button>
         @endif
 
-        <!-- Premium / Önə Çək / Status Badges -->
+        <!-- Premium / Təcili / Endirim / Status Badges -->
         <div class="absolute top-2 left-2 sm:top-2.5 sm:left-2.5 flex flex-col gap-1 z-10">
             @if($car->is_premium)
                 <span class="bg-[#ffd700] text-gray-950 text-[9px] sm:text-[11px] font-black px-1.5 sm:px-2.5 py-0.5 rounded-md sm:rounded-lg shadow-xs flex items-center gap-1 border border-yellow-400 tracking-wider">
                     <i class="bi bi-gem text-[9px] sm:text-[10px] text-gray-950"></i> PREMIUM
+                </span>
+            @endif
+
+            @if($car->is_urgent)
+                <span class="bg-rose-600 text-white text-[9px] sm:text-[10px] font-black px-1.5 sm:px-2 py-0.5 rounded-md shadow-xs tracking-wider flex items-center gap-0.5">
+                    <i class="bi bi-lightning-charge-fill text-[9px]"></i> TƏCİLİ
+                </span>
+            @endif
+
+            @if($car->hasPriceDrop())
+                <span class="bg-emerald-700 text-white text-[9px] sm:text-[10px] font-bold px-1.5 sm:px-2 py-0.5 rounded-md shadow-xs flex items-center gap-0.5">
+                    <i class="bi bi-arrow-down-short text-xs"></i>
+                    @if($car->price_drop_percentage) -%{{ $car->price_drop_percentage }} @else ENDİRİM @endif
+                </span>
+            @endif
+
+            @if($car->is_plate_masked)
+                <span class="bg-gray-800 text-white text-[8px] sm:text-[9px] font-semibold px-1.5 py-0.5 rounded-md shadow-xs flex items-center gap-1 opacity-90">
+                    <i class="bi bi-shield-lock-fill text-[8px]"></i> Plaka Gizli
                 </span>
             @endif
 
@@ -86,10 +105,17 @@
         <div>
             <!-- Price & Deal Type -->
             <div class="flex items-baseline justify-between gap-1.5 mb-1">
-                <div class="text-sm sm:text-lg lg:text-xl font-extrabold text-gray-900 tracking-tight truncate">
-                    {{ $car->formatted_price }}
-                    @if($car->deal_type->value === 'rent_daily')
-                        <span class="text-[10px] sm:text-xs font-normal text-gray-500">/ gün</span>
+                <div class="flex flex-wrap items-baseline gap-1.5 truncate">
+                    <div class="text-sm sm:text-lg lg:text-xl font-extrabold text-gray-900 tracking-tight truncate">
+                        {{ $car->formatted_price }}
+                        @if($car->deal_type->value === 'rent_daily')
+                            <span class="text-[10px] sm:text-xs font-normal text-gray-500">/ gün</span>
+                        @endif
+                    </div>
+                    @if($car->hasPriceDrop())
+                        <span class="text-[10px] sm:text-xs font-semibold text-gray-400 line-through">
+                            {{ $car->formatted_old_price }}
+                        </span>
                     @endif
                 </div>
                 @if($car->autosalon)

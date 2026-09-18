@@ -52,9 +52,18 @@
                                 @if($autosalon->address) • {{ $autosalon->address }} @endif
                             </span>
                             @if($autosalon->working_hours)
-                                <span class="flex items-center gap-1 font-medium">
+                                <span class="flex items-center gap-1.5 font-medium">
                                     <i class="bi bi-clock text-[var(--primary)]"></i>
-                                    {{ $autosalon->working_hours }}
+                                    <span>{{ $autosalon->working_hours }}</span>
+                                    @if($autosalon->isOpenNow())
+                                        <span class="bg-emerald-100 text-emerald-800 text-[10px] sm:text-[11px] font-black px-2 py-0.5 rounded-full flex items-center gap-1">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-emerald-600"></span> {{ __('İNDİ AÇIQDIR') }}
+                                        </span>
+                                    @else
+                                        <span class="bg-gray-100 text-gray-700 text-[10px] sm:text-[11px] font-bold px-2 py-0.5 rounded-full flex items-center gap-1">
+                                            <span class="w-1.5 h-1.5 rounded-full bg-gray-400"></span> {{ __('İNDİ BAĞLIDIR') }}
+                                        </span>
+                                    @endif
                                 </span>
                             @endif
                         </div>
@@ -89,6 +98,41 @@
                     <p class="text-sm text-gray-600 leading-relaxed max-w-4xl">
                         {{ is_array($autosalon->description) ? ($autosalon->description[app()->getLocale()] ?? $autosalon->description['tr'] ?? '') : $autosalon->description }}
                     </p>
+                </div>
+            @endif
+
+            <!-- Sales Consultants / Team (Feature 11) -->
+            @if(!empty($autosalon->consultants) && count($autosalon->consultants) > 0)
+                <div class="mt-6 pt-6 border-t border-gray-100">
+                    <h3 class="text-xs font-bold text-gray-700 uppercase tracking-wider mb-3.5 flex items-center gap-2">
+                        <i class="bi bi-people-fill text-[var(--primary)]"></i>
+                        <span>{{ __('Satış Təmsilçiləri və Əlaqəli Şəxslər') }}</span>
+                    </h3>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                        @foreach($autosalon->consultants as $c)
+                            @if(!empty($c['name']))
+                                <div class="bg-gray-50 border border-gray-200/90 rounded-2xl p-3.5 flex flex-col justify-between gap-3 shadow-2xs">
+                                    <div>
+                                        <div class="font-bold text-gray-900 text-sm">{{ $c['name'] }}</div>
+                                        <div class="text-xs text-gray-500 mt-0.5">{{ $c['role'] ?? __('Satış Meneceri') }}</div>
+                                    </div>
+                                    <div class="flex items-center gap-2 pt-2 border-t border-gray-200/70">
+                                        @if(!empty($c['phone']))
+                                            <a href="tel:{{ $c['phone'] }}" class="flex-1 py-1.5 px-2.5 bg-white border border-gray-200 hover:bg-gray-100 text-gray-800 text-xs font-bold rounded-xl flex items-center justify-center gap-1 shadow-2xs">
+                                                <i class="bi bi-telephone text-[var(--primary)]"></i>
+                                                <span class="truncate">{{ $c['phone'] }}</span>
+                                            </a>
+                                        @endif
+                                        @if(!empty($c['whatsapp']))
+                                            <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $c['whatsapp']) }}" target="_blank" rel="noopener" class="w-8 h-8 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl flex items-center justify-center shrink-0 shadow-2xs" title="WhatsApp">
+                                                <i class="bi bi-whatsapp text-xs"></i>
+                                            </a>
+                                        @endif
+                                    </div>
+                                </div>
+                            @endif
+                        @endforeach
+                    </div>
                 </div>
             @endif
         </div>

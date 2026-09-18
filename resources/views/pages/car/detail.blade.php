@@ -33,31 +33,57 @@
         
         <!-- Owner Action Bar (If logged in seller or admin) -->
         @if(auth()->check() && (auth()->id() === $car->user_id || auth()->user()->isAdmin()))
-            <div class="bg-indigo-50 border border-indigo-200/80 rounded-2xl p-4 mb-6 flex flex-wrap items-center justify-between gap-3 shadow-xs">
-                <div class="flex items-center gap-2.5">
-                    <div class="w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center shrink-0">
-                        <i class="bi bi-person-gear"></i>
-                    </div>
-                    <div>
-                        <div class="text-xs font-bold text-indigo-950">{{ __('Bu elan sizə məxsusdur') }}</div>
-                        <div class="text-[11px] text-indigo-600">
-                            {{ __('Status') }}: <strong class="uppercase font-extrabold" id="ownerAdStatus">{{ $car->status->value }}</strong>
+            <div class="bg-indigo-50 border border-indigo-200/80 rounded-2xl p-4 mb-6 shadow-xs space-y-3">
+                <div class="flex flex-wrap items-center justify-between gap-3">
+                    <div class="flex items-center gap-2.5">
+                        <div class="w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center shrink-0">
+                            <i class="bi bi-person-gear"></i>
                         </div>
+                        <div>
+                            <div class="text-xs font-bold text-indigo-950">{{ __('Bu elan sizə məxsusdur') }}</div>
+                            <div class="text-[11px] text-indigo-600">
+                                {{ __('Status') }}: <strong class="uppercase font-extrabold" id="ownerAdStatus">{{ $car->status->value }}</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex items-center gap-2">
+                        <a href="{{ route('cars.edit', $car) }}"
+                           class="px-3.5 py-1.5 bg-white hover:bg-gray-50 text-gray-800 border border-gray-300 rounded-xl text-xs font-bold shadow-2xs flex items-center gap-1.5">
+                            <i class="bi bi-pencil-square text-indigo-600"></i>
+                            {{ __('Redaktə et') }}
+                        </a>
+
+                        <button type="button" onclick="toggleAdSold({{ $car->id }})" id="btnMarkSold"
+                                class="px-3.5 py-1.5 {{ $car->status->value === 'sold' ? 'bg-amber-600 hover:bg-amber-700' : 'bg-emerald-600 hover:bg-emerald-700' }} text-white rounded-xl text-xs font-bold shadow-2xs flex items-center gap-1.5">
+                            <i class="bi bi-check-circle-fill"></i>
+                            <span id="markSoldText">{{ $car->status->value === 'sold' ? __('Təkrar Yayına Al') : __('Satıldı Olarak İşarələ') }}</span>
+                        </button>
                     </div>
                 </div>
 
-                <div class="flex items-center gap-2">
-                    <a href="{{ route('cars.edit', $car) }}"
-                       class="px-3.5 py-1.5 bg-white hover:bg-gray-50 text-gray-800 border border-gray-300 rounded-xl text-xs font-bold transition shadow-2xs flex items-center gap-1.5">
-                        <i class="bi bi-pencil-square text-indigo-600"></i>
-                        {{ __('Redaktə et') }}
-                    </a>
-
-                    <button type="button" onclick="toggleAdSold({{ $car->id }})" id="btnMarkSold"
-                            class="px-3.5 py-1.5 {{ $car->status->value === 'sold' ? 'bg-amber-600 hover:bg-amber-700' : 'bg-emerald-600 hover:bg-emerald-700' }} text-white rounded-xl text-xs font-bold transition shadow-2xs flex items-center gap-1.5">
-                        <i class="bi bi-check-circle-fill"></i>
-                        <span id="markSoldText">{{ $car->status->value === 'sold' ? __('Təkrar Yayına Al') : __('Satıldı Olarak İşarələ') }}</span>
-                    </button>
+                <!-- Owner Performance Analytics -->
+                <div class="pt-3 border-t border-indigo-200/70 grid grid-cols-2 sm:grid-cols-5 gap-2 text-center text-xs">
+                    <div class="bg-white p-2.5 rounded-xl border border-indigo-100 shadow-2xs">
+                        <div class="text-[11px] text-gray-500 font-medium">{{ __('Baxış Sayı') }}</div>
+                        <div class="text-base font-extrabold text-indigo-950 mt-0.5">{{ $car->view_count }}</div>
+                    </div>
+                    <div class="bg-white p-2.5 rounded-xl border border-indigo-100 shadow-2xs">
+                        <div class="text-[11px] text-gray-500 font-medium">{{ __('Əlaqə Baxışı') }}</div>
+                        <div class="text-base font-extrabold text-emerald-700 mt-0.5">{{ $car->phone_view_count }}</div>
+                    </div>
+                    <div class="bg-white p-2.5 rounded-xl border border-indigo-100 shadow-2xs">
+                        <div class="text-[11px] text-gray-500 font-medium">{{ __('Sevimlilər') }}</div>
+                        <div class="text-base font-extrabold text-rose-600 mt-0.5">{{ $car->favorite_count }}</div>
+                    </div>
+                    <div class="bg-white p-2.5 rounded-xl border border-indigo-100 shadow-2xs">
+                        <div class="text-[11px] text-gray-500 font-medium">{{ __('Əlaqə Nisbəti') }}</div>
+                        <div class="text-base font-extrabold text-blue-700 mt-0.5">{{ $car->view_count > 0 ? round(($car->phone_view_count / $car->view_count) * 100, 1) : 0 }}%</div>
+                    </div>
+                    <div class="bg-white p-2.5 rounded-xl border border-indigo-100 shadow-2xs col-span-2 sm:col-span-1">
+                        <div class="text-[11px] text-gray-500 font-medium">{{ __('Yayımda') }}</div>
+                        <div class="text-base font-extrabold text-gray-800 mt-0.5">{{ $car->published_at ? max(1, $car->published_at->diffInDays(now())) : 1 }} {{ __('gün') }}</div>
+                    </div>
                 </div>
             </div>
         @endif
@@ -66,11 +92,16 @@
         <div class="bg-white p-4 sm:p-6 rounded-3xl border border-gray-200/80 shadow-2xs mb-6">
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
                 <div>
-                    @if($car->is_premium || $car->deal_type->value === 'rent_daily')
+                    @if($car->is_premium || $car->is_urgent || $car->deal_type->value === 'rent_daily')
                         <div class="flex flex-wrap items-center gap-2 mb-2">
                             @if($car->is_premium)
                                 <span class="bg-[#ffd700] text-gray-950 text-xs font-black px-3 py-1 rounded-lg shadow-xs flex items-center gap-1.5 border border-yellow-400 tracking-wider">
                                     <i class="bi bi-gem text-[11px] text-gray-950"></i> PREMIUM
+                                </span>
+                            @endif
+                            @if($car->is_urgent)
+                                <span class="bg-rose-600 text-white text-xs font-black px-2.5 py-1 rounded-lg shadow-xs flex items-center gap-1 tracking-wider">
+                                    <i class="bi bi-lightning-charge-fill text-[11px]"></i> TƏCİLİ
                                 </span>
                             @endif
                             @if($car->deal_type->value === 'rent_daily')
@@ -124,6 +155,17 @@
 
                 <!-- Price Block in Header -->
                 <div class="text-left md:text-right shrink-0">
+                    @if($car->hasPriceDrop())
+                        <div class="flex items-center md:justify-end gap-2 mb-0.5">
+                            <span class="text-xs sm:text-sm font-bold text-gray-400 line-through">
+                                {{ $car->formatted_old_price }}
+                            </span>
+                            <span class="bg-emerald-700 text-white text-[11px] font-extrabold px-2 py-0.5 rounded-md flex items-center gap-0.5">
+                                <i class="bi bi-arrow-down-short text-xs"></i>
+                                @if($car->price_drop_percentage) -%{{ $car->price_drop_percentage }} @else ENDİRİM @endif
+                            </span>
+                        </div>
+                    @endif
                     <div class="text-2xl sm:text-3xl font-black text-[var(--primary)] tracking-tight">
                         {{ $car->formatted_price }}
                         @if($car->deal_type->value === 'rent_daily')
@@ -270,8 +312,13 @@
 
                         <div class="flex items-center justify-between py-1.5 border-b border-gray-50">
                             <span class="text-gray-500 font-medium">{{ __('car.plate_type') }}</span>
-                            <span class="font-bold text-gray-900">
-                                {{ $car->plate_type?->label() ?? ($car->is_customs_cleared ? __('KKTC Plakalı (Gümrüğü Ödenmiş)') : __('Yurtdışı Plakalı (Gümrüksüz)')) }}
+                            <span class="font-bold text-gray-900 flex items-center gap-1.5">
+                                <span>{{ $car->plate_type?->label() ?? ($car->is_customs_cleared ? __('KKTC Plakalı (Gümrüğü Ödenmiş)') : __('Yurtdışı Plakalı (Gümrüksüz)')) }}</span>
+                                @if($car->is_plate_masked)
+                                    <span class="text-[10px] bg-gray-100 text-gray-700 px-1.5 py-0.5 rounded border border-gray-200">
+                                        <i class="bi bi-shield-lock-fill text-[9px] text-gray-500"></i> {{ __('Nömrə Gizli') }}
+                                    </span>
+                                @endif
                             </span>
                         </div>
 
@@ -435,35 +482,55 @@
                     <div class="grid grid-cols-2 gap-2.5 pt-1">
                         <!-- Önə çək -->
                         <div onclick="openAdvanceModal()"
-                             class="js-btn-advance bg-white hover:bg-emerald-50/50 border border-gray-200/90 hover:border-emerald-300 rounded-2xl p-3 flex flex-col justify-between cursor-pointer transition shadow-2xs group">
+                             class="js-btn-advance bg-white hover:bg-emerald-50/50 border border-gray-200/90 hover:border-emerald-300 rounded-2xl p-3 flex flex-col justify-between cursor-pointer shadow-2xs group">
                             <div class="flex items-center justify-between">
-                                <span class="text-xs sm:text-sm font-bold text-gray-800 group-hover:text-emerald-700 transition">{{ __('promotion.advance_ad') }}</span>
-                                <span class="w-6 h-6 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center text-xs font-bold group-hover:bg-emerald-600 group-hover:text-white transition"><i class="fa-solid fa-arrow-up"></i></span>
+                                <span class="text-xs sm:text-sm font-bold text-gray-800 group-hover:text-emerald-700">{{ __('promotion.advance_ad') }}</span>
+                                <span class="w-6 h-6 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center text-xs font-bold group-hover:bg-emerald-600 group-hover:text-white"><i class="fa-solid fa-arrow-up"></i></span>
                             </div>
                             <span class="text-[11px] font-semibold text-blue-600 mt-1.5">{{ __('promotion.from_price', ['amount' => 50]) }}</span>
                         </div>
 
                         <!-- Premium -->
                         <div onclick="openPremiumModal()"
-                             class="js-btn-premium bg-white hover:bg-amber-50/50 border border-gray-200/90 hover:border-amber-300 rounded-2xl p-3 flex flex-col justify-between cursor-pointer transition shadow-2xs group">
+                             class="js-btn-premium bg-white hover:bg-amber-50/50 border border-gray-200/90 hover:border-amber-300 rounded-2xl p-3 flex flex-col justify-between cursor-pointer shadow-2xs group">
                             <div class="flex items-center justify-between">
-                                <span class="text-xs sm:text-sm font-bold text-gray-800 group-hover:text-amber-700 transition">{{ __('promotion.premium_ad') }}</span>
-                                <span class="w-6 h-6 rounded-lg bg-amber-50 text-amber-500 flex items-center justify-center text-xs font-bold group-hover:bg-amber-500 group-hover:text-white transition"><i class="fa-solid fa-crown"></i></span>
+                                <span class="text-xs sm:text-sm font-bold text-gray-800 group-hover:text-amber-700">{{ __('promotion.premium_ad') }}</span>
+                                <span class="w-6 h-6 rounded-lg bg-amber-50 text-amber-500 flex items-center justify-center text-xs font-bold group-hover:bg-amber-500 group-hover:text-white"><i class="fa-solid fa-crown"></i></span>
                             </div>
                             <span class="text-[11px] font-semibold text-blue-600 mt-1.5">{{ __('promotion.from_price', ['amount' => 150]) }}</span>
                         </div>
                     </div>
 
-                    <!-- Safety Note -->
-                    <div class="pt-3 border-t border-gray-100 flex items-start gap-2.5 text-[11px] text-gray-500 leading-tight">
-                        <i class="bi bi-shield-lock text-gray-400 text-sm mt-0.5"></i>
-                        <span>{{ __('Aracı görmeden ve ekspertiz yaptırmadan kapora veya ön ödeme göndermeyiniz.') }}</span>
+                    <!-- Comprehensive Safety Tips Box (Feature 12) -->
+                    <div class="bg-gray-50 border border-gray-200/90 rounded-2xl p-3.5 text-xs text-gray-600 space-y-2.5 shadow-2xs">
+                        <div class="font-bold text-gray-900 flex items-center gap-2 text-xs border-b border-gray-200/70 pb-2">
+                            <i class="bi bi-shield-check text-emerald-600 text-sm"></i>
+                            <span>{{ __('Təhlükəsiz Alış-Veriş Məsləhətləri') }}</span>
+                        </div>
+                        <ul class="space-y-2 text-[11px] leading-relaxed text-gray-600">
+                            <li class="flex items-start gap-1.5">
+                                <i class="bi bi-exclamation-triangle-fill text-amber-600 text-xs shrink-0 mt-0.5"></i>
+                                <span>{{ __('Avtomobili fiziki görmədən və yoxlamadan qətiyyən beh (depozit) göndərməyin.') }}</span>
+                            </li>
+                            <li class="flex items-start gap-1.5">
+                                <i class="bi bi-file-earmark-check-fill text-blue-600 text-xs shrink-0 mt-0.5"></i>
+                                <span>{{ __('Koçan (qeydiyyat şəhadətnaməsi) və şassi nömrəsinin (VIN) sənədlərlə tam eyni olduğunu yoxlayın.') }}</span>
+                            </li>
+                            <li class="flex items-start gap-1.5">
+                                <i class="bi bi-wrench-adjustable-circle-fill text-emerald-600 text-xs shrink-0 mt-0.5"></i>
+                                <span>{{ __('Alışdan əvvəl rəsmi ekspertiz mərkəzində və ya güvəndiyiniz ustada avtomobili yoxlatdırın.') }}</span>
+                            </li>
+                            <li class="flex items-start gap-1.5">
+                                <i class="bi bi-bank2 text-indigo-600 text-xs shrink-0 mt-0.5"></i>
+                                <span>{{ __('Ödənişi yalnız rəsmi dövlət devir prosesi zamanı həyata keçirin.') }}</span>
+                            </li>
+                        </ul>
                     </div>
 
                     <!-- Report Ad Button -->
                     <div class="pt-2 border-t border-gray-100">
                         <button type="button" onclick="openReportModal()"
-                                class="w-full flex items-center justify-center gap-1.5 py-1.5 text-xs text-gray-400 hover:text-rose-600 transition font-medium">
+                                class="w-full flex items-center justify-center gap-1.5 py-1.5 text-xs text-gray-400 hover:text-rose-600 font-medium cursor-pointer">
                             <i class="bi bi-flag text-xs"></i>
                             <span>{{ __('Hatalı / Şüpheli İlanı Bildir') }}</span>
                         </button>

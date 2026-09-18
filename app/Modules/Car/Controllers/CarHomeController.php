@@ -32,13 +32,26 @@ class CarHomeController extends Controller
             $third = func_num_args() > 4 ? func_get_arg(4) : null;
         }
 
-        // Deal type path mapping e.g. /satilik, /kiralik
+        // Deal type path mapping e.g. /satilik, /kiralik, /tecili
         if ($first !== null) {
             $firstLow = strtolower($first);
             if (in_array($firstLow, ['satilik', 'satisi', 'sale', 'for-sale'])) {
                 $request->merge(['adType' => 'sale', 'deal_type' => 'sale']);
             } elseif (in_array($firstLow, ['kiralik', 'kiraye', 'rent', 'for-rent'])) {
                 $request->merge(['adType' => 'rent', 'deal_type' => 'rent']);
+            } elseif (in_array($firstLow, ['tecili', 'acil', 'urgent'])) {
+                $request->merge(['adType' => 'urgent', 'is_urgent' => 1]);
+            }
+        }
+
+        // Direct ID search redirect for standard GET requests
+        $searchQuery = trim($request->input('q') ?? $request->input('ad_number') ?? '');
+        if ($searchQuery !== '' && !$request->ajax() && !($request->hasHeader('X-Requested-With') && strtolower($request->header('X-Requested-With')) === 'xmlhttprequest')) {
+            if (preg_match('/^(?:#?CAR-?|#)?0*([1-9]\d*)$/i', $searchQuery, $m)) {
+                $foundCar = \App\Modules\Car\Models\Car::where('id', (int)$m[1])->first();
+                if ($foundCar) {
+                    return redirect()->route('cars.show', $foundCar->slug);
+                }
             }
         }
 

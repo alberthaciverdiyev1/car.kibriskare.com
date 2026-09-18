@@ -19,6 +19,27 @@ class CarService
             ->with(['brand', 'model', 'bodyType', 'city', 'images' => fn ($q) => $q->orderBy('sort_order'), 'autosalon'])
             ->where('status', CarStatus::Active->value);
 
+        // Filter by Query (Keyword or Listing ID)
+        if ($search = trim($request->input('q') ?? $request->input('ad_number') ?? '')) {
+            if (preg_match('/^(?:#?CAR-?|#)?0*([1-9]\d*)$/i', $search, $m)) {
+                $query->where('id', (int)$m[1]);
+            } else {
+                $query->where(function ($sub) use ($search) {
+                    $sub->where('title->tr', 'like', "%{$search}%")
+                        ->orWhere('title->az', 'like', "%{$search}%")
+                        ->orWhere('title->en', 'like', "%{$search}%")
+                        ->orWhere('title->ru', 'like', "%{$search}%")
+                        ->orWhereHas('brand', fn ($b) => $b->where('name', 'like', "%{$search}%"))
+                        ->orWhereHas('model', fn ($m) => $m->where('name', 'like', "%{$search}%"));
+                });
+            }
+        }
+
+        // Filter by Urgent
+        if ($request->boolean('is_urgent') || $request->input('urgent') || ($request->input('adType') === 'urgent')) {
+            $query->where('is_urgent', true);
+        }
+
         // Filter by Vehicle Type (car, suv, motorcycle, commercial, classic, damaged)
         if ($vehicleType = $request->input('vehicle_type')) {
             if ($vehicleType !== 'all') {
@@ -162,6 +183,17 @@ class CarService
         }
         if ($priceMax = $request->input('price_max')) {
             $query->where($priceCol, '<=', (float)$priceMax);
+        }
+
+        // Filter by Price Dropped
+        if ($request->boolean('price_dropped') || $request->input('price_drop')) {
+            $oldCol = match ($priceCol) {
+                'price_try' => 'old_price_try',
+                'price_eur' => 'old_price_eur',
+                'price_usd' => 'old_price_usd',
+                default => 'old_price_gbp',
+            };
+            $query->whereNotNull($oldCol)->whereColumn($priceCol, '<', $oldCol);
         }
 
         // Filter by Import Origin (Japan, UK, KKTC Dealer...)

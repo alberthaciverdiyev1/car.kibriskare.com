@@ -97,6 +97,19 @@
                     </div>
                 </div>
 
+                <!-- İlan Numarası / ID Arama -->
+                <div>
+                    <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-2">
+                        {{ __('İlan Numarası (ID) ilə Birbaşa Axtar') }}
+                    </label>
+                    <div class="relative">
+                        <input type="text" name="ad_number" id="modal_ad_number" value="{{ request('ad_number', request('q')) }}"
+                               placeholder="{{ __('Məsələn: #CAR-00123 və ya 123') }}"
+                               class="w-full h-10 px-3 bg-white border border-gray-200 rounded-lg text-xs font-medium text-gray-800 outline-none focus:border-gray-400">
+                        <i class="bi bi-hash absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 text-sm pointer-events-none"></i>
+                    </div>
+                </div>
+
                 <!-- Row: Marka & Model & Şehir -->
                 <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
                     <!-- Marka -->
@@ -427,6 +440,24 @@
                 </div>
 
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-2.5">
+                    @php $isPriceDropped = (bool)request('price_dropped'); @endphp
+                    <label class="modal-check-chip flex items-center gap-2.5 p-3 rounded-lg border cursor-pointer select-none text-xs {{ $isPriceDropped ? 'border-emerald-600 bg-emerald-50 text-emerald-700 font-bold' : 'border-gray-200 bg-white text-gray-700 hover:border-gray-400' }}">
+                        <input type="checkbox" name="price_dropped" value="1" {{ $isPriceDropped ? 'checked' : '' }} class="accent-emerald-600 w-4 h-4 rounded">
+                        <span class="font-medium flex items-center gap-1">
+                            <i class="bi bi-arrow-down-short text-emerald-600 text-sm"></i>
+                            {{ __('Yalnız Qiyməti Düşənlər') }}
+                        </span>
+                    </label>
+
+                    @php $isUrgent = (bool)request('is_urgent'); @endphp
+                    <label class="modal-check-chip flex items-center gap-2.5 p-3 rounded-lg border cursor-pointer select-none text-xs {{ $isUrgent ? 'border-rose-600 bg-rose-50 text-rose-700 font-bold' : 'border-gray-200 bg-white text-gray-700 hover:border-gray-400' }}">
+                        <input type="checkbox" name="is_urgent" value="1" {{ $isUrgent ? 'checked' : '' }} class="accent-rose-600 w-4 h-4 rounded">
+                        <span class="font-medium flex items-center gap-1">
+                            <i class="bi bi-lightning-charge-fill text-rose-600 text-xs"></i>
+                            {{ __('Təcili Elanlar (Acil)') }}
+                        </span>
+                    </label>
+
                     @php $isDeedReady = (bool)request('title_deed_ready'); @endphp
                     <label class="modal-check-chip flex items-center gap-2.5 p-3 rounded-lg border cursor-pointer select-none text-xs {{ $isDeedReady ? 'border-[#ca1016] bg-red-50 text-[#ca1016] font-bold' : 'border-gray-200 bg-white text-gray-700 hover:border-gray-400' }}">
                         <input type="checkbox" name="title_deed_ready" value="1" {{ $isDeedReady ? 'checked' : '' }} class="accent-[#ca1016] w-4 h-4 rounded">

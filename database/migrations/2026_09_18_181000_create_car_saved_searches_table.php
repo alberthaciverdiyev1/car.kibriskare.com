@@ -1,0 +1,28 @@
+<?php
+
+use Illuminate\Database\Migrations\Migration;
+use Illuminate\Database\Schema\Blueprint;
+use Illuminate\Support\Facades\Schema;
+
+return new class extends Migration
+{
+    public function up(): void
+    {
+        Schema::create('car_saved_searches', function (Blueprint $table) {
+            $table->id();
+            $table->foreignId('user_id')->constrained('users')->cascadeOnDelete();
+            $table->string('title', 150);
+            $table->text('url_query'); // e.g. brand_id=5&model_id=12&price_max=15000
+            $table->jsonb('criteria')->nullable(); // structured filters array
+            $table->boolean('alert_enabled')->default(true);
+            $table->timestamps();
+
+            $table->index(['user_id', 'created_at']);
+        });
+    }
+
+    public function down(): void
+    {
+        Schema::dropIfExists('car_saved_searches');
+    }
+};

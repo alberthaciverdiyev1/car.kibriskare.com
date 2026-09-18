@@ -30,6 +30,7 @@ class Autosalon extends Model
         'address',
         'description',
         'working_hours',
+        'consultants',
         'lat',
         'lng',
         'is_verified',
@@ -40,6 +41,7 @@ class Autosalon extends Model
 
     protected $casts = [
         'description' => 'array',
+        'consultants' => 'array',
         'is_verified' => 'boolean',
         'is_active' => 'boolean',
         'rating' => 'decimal:2',
@@ -47,6 +49,38 @@ class Autosalon extends Model
         'lat' => 'float',
         'lng' => 'float',
     ];
+
+    public function isOpenNow(): bool
+    {
+        if (empty($this->working_hours)) {
+            return false;
+        }
+
+        $now = now()->setTimezone('Asia/Nicosia');
+        $text = mb_strtolower($this->working_hours);
+
+        // Check Sunday
+        if ($now->isSunday()) {
+            if (str_contains($text, 'pazar kapalı') || str_contains($text, 'bazar bağlı') || str_contains($text, 'sunday closed')) {
+                return false;
+            }
+        }
+
+        if (str_contains($text, '24/7') || str_contains($text, '7/24')) {
+            return true;
+        }
+
+        if (preg_match('/(\d{1,2}):(\d{2})\s*[-–]\s*(\d{1,2}):(\d{2})/', $text, $m)) {
+            $startMinutes = (int)$m[1] * 60 + (int)$m[2];
+            $endMinutes = (int)$m[3] * 60 + (int)$m[4];
+            $currentMinutes = (int)$now->format('H') * 60 + (int)$now->format('i');
+
+            return $currentMinutes >= $startMinutes && $currentMinutes <= $endMinutes;
+        }
+
+        // Default open during typical business hours 09:00 - 18:00 on weekdays
+        return !$now->isSunday() && $now->hour >= 9 && $now->hour < 18;
+    }
 
     protected static function booted(): void
     {

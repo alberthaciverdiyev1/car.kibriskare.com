@@ -53,3 +53,8 @@ Route::post('/api/cars/report', [\App\Modules\Car\Controllers\CarReportControlle
 // AJAX Models by Brand
 Route::get('/api/brands/{brandId}/models', [CarHomeController::class, 'modelsByBrand'])->name('api.brands.models');
 
+// Saved Searches
+Route::get('/api/saved-searches', [\App\Modules\Car\Controllers\CarSavedSearchController::class, 'index'])->name('api.saved-searches.index');
+Route::post('/api/saved-searches', [\App\Modules\Car\Controllers\CarSavedSearchController::class, 'store'])->name('api.saved-searches.store');
+Route::delete('/api/saved-searches/{savedSearch}', [\App\Modules\Car\Controllers\CarSavedSearchController::class, 'destroy'])->name('api.saved-searches.destroy');
+
