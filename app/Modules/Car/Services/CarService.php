@@ -85,7 +85,28 @@ class CarService
 
         // Filter by Color
         if ($color = $request->input('color')) {
-            $query->where('color', $color);
+            $colorMap = [
+                'Ağ' => ['Ağ', 'Beyaz', 'White', 'Mirvari Ağ'],
+                'Qara' => ['Qara', 'Siyah', 'Black'],
+                'Gümüşü' => ['Gümüşü', 'Gümüş', 'Silver'],
+                'Boz' => ['Boz', 'Gri', 'Füme', 'Grey', 'Gray', 'Titan Boz', 'Dolphin Grey', 'Daytona Boz'],
+                'Qırmızı' => ['Qırmızı', 'Kırmızı', 'Red'],
+                'Mavi' => ['Mavi', 'Blue'],
+                'Göy' => ['Göy', 'Lacivert', 'Navy'],
+                'Yaşıl' => ['Yaşıl', 'Yeşil', 'Green'],
+                'Sarı' => ['Sarı', 'Yellow'],
+                'Qəhvəyi' => ['Qəhvəyi', 'Kahverengi', 'Brown'],
+                'Bej' => ['Bej', 'Beige'],
+                'Narıncı' => ['Narıncı', 'Narinci', 'Turuncu', 'Orange'],
+                'Bordo' => ['Bordo', 'Burgundy'],
+                'Qızılı' => ['Qızılı', 'Altın', 'Gold', 'Şampanya'],
+            ];
+            $keywords = $colorMap[$color] ?? [$color];
+            $query->where(function ($q) use ($keywords) {
+                foreach ($keywords as $kw) {
+                    $q->orWhere('color', 'like', "%{$kw}%");
+                }
+            });
         }
 
         // Filter by Condition
@@ -143,6 +164,11 @@ class CarService
             $query->where($priceCol, '<=', (float)$priceMax);
         }
 
+        // Filter by Import Origin (Japan, UK, KKTC Dealer...)
+        if ($origin = $request->input('import_origin')) {
+            $query->where('import_origin', $origin);
+        }
+
         // Commercial & Special Feature Flags
         if ($request->boolean('is_barter_available') || $request->input('barter')) {
             $query->where('is_barter_available', true);
@@ -158,6 +184,15 @@ class CarService
         }
         if ($request->boolean('is_customs_cleared') || $request->input('customs_cleared')) {
             $query->where('is_customs_cleared', true);
+        }
+        if ($request->boolean('title_deed_ready')) {
+            $query->where('title_deed_ready', true);
+        }
+        if ($request->boolean('no_heavy_damage')) {
+            $query->where('is_heavy_damaged', false);
+        }
+        if ($request->boolean('no_tramer')) {
+            $query->where('has_tramer', false);
         }
         if ($request->input('seller_type')) {
             $query->where('seller_type', $request->input('seller_type'));

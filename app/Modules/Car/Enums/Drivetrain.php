@@ -11,9 +11,9 @@ enum Drivetrain: string
     public function label(): string
     {
         return match ($this) {
-            self::FrontWheel => 'Ön Çəkən (FWD)',
-            self::RearWheel => 'Arxa Çəkən (RWD)',
-            self::AllWheel => 'Tam Çəkən (4WD / AWD)',
+            self::FrontWheel => __('Önden Çekiş (FWD)'),
+            self::RearWheel => __('Arkadan İtiş (RWD)'),
+            self::AllWheel => __('4 Çeker (AWD / 4WD)'),
         };
     }
 

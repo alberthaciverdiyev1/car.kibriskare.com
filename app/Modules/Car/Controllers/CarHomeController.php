@@ -5,6 +5,7 @@ namespace App\Modules\Car\Controllers;
 use App\Http\Controllers\Controller;
 use App\Modules\Car\Enums\Drivetrain;
 use App\Modules\Car\Enums\FuelType;
+use App\Modules\Car\Enums\ImportOrigin;
 use App\Modules\Car\Enums\PlateType;
 use App\Modules\Car\Enums\SteeringWheel;
 use App\Modules\Car\Enums\Transmission;
@@ -73,6 +74,7 @@ class CarHomeController extends Controller
         $transmissions = Transmission::options();
         $steeringWheels = SteeringWheel::options();
         $plateTypes = PlateType::options();
+        $importOrigins = ImportOrigin::options();
         $drivetrains = Drivetrain::options();
 
         $colors = [
@@ -104,6 +106,7 @@ class CarHomeController extends Controller
             'transmissions',
             'steeringWheels',
             'plateTypes',
+            'importOrigins',
             'drivetrains',
             'colors'
         ))->header('Vary', 'X-Requested-With, Accept');

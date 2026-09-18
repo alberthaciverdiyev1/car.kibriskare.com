@@ -85,7 +85,7 @@
                                     <i class="fa-solid fa-xmark text-xs"></i>
                                 </button>
                                 <div class="w-full max-w-[220px] h-[130px] sm:h-[150px] mx-auto rounded-xl overflow-hidden mb-2.5 bg-gray-100 shadow-sm relative">
-                                    <img src="{{ $car->images->first()?->thumb ?: asset('images/box-house.jpg') }}" alt="{{ $car->display_title }}"
+                                    <img src="{{ $car->images->first()?->thumb ?: asset('images/car-placeholder.svg') }}" alt="{{ $car->display_title }}"
                                          class="w-full h-full object-cover"/>
                                 </div>
                                 <a href="{{ route('cars.show', $car->slug) }}"

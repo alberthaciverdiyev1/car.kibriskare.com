@@ -57,7 +57,7 @@
     </div>
 
     <!-- Favorites Cards Grid -->
-    <div id="favoritesContainer" class="{{ count($cars) > 0 ? '' : 'hidden' }} grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+    <div id="favoritesContainer" class="{{ count($cars) > 0 ? '' : 'hidden' }} grid grid-cols-2 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-2.5 sm:gap-4 lg:gap-6">
         @include('pages.favorites.partials.cards', ['cars' => $cars])
     </div>
 

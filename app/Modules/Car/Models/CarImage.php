@@ -32,7 +32,7 @@ class CarImage extends Model
     public function getUrlAttribute(): string
     {
         if (empty($this->image_path)) {
-            return asset('images/box-house.jpg');
+            return asset('images/car-placeholder.svg');
         }
 
         if (str_starts_with($this->image_path, 'http://') || str_starts_with($this->image_path, 'https://')) {

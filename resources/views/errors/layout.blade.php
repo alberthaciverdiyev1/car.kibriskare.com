@@ -35,24 +35,24 @@
 
         {{-- Action Buttons --}}
         <div class="flex flex-col sm:flex-row items-center justify-center gap-3">
-            <a href="{{ route('home') }}" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-orange-500 hover:bg-orange-600 active:scale-[0.98] text-white font-semibold text-sm rounded-2xl shadow-sm hover:shadow-md transition">
+            <a href="{{ route('home') }}" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-[var(--primary)] hover:bg-[var(--primary-hover)] text-white font-semibold text-sm rounded-2xl shadow-sm cursor-pointer">
                 <i class="fa-solid fa-house text-xs"></i>
                 <span>{{ __('errors.back_to_home') }}</span>
             </a>
 
             @if(isset($showRefresh) && $showRefresh)
-                <button type="button" onclick="window.location.reload()" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-white hover:bg-gray-50 active:scale-[0.98] text-gray-700 font-semibold text-sm rounded-2xl border border-gray-200 shadow-2xs hover:border-gray-300 transition">
+                <button type="button" onclick="window.location.reload()" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-white hover:bg-gray-50 text-gray-700 font-semibold text-sm rounded-2xl border border-gray-200 shadow-2xs hover:border-gray-300 cursor-pointer">
                     <i class="fa-solid fa-rotate-right text-xs text-gray-500"></i>
                     <span>{{ __('errors.refresh_page') }}</span>
                 </button>
             @else
-                <a href="{{ route('listing') }}" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-white hover:bg-gray-50 active:scale-[0.98] text-gray-700 font-semibold text-sm rounded-2xl border border-gray-200 shadow-2xs hover:border-gray-300 transition">
+                <a href="{{ route('listing') }}" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-6 py-3 bg-white hover:bg-gray-50 text-gray-700 font-semibold text-sm rounded-2xl border border-gray-200 shadow-2xs hover:border-gray-300 cursor-pointer">
                     <i class="fa-solid fa-magnifying-glass text-xs text-gray-500"></i>
                     <span>{{ __('errors.browse_listings') }}</span>
                 </a>
             @endif
 
-            <button type="button" onclick="if(window.history.length > 1){ window.history.back(); } else { window.location.href='/'; }" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 text-gray-500 hover:text-gray-800 text-sm font-medium transition">
+            <button type="button" onclick="if(window.history.length > 1){ window.history.back(); } else { window.location.href='/'; }" class="w-full sm:w-auto inline-flex items-center justify-center gap-2 px-5 py-3 text-gray-500 hover:text-gray-800 text-sm font-medium cursor-pointer">
                 <i class="fa-solid fa-arrow-left text-xs"></i>
                 <span>{{ __('errors.back_previous') }}</span>
             </button>
@@ -64,16 +64,16 @@
                 Faydalı Bölmələr
             </div>
             <div class="flex flex-wrap items-center justify-center gap-2 text-xs font-medium">
-                <a href="{{ route('listing.path1', ['first' => 'satilik']) }}" class="px-3 py-1.5 bg-white hover:bg-orange-50 hover:text-orange-600 border border-gray-200/80 rounded-xl text-gray-700 transition">
-                    🏷️ Satılıq Əmlaklar
+                <a href="{{ route('listing') }}" class="px-3 py-1.5 bg-white hover:bg-gray-50 border border-gray-200/80 rounded-xl text-gray-700">
+                    🚗 Bütün Elanlar
                 </a>
-                <a href="{{ route('listing.path2', ['first' => 'kiralik', 'second' => 'aylik']) }}" class="px-3 py-1.5 bg-white hover:bg-orange-50 hover:text-orange-600 border border-gray-200/80 rounded-xl text-gray-700 transition">
-                    🔑 Kirayə Mənzillər
+                <a href="{{ route('autosalons.index') }}" class="px-3 py-1.5 bg-white hover:bg-gray-50 border border-gray-200/80 rounded-xl text-gray-700">
+                    🏢 Avtosalonlar
                 </a>
-                <a href="{{ route('requests.index') }}" class="px-3 py-1.5 bg-white hover:bg-orange-50 hover:text-orange-600 border border-gray-200/80 rounded-xl text-gray-700 transition">
-                    📢 Əmlak Tələbləri
+                <a href="{{ route('add-car') }}" class="px-3 py-1.5 bg-white hover:bg-gray-50 border border-gray-200/80 rounded-xl text-gray-700">
+                    ➕ Elan Yerləşdir
                 </a>
-                <a href="{{ route('contact') }}" class="px-3 py-1.5 bg-white hover:bg-orange-50 hover:text-orange-600 border border-gray-200/80 rounded-xl text-gray-700 transition">
+                <a href="{{ route('contact') }}" class="px-3 py-1.5 bg-white hover:bg-gray-50 border border-gray-200/80 rounded-xl text-gray-700">
                     📞 Əlaqə
                 </a>
             </div>

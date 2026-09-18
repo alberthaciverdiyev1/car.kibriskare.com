@@ -1,0 +1,26 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 800 500" width="100%" height="100%">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#f8fafc"/>
+      <stop offset="100%" stop-color="#e2e8f0"/>
+    </linearGradient>
+    <linearGradient id="carGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+      <stop offset="0%" stop-color="#94a3b8"/>
+      <stop offset="100%" stop-color="#64748b"/>
+    </linearGradient>
+  </defs>
+  <rect width="800" height="500" fill="url(#bgGrad)"/>
+  
+  <!-- Subtle Grid/Floor Line -->
+  <line x1="140" y1="350" x2="660" y2="350" stroke="#cbd5e1" stroke-width="2.5" stroke-linecap="round"/>
+  
+  <!-- Modern Car Silhouette -->
+  <g transform="translate(260, 140) scale(3.5)" fill="url(#carGrad)">
+    <path d="M68.5 28.2l-6.8-13.6C60.2 11.6 57.1 9.5 53.6 9.5H26.4c-3.5 0-6.6 2.1-8.1 5.1L11.5 28.2C4.8 29.8 0 35.8 0 43v21.5C0 66 1.5 67.5 3.5 67.5h5c2 0 3.5-1.5 3.5-3.5V59h56v5c0 2 1.5 3.5 3.5 3.5h5c2 0 3.5-1.5 3.5-3.5V43c0-7.2-4.8-13.2-11.5-14.8zM21.7 17.5c.7-1.4 2.1-2.3 3.7-2.3h29.2c1.6 0 3 0.9 3.7 2.3l4.8 9.7H16.9l4.8-9.7zM11.5 48.5c-2.8 0-5-2.2-5-5s2.2-5 5-5 5 2.2 5 5-2.2 5-5 5zm57 0c-2.8 0-5-2.2-5-5s2.2-5 5-5 5 2.2 5 5-2.2 5-5 5z"/>
+  </g>
+  
+  <!-- Placeholder Text -->
+  <text x="400" y="405" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="16" font-weight="600" fill="#94a3b8" text-anchor="middle" letter-spacing="1">
+    FOTOĞRAF BULUNMUYOR
+  </text>
+</svg>

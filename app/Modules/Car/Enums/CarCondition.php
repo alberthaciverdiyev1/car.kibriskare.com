@@ -12,10 +12,10 @@ enum CarCondition: string
     public function label(): string
     {
         return match ($this) {
-            self::New => 'Yeni (0 km)',
-            self::Used => 'İkinci Əl (İşlənmiş)',
-            self::Damaged => 'Qəzalı / Zədəli',
-            self::ForParts => 'Ehtiyat hissəsi üçün',
+            self::New => __('Sıfır (0 km)'),
+            self::Used => __('İkinci El'),
+            self::Damaged => __('Hasarlı / Kazalı'),
+            self::ForParts => __('Yedek Parça Amaçlı'),
         };
     }
 

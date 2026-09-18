@@ -10,7 +10,7 @@
 
     <section class="mt-4 sm:mt-6">
         <!-- Header & Search Banner -->
-        <div class="bg-gradient-to-r from-[var(--primary)] to-emerald-800 rounded-3xl p-6 sm:p-8 text-white mb-8 shadow-sm">
+        <div class="bg-[var(--primary)] rounded-3xl p-6 sm:p-8 text-white mb-8 shadow-sm">
             <div class="max-w-3xl">
                 <span class="bg-white/20 backdrop-blur-xs text-white text-xs font-bold px-3 py-1 rounded-full uppercase tracking-wider">
                     KKTC Avtomobil Dilerləri
@@ -64,20 +64,17 @@
                         <div class="relative h-36 bg-gray-100 overflow-hidden">
                             <img src="{{ $salon->banner_url }}"
                                  alt="{{ $salon->name }}"
-                                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
-                            <div class="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent"></div>
+                                 class="w-full h-full object-cover" />
+                            <div class="absolute inset-0 bg-black/40"></div>
 
-                            <!-- Rating & Badge -->
-                            <div class="absolute top-3 right-3 flex items-center gap-1.5">
-                                @if($salon->is_verified)
+                            <!-- Verified Badge -->
+                            @if($salon->is_verified)
+                                <div class="absolute top-3 right-3 flex items-center gap-1.5">
                                     <span class="bg-emerald-500 text-white text-[11px] font-bold px-2 py-0.5 rounded-lg shadow-sm flex items-center gap-1">
                                         <i class="bi bi-patch-check-fill text-xs"></i> Təsdiqlənmiş
                                     </span>
-                                @endif
-                                <span class="bg-neutral-900/80 backdrop-blur-xs text-white text-xs font-bold px-2 py-0.5 rounded-lg flex items-center gap-1">
-                                    <i class="bi bi-star-fill text-amber-400 text-xs"></i> {{ $salon->rating ?? '5.0' }}
-                                </span>
-                            </div>
+                                </div>
+                            @endif
 
                             <!-- Logo -->
                             <div class="absolute -bottom-4 left-5 w-16 h-16 rounded-2xl bg-white p-1 shadow-md border-2 border-white overflow-hidden">

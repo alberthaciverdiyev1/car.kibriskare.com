@@ -12,10 +12,10 @@ enum Transmission: string
     public function label(): string
     {
         return match ($this) {
-            self::Automatic => 'Avtomat',
-            self::Manual => 'Mexaniki',
-            self::Robot => 'Robotlaşdırılmış',
-            self::Cvt => 'Variator (CVT)',
+            self::Automatic => __('Otomatik'),
+            self::Manual => __('Manuel'),
+            self::Robot => __('Yarı Otomatik (Robot)'),
+            self::Cvt => __('CVT (Kademesiz)'),
         };
     }
 

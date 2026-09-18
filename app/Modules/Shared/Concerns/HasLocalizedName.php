@@ -6,16 +6,22 @@ trait HasLocalizedName
 {
     public function getLocalizedNameAttribute(): string
     {
-        $locale = app()->getLocale();
-        if (is_array($this->name)) {
-            return $this->name[$locale]
-                ?? $this->name['tr']
-                ?? $this->name['az']
-                ?? $this->name['en']
-                ?? $this->name['ru']
-                ?? (string)($this->value ?? '');
+        return $this->getTrans('name');
+    }
+
+    public function getTrans(string $field = 'name', ?string $locale = null, string $default = ''): string
+    {
+        $locale = $locale ?: app()->getLocale();
+        $value = $this->{$field} ?? null;
+        if (is_array($value)) {
+            return $value[$locale]
+                ?? $value['tr']
+                ?? $value['az']
+                ?? $value['en']
+                ?? $value['ru']
+                ?? (string)(reset($value) ?: $default);
         }
 
-        return (string)($this->name ?? $this->value ?? '');
+        return (string)($value ?? $default);
     }
 }

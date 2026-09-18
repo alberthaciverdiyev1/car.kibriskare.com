@@ -160,11 +160,11 @@ class TelegramBotService
             $data = $callbackQuery['data'];
             $originalText = $callbackQuery['message']['text'] ?? $callbackQuery['message']['caption'] ?? '';
 
-            if (preg_match('/^approve_(car|property|request|roommate)_(\d+)$/', $data, $matches)) {
+            if (preg_match('/^approve_(car|request)_(\d+)$/', $data, $matches)) {
                 $type = $matches[1];
                 $id = $matches[2];
 
-                $model = $this->getModelInstance($type, $id);
+                $model = $this->getModelInstance($type, (int) $id);
                 if ($model) {
                     $model->status = $type === 'car' ? \App\Modules\Car\Enums\CarStatus::Active : 'published';
                     if (isset($model->rejection_reason)) {
@@ -201,7 +201,7 @@ class TelegramBotService
                         'text' => 'Elan təsdiqləndi!',
                     ]);
                 }
-            } elseif (preg_match('/^reject_prompt_(car|property|request|roommate)_(\d+)$/', $data, $matches)) {
+            } elseif (preg_match('/^reject_prompt_(car|request)_(\d+)$/', $data, $matches)) {
                 $type = $matches[1];
                 $id = $matches[2];
 
@@ -314,8 +314,6 @@ class TelegramBotService
         switch ($type) {
             case 'car':
                 return \App\Modules\Car\Models\Car::find($id);
-            case 'property':
-                return class_exists(\App\Modules\Property\Models\Property::class) ? \App\Modules\Property\Models\Property::find($id) : null;
         }
         return null;
     }

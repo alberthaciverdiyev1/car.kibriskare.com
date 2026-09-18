@@ -10,8 +10,8 @@ enum SteeringWheel: string
     public function label(): string
     {
         return match ($this) {
-            self::Right => 'Sağ Sükan (KKTC / UK)',
-            self::Left => 'Sol Sükan',
+            self::Right => __('Sağ Direksiyon (KKTC / UK)'),
+            self::Left => __('Sol Direksiyon'),
         };
     }
 

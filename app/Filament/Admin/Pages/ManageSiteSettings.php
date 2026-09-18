@@ -10,6 +10,7 @@ use Filament\Forms\Components\Section;
 use Filament\Forms\Components\Tabs;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Forms\Concerns\InteractsWithForms;
 use Filament\Forms\Contracts\HasForms;
 use Filament\Forms\Form;
@@ -278,6 +279,15 @@ class ManageSiteSettings extends Page implements HasForms
                         Tabs\Tab::make('Limitlər & Mesaj Şablonları')
                             ->icon('heroicon-o-cog-6-tooth')
                             ->schema([
+                                Section::make('Araç İlanları Modül Ayarları')
+                                    ->description('Otomotiv platformu özelliklerini aktif veya pasif yapabilirsiniz')
+                                    ->schema([
+                                        Toggle::make('enable_car_video')
+                                            ->label('Araç Tanıtım Videosu Ekleme (YouTube / Video URL)')
+                                            ->helperText('Aktiv edildikdə satıcılar elan verərkən avtomobilin YouTube və ya video linkini daxil edə biləcək. Hazırda deaktivdir.')
+                                            ->default(false),
+                                    ]),
+
                                 Section::make('Elan & Səhifələmə Limitləri')
                                     ->description('Saytdakı elanların görünmə müddəti və siyahılama limitləri')
                                     ->schema([

@@ -9,4 +9,5 @@ return [
     'explore_listings' => 'Elanları Kəşf Et',
     'empty_message' => 'Seçilmiş elan tapılmadı.',
     'confirm_clear_all' => 'Bütün seçilmiş elanları silmək istədiyinizdən əminsiniz?',
+    'add_to_favorites' => 'Seçilmişlərə əlavə et',
 ];

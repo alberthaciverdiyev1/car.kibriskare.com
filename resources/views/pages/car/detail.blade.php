@@ -6,7 +6,7 @@
 @section('content')
     @php
         $galleryImages = $car->images->sortBy('sort_order')->values();
-        $defaultImg = asset('images/box-house.jpg');
+        $defaultImg = asset('images/car-placeholder.svg');
         $firstImg = $galleryImages->first()?->thumb ?? $defaultImg;
         $totalImages = count($galleryImages);
 
@@ -17,7 +17,7 @@
         $sellerName = $car->autosalon?->name
             ?? ($car->contact_name
             ?? ($car->user?->name
-            ?? 'Fərdi Satıcı'));
+            ?? __('car.individual_seller')));
 
         $phone = $car->autosalon?->phone ?? $car->contact_phone;
         $whatsapp = $car->autosalon?->whatsapp ?? $car->contact_whatsapp;
@@ -31,6 +31,37 @@
 
     <div class="w-full mt-4 sm:mt-6 pb-16">
         
+        <!-- Owner Action Bar (If logged in seller or admin) -->
+        @if(auth()->check() && (auth()->id() === $car->user_id || auth()->user()->isAdmin()))
+            <div class="bg-indigo-50 border border-indigo-200/80 rounded-2xl p-4 mb-6 flex flex-wrap items-center justify-between gap-3 shadow-xs">
+                <div class="flex items-center gap-2.5">
+                    <div class="w-8 h-8 rounded-full bg-indigo-600 text-white flex items-center justify-center shrink-0">
+                        <i class="bi bi-person-gear"></i>
+                    </div>
+                    <div>
+                        <div class="text-xs font-bold text-indigo-950">{{ __('Bu elan sizə məxsusdur') }}</div>
+                        <div class="text-[11px] text-indigo-600">
+                            {{ __('Status') }}: <strong class="uppercase font-extrabold" id="ownerAdStatus">{{ $car->status->value }}</strong>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-2">
+                    <a href="{{ route('cars.edit', $car) }}"
+                       class="px-3.5 py-1.5 bg-white hover:bg-gray-50 text-gray-800 border border-gray-300 rounded-xl text-xs font-bold transition shadow-2xs flex items-center gap-1.5">
+                        <i class="bi bi-pencil-square text-indigo-600"></i>
+                        {{ __('Redaktə et') }}
+                    </a>
+
+                    <button type="button" onclick="toggleAdSold({{ $car->id }})" id="btnMarkSold"
+                            class="px-3.5 py-1.5 {{ $car->status->value === 'sold' ? 'bg-amber-600 hover:bg-amber-700' : 'bg-emerald-600 hover:bg-emerald-700' }} text-white rounded-xl text-xs font-bold transition shadow-2xs flex items-center gap-1.5">
+                        <i class="bi bi-check-circle-fill"></i>
+                        <span id="markSoldText">{{ $car->status->value === 'sold' ? __('Təkrar Yayına Al') : __('Satıldı Olarak İşarələ') }}</span>
+                    </button>
+                </div>
+            </div>
+        @endif
+
         <!-- Top Title & Price Header (Mobile & Desktop) -->
         <div class="bg-white p-4 sm:p-6 rounded-3xl border border-gray-200/80 shadow-2xs mb-6">
             <div class="flex flex-col md:flex-row md:items-center justify-between gap-4">
@@ -44,7 +75,7 @@
                             @endif
                             @if($car->deal_type->value === 'rent_daily')
                                 <span class="bg-emerald-600 text-white text-xs font-bold px-2.5 py-0.5 rounded-lg shadow-sm">
-                                    KİRAYƏ
+                                    {{ __('listing.rent') }}
                                 </span>
                             @endif
                         </div>
@@ -59,14 +90,14 @@
                                     onclick="event.stopPropagation(); toggleCompare(this, {{ $car->id }})"
                                     data-compare-btn="{{ $car->id }}"
                                     class="w-9 h-9 rounded-2xl bg-gray-50 hover:bg-orange-50 hover:text-[var(--primary)] text-gray-600 border border-gray-100 flex items-center justify-center transition cursor-pointer shadow-2xs"
-                                    title="{{ __('compare.compare') ?? 'Müqayisə et' }}">
+                                    title="{{ __('listing.compare') }}">
                                 <i class="bi bi-arrow-left-right text-sm"></i>
                             </button>
                             <button type="button"
                                     onclick="event.stopPropagation(); toggleFavorite(this, {{ $car->id }})"
                                     data-fav-btn="{{ $car->id }}"
                                     class="w-9 h-9 rounded-2xl bg-gray-50 hover:bg-rose-50 hover:text-rose-500 text-gray-600 border border-gray-100 flex items-center justify-center transition cursor-pointer shadow-2xs"
-                                    title="{{ __('property.add_to_favorites') ?? 'Seçilmişlərə əlavə et' }}">
+                                    title="{{ __('favorites.add_to_favorites') }}">
                                 <i class="fa-regular fa-heart text-sm"></i>
                             </button>
                         </div>
@@ -83,10 +114,10 @@
                         </span>
                         <span class="flex items-center gap-1">
                             <i class="bi bi-eye text-gray-400"></i>
-                            {{ $car->view_count }} baxış
+                            {{ $car->view_count }} {{ __('car.view_count') }}
                         </span>
                         <span class="flex items-center gap-1 text-gray-400">
-                            İlan №: #CAR-{{ str_pad($car->id, 5, '0', STR_PAD_LEFT) }}
+                            {{ __('listing.ad_number') }}: #CAR-{{ str_pad($car->id, 5, '0', STR_PAD_LEFT) }}
                         </span>
                     </div>
                 </div>
@@ -96,7 +127,7 @@
                     <div class="text-2xl sm:text-3xl font-black text-[var(--primary)] tracking-tight">
                         {{ $car->formatted_price }}
                         @if($car->deal_type->value === 'rent_daily')
-                            <span class="text-sm font-normal text-gray-500">/ gün</span>
+                            <span class="text-sm font-normal text-gray-500">/ {{ __('gün') }}</span>
                         @endif
                     </div>
                     <div class="text-xs text-gray-400 font-medium mt-0.5 flex items-center md:justify-end gap-2">
@@ -125,7 +156,7 @@
                         
                         <div class="absolute bottom-3 right-3 bg-black/70 backdrop-blur-xs text-white text-xs font-semibold px-3 py-1.5 rounded-xl flex items-center gap-1.5">
                             <i class="bi bi-camera"></i>
-                            <span>{{ $totalImages }} Şəkil</span>
+                            <span>{{ $totalImages }} {{ __('Fotoğraf') }}</span>
                         </div>
                     </div>
 
@@ -144,135 +175,191 @@
                     @endif
                 </div>
 
+                <!-- Description (Satıcı Açıklaması) -->
+                @if($car->display_description)
+                    <div class="bg-white p-5 sm:p-6 rounded-3xl border border-gray-200/80 shadow-2xs space-y-3">
+                        <div class="flex items-center gap-2 border-b border-gray-100 pb-3">
+                            <i class="bi bi-card-text text-[var(--primary)] text-xl"></i>
+                            <h2 class="text-base sm:text-lg font-bold text-gray-900">{{ __('car.seller_notes') }}</h2>
+                        </div>
+
+                        <div class="text-gray-700 text-sm leading-relaxed whitespace-pre-line">
+                            {{ $car->display_description }}
+                        </div>
+                    </div>
+                @endif
+
                 <!-- Technical Specifications Table -->
                 <div class="bg-white p-5 sm:p-6 rounded-3xl border border-gray-200/80 shadow-2xs space-y-4">
                     <div class="flex items-center gap-2 border-b border-gray-100 pb-3">
                         <i class="bi bi-cpu text-[var(--primary)] text-xl"></i>
-                        <h2 class="text-base sm:text-lg font-bold text-gray-900">Texniki Spesifikasiyalar</h2>
+                        <h2 class="text-base sm:text-lg font-bold text-gray-900">{{ __('car.technical_specs') }}</h2>
                     </div>
 
                     <div class="grid grid-cols-1 sm:grid-cols-2 gap-x-8 gap-y-3 text-sm">
                         
                         <div class="flex items-center justify-between py-1.5 border-b border-gray-50">
-                            <span class="text-gray-500 font-medium">Kateqoriya</span>
+                            <span class="text-gray-500 font-medium">{{ __('car.vehicle_category') }}</span>
                             <span class="font-bold text-gray-900">{{ $car->vehicle_type?->label() ?? 'Otomobil' }}</span>
                         </div>
 
                         <div class="flex items-center justify-between py-1.5 border-b border-gray-50">
-                            <span class="text-gray-500 font-medium">Marka</span>
+                            <span class="text-gray-500 font-medium">{{ __('car.brand') }}</span>
                             <span class="font-bold text-gray-900">{{ $car->brand?->name ?? '—' }}</span>
                         </div>
 
                         <div class="flex items-center justify-between py-1.5 border-b border-gray-50">
-                            <span class="text-gray-500 font-medium">Model</span>
+                            <span class="text-gray-500 font-medium">{{ __('car.model') }}</span>
                             <span class="font-bold text-gray-900">{{ $car->model?->name ?? '—' }}</span>
                         </div>
 
                         <div class="flex items-center justify-between py-1.5 border-b border-gray-50">
-                            <span class="text-gray-500 font-medium">Buraxılış İli</span>
+                            <span class="text-gray-500 font-medium">{{ __('car.year') }}</span>
                             <span class="font-bold text-gray-900">{{ $car->year }}</span>
                         </div>
 
                         <div class="flex items-center justify-between py-1.5 border-b border-gray-50">
-                            <span class="text-gray-500 font-medium">Yürüş</span>
+                            <span class="text-gray-500 font-medium">{{ __('car.mileage') }}</span>
                             <span class="font-bold text-gray-900">{{ $car->formatted_mileage }}</span>
                         </div>
 
                         <div class="flex items-center justify-between py-1.5 border-b border-gray-50">
-                            <span class="text-gray-500 font-medium">Ban Növü</span>
+                            <span class="text-gray-500 font-medium">{{ __('car.body_type') }}</span>
                             <span class="font-bold text-gray-900">{{ $car->bodyType?->localized_name ?? '—' }}</span>
                         </div>
 
                         <div class="flex items-center justify-between py-1.5 border-b border-gray-50">
-                            <span class="text-gray-500 font-medium">Yanacaq Növü</span>
+                            <span class="text-gray-500 font-medium">{{ __('car.fuel_type') }}</span>
                             <span class="font-bold text-gray-900">{{ $car->fuel_type->label() }}</span>
                         </div>
 
                         <div class="flex items-center justify-between py-1.5 border-b border-gray-50">
-                            <span class="text-gray-500 font-medium">Sürətlər Qutusu</span>
+                            <span class="text-gray-500 font-medium">{{ __('car.transmission') }}</span>
                             <span class="font-bold text-gray-900">{{ $car->transmission->label() }}</span>
                         </div>
 
                         <div class="flex items-center justify-between py-1.5 border-b border-gray-50">
-                            <span class="text-gray-500 font-medium">Ötürücü</span>
+                            <span class="text-gray-500 font-medium">{{ __('car.drivetrain') }}</span>
                             <span class="font-bold text-gray-900">{{ $car->drivetrain?->label() ?? '—' }}</span>
                         </div>
 
                         <div class="flex items-center justify-between py-1.5 border-b border-gray-50">
-                            <span class="text-gray-500 font-medium">Mühərrik Həcmi</span>
+                            <span class="text-gray-500 font-medium">{{ __('car.engine_volume') }}</span>
                             <span class="font-bold text-gray-900">{{ $car->engine_volume_l ?: ($car->engine_volume ? $car->engine_volume . ' cc' : '—') }}</span>
                         </div>
 
                         <div class="flex items-center justify-between py-1.5 border-b border-gray-50">
-                            <span class="text-gray-500 font-medium">Mühərrik Gücü</span>
-                            <span class="font-bold text-gray-900">{{ $car->engine_power ? $car->engine_power . ' a.g. (hp)' : '—' }}</span>
+                            <span class="text-gray-500 font-medium">{{ __('car.engine_power') }}</span>
+                            <span class="font-bold text-gray-900">{{ $car->engine_power ? $car->engine_power . ' HP' : '—' }}</span>
                         </div>
 
                         <div class="flex items-center justify-between py-1.5 border-b border-gray-50">
-                            <span class="text-gray-500 font-medium">Sükan</span>
+                            <span class="text-gray-500 font-medium">{{ __('car.steering_wheel') }}</span>
                             <span class="font-bold text-gray-900">{{ $car->steering_wheel->label() }}</span>
                         </div>
 
                         <div class="flex items-center justify-between py-1.5 border-b border-gray-50">
-                            <span class="text-gray-500 font-medium">Rəng</span>
-                            <span class="font-bold text-gray-900">{{ $car->color ?? '—' }} {{ $car->is_metallic ? '(Metalik)' : '' }}</span>
+                            <span class="text-gray-500 font-medium">{{ __('car.color') }}</span>
+                            <span class="font-bold text-gray-900">{{ $car->color ?? '—' }} {{ $car->is_metallic ? '(' . __('car.metallic_color') . ')' : '' }}</span>
                         </div>
 
                         <div class="flex items-center justify-between py-1.5 border-b border-gray-50">
-                            <span class="text-gray-500 font-medium">Vəziyyəti</span>
+                            <span class="text-gray-500 font-medium">{{ __('car.condition') }}</span>
                             <span class="font-bold text-gray-900">{{ $car->condition->label() }}</span>
                         </div>
 
                         <div class="flex items-center justify-between py-1.5 border-b border-gray-50">
-                            <span class="text-gray-500 font-medium">Plaka Durumu</span>
+                            <span class="text-gray-500 font-medium">{{ __('car.plate_type') }}</span>
                             <span class="font-bold text-gray-900">
-                                {{ $car->plate_type?->label() ?? ($car->is_customs_cleared ? 'KKTC Plakalı' : 'Gömrüksüz') }}
+                                {{ $car->plate_type?->label() ?? ($car->is_customs_cleared ? __('KKTC Plakalı (Gümrüğü Ödenmiş)') : __('Yurtdışı Plakalı (Gümrüksüz)')) }}
                             </span>
                         </div>
 
                         <div class="flex items-center justify-between py-1.5 border-b border-gray-50">
-                            <span class="text-gray-500 font-medium">Zəmanət</span>
+                            <span class="text-gray-500 font-medium">{{ __('car.has_warranty') }}</span>
                             <span class="font-bold {{ $car->has_warranty ? 'text-emerald-600' : 'text-gray-500' }}">
-                                {{ $car->has_warranty ? 'Zəmanəti var' : 'Yoxdur' }}
+                                {{ $car->has_warranty ? __('Var') : __('Yok') }}
                             </span>
                         </div>
 
                         <div class="flex items-center justify-between py-1.5 border-b border-gray-50">
-                            <span class="text-gray-500 font-medium">Razılaşma (Pazarlık)</span>
+                            <span class="text-gray-500 font-medium">{{ __('İthalat Menşei') }}</span>
+                            <span class="font-bold text-gray-900">{{ $car->import_origin?->label() ?? '—' }}</span>
+                        </div>
+
+                        <div class="flex items-center justify-between py-1.5 border-b border-gray-50">
+                            <span class="text-gray-500 font-medium">{{ __('Seyrüsefer Geçerlilik') }}</span>
+                            <span class="font-bold text-gray-900">
+                                {{ $car->road_tax_valid_until ? $car->road_tax_valid_until->format('d.m.Y') : '—' }}
+                            </span>
+                        </div>
+
+                        <div class="flex items-center justify-between py-1.5 border-b border-gray-50">
+                            <span class="text-gray-500 font-medium">{{ __('Muayene Geçerlilik') }}</span>
+                            <span class="font-bold text-gray-900">
+                                {{ $car->inspection_valid_until ? $car->inspection_valid_until->format('d.m.Y') : '—' }}
+                            </span>
+                        </div>
+
+                        <div class="flex items-center justify-between py-1.5 border-b border-gray-50">
+                            <span class="text-gray-500 font-medium">{{ __('Koçan / Devir Durumu') }}</span>
+                            <span class="font-bold {{ $car->title_deed_ready ? 'text-emerald-600' : 'text-amber-600' }}">
+                                {{ $car->title_deed_ready ? __('Devre Hazır (Sorunsuz)') : __('Devir Bekleniyor') }}
+                            </span>
+                        </div>
+
+                        <div class="flex items-center justify-between py-1.5 border-b border-gray-50">
+                            <span class="text-gray-500 font-medium">{{ __('car.is_negotiable') }}</span>
                             <span class="font-bold {{ $car->is_negotiable ? 'text-emerald-600' : 'text-gray-500' }}">
-                                {{ $car->is_negotiable ? 'Mümkündür' : 'Son qiymət' }}
+                                {{ $car->is_negotiable ? __('Mümkün') : __('Pazarlıksız') }}
                             </span>
                         </div>
 
                         <div class="flex items-center justify-between py-1.5 border-b border-gray-50">
-                            <span class="text-gray-500 font-medium">Kredit / Lizinq</span>
+                            <span class="text-gray-500 font-medium">{{ __('car.is_credit_available') }}</span>
                             <span class="font-bold {{ $car->is_credit_available ? 'text-emerald-600' : 'text-gray-500' }}">
-                                {{ $car->is_credit_available ? 'Mümkündür' : 'Yoxdur' }}
+                                {{ $car->is_credit_available ? __('Var') : __('Yok') }}
                             </span>
                         </div>
 
                         <div class="flex items-center justify-between py-1.5 border-b border-gray-50">
-                            <span class="text-gray-500 font-medium">Barter (Takas)</span>
+                            <span class="text-gray-500 font-medium">{{ __('car.is_barter_available') }}</span>
                             <span class="font-bold {{ $car->is_barter_available ? 'text-emerald-600' : 'text-gray-500' }}">
-                                {{ $car->is_barter_available ? 'Mümkündür' : 'Yoxdur' }}
+                                {{ $car->is_barter_available ? __('Var') : __('Yok') }}
                             </span>
                         </div>
 
                         @if($car->vin)
                             <div class="flex items-center justify-between py-1.5 border-b border-gray-50 col-span-full">
-                                <span class="text-gray-500 font-medium">VIN Kod</span>
+                                <span class="text-gray-500 font-medium">{{ __('car.vin_code') }}</span>
                                 <span class="font-mono font-bold text-gray-900 tracking-wider bg-gray-100 px-2 py-0.5 rounded">{{ $car->vin }}</span>
                             </div>
                         @endif
                     </div>
                 </div>
 
+                <!-- Ekspertiz, Boya & Değişen Kaporta Şeması -->
+                <x-car.damage-scheme :car="$car" mode="display" />
+
+                <!-- Araç Tanıtım Videosu (Admin tərəfindən aktiv edilibsə) -->
+                @if(\App\Modules\Shared\Models\SiteSetting::current()->enable_car_video && $car->embed_video_url)
+                    <div class="bg-white p-5 sm:p-6 rounded-3xl border border-gray-200/80 shadow-2xs space-y-4">
+                        <div class="flex items-center gap-2 border-b border-gray-100 pb-3">
+                            <i class="bi bi-play-circle-fill text-rose-600 text-xl"></i>
+                            <h2 class="text-base sm:text-lg font-bold text-gray-900">{{ __('Araç Tanıtım Videosu / Motor Sesi') }}</h2>
+                        </div>
+                        <div class="aspect-video w-full rounded-2xl overflow-hidden bg-black shadow-inner">
+                            <iframe src="{{ $car->embed_video_url }}" class="w-full h-full" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                        </div>
+                    </div>
+                @endif
+
                 <!-- Features & Equipment -->
                 @if($car->features->count() > 0)
                     <div class="bg-white p-5 sm:p-6 rounded-3xl border border-gray-200/80 shadow-2xs space-y-4">
                         <div class="flex items-center gap-2 border-b border-gray-100 pb-3">
                             <i class="bi bi-sparkles text-[var(--primary)] text-xl"></i>
-                            <h2 class="text-base sm:text-lg font-bold text-gray-900">Təchizat və Komplektasiya</h2>
+                            <h2 class="text-base sm:text-lg font-bold text-gray-900">{{ __('car.features') }}</h2>
                         </div>
 
                         <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
@@ -282,20 +369,6 @@
                                     <span>{{ $feature->localized_name }}</span>
                                 </div>
                             @endforeach
-                        </div>
-                    </div>
-                @endif
-
-                <!-- Description -->
-                @if($car->display_description)
-                    <div class="bg-white p-5 sm:p-6 rounded-3xl border border-gray-200/80 shadow-2xs space-y-3">
-                        <div class="flex items-center gap-2 border-b border-gray-100 pb-3">
-                            <i class="bi bi-card-text text-[var(--primary)] text-xl"></i>
-                            <h2 class="text-base sm:text-lg font-bold text-gray-900">Elanın Təsviri</h2>
-                        </div>
-
-                        <div class="text-gray-700 text-sm leading-relaxed whitespace-pre-line">
-                            {{ $car->display_description }}
                         </div>
                     </div>
                 @endif
@@ -322,10 +395,10 @@
                             <div class="text-xs text-gray-500 font-medium mt-0.5 flex items-center gap-1">
                                 @if($car->autosalon)
                                     <span class="text-emerald-700 font-semibold flex items-center gap-0.5">
-                                        <i class="bi bi-patch-check-fill text-xs"></i> Rəsmi Avtosalon
+                                        <i class="bi bi-patch-check-fill text-xs"></i> {{ __('car.dealer_seller') }}
                                     </span>
                                 @else
-                                    <span>Şəxsi Sahibindən</span>
+                                    <span>{{ __('car.private_seller') }}</span>
                                 @endif
                             </div>
                         </div>
@@ -348,12 +421,12 @@
                         @if($whatsapp)
                             @php
                                 $cleanWa = preg_replace('/[^0-9]/', '', $whatsapp);
-                                $waMsg = urlencode("Salam, araba.kibriskare.com saytındakı {$car->display_title} elanı ilə bağlı yazıram: " . url()->current());
+                                $waMsg = urlencode(__('Merhaba, araba.kibriskare.com sitesindeki :title ilanı ile ilgili bilgi almak istiyorum: :url', ['title' => $car->display_title, 'url' => url()->current()]));
                             @endphp
                             <a href="https://wa.me/{{ $cleanWa }}?text={{ $waMsg }}" target="_blank" rel="noopener"
                                class="w-full py-3 px-4 bg-emerald-600 hover:bg-emerald-700 text-white font-bold rounded-2xl text-sm transition shadow-sm flex items-center justify-center gap-2">
                                 <i class="bi bi-whatsapp text-base"></i>
-                                <span>WhatsApp ilə Yaz</span>
+                                <span>{{ __('car.whatsapp_chat') }}</span>
                             </a>
                         @endif
                     </div>
@@ -364,27 +437,36 @@
                         <div onclick="openAdvanceModal()"
                              class="js-btn-advance bg-white hover:bg-emerald-50/50 border border-gray-200/90 hover:border-emerald-300 rounded-2xl p-3 flex flex-col justify-between cursor-pointer transition shadow-2xs group">
                             <div class="flex items-center justify-between">
-                                <span class="text-xs sm:text-sm font-bold text-gray-800 group-hover:text-emerald-700 transition">{{ __('property.advance_ad') }}</span>
+                                <span class="text-xs sm:text-sm font-bold text-gray-800 group-hover:text-emerald-700 transition">{{ __('promotion.advance_ad') }}</span>
                                 <span class="w-6 h-6 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center text-xs font-bold group-hover:bg-emerald-600 group-hover:text-white transition"><i class="fa-solid fa-arrow-up"></i></span>
                             </div>
-                            <span class="text-[11px] font-semibold text-blue-600 mt-1.5">{{ __('property.from_azn', ['amount' => 3]) }}</span>
+                            <span class="text-[11px] font-semibold text-blue-600 mt-1.5">{{ __('promotion.from_price', ['amount' => 50]) }}</span>
                         </div>
 
                         <!-- Premium -->
                         <div onclick="openPremiumModal()"
                              class="js-btn-premium bg-white hover:bg-amber-50/50 border border-gray-200/90 hover:border-amber-300 rounded-2xl p-3 flex flex-col justify-between cursor-pointer transition shadow-2xs group">
                             <div class="flex items-center justify-between">
-                                <span class="text-xs sm:text-sm font-bold text-gray-800 group-hover:text-amber-700 transition">{{ __('property.premium_ad') }}</span>
+                                <span class="text-xs sm:text-sm font-bold text-gray-800 group-hover:text-amber-700 transition">{{ __('promotion.premium_ad') }}</span>
                                 <span class="w-6 h-6 rounded-lg bg-amber-50 text-amber-500 flex items-center justify-center text-xs font-bold group-hover:bg-amber-500 group-hover:text-white transition"><i class="fa-solid fa-crown"></i></span>
                             </div>
-                            <span class="text-[11px] font-semibold text-blue-600 mt-1.5">{{ __('property.from_azn', ['amount' => 7]) }}</span>
+                            <span class="text-[11px] font-semibold text-blue-600 mt-1.5">{{ __('promotion.from_price', ['amount' => 150]) }}</span>
                         </div>
                     </div>
 
                     <!-- Safety Note -->
                     <div class="pt-3 border-t border-gray-100 flex items-start gap-2.5 text-[11px] text-gray-500 leading-tight">
                         <i class="bi bi-shield-lock text-gray-400 text-sm mt-0.5"></i>
-                        <span>Avtomobili şəxsən görmədən və texniki yoxlamadan keçirmədən beh və ya ödəniş göndərməyin.</span>
+                        <span>{{ __('Aracı görmeden ve ekspertiz yaptırmadan kapora veya ön ödeme göndermeyiniz.') }}</span>
+                    </div>
+
+                    <!-- Report Ad Button -->
+                    <div class="pt-2 border-t border-gray-100">
+                        <button type="button" onclick="openReportModal()"
+                                class="w-full flex items-center justify-center gap-1.5 py-1.5 text-xs text-gray-400 hover:text-rose-600 transition font-medium">
+                            <i class="bi bi-flag text-xs"></i>
+                            <span>{{ __('Hatalı / Şüpheli İlanı Bildir') }}</span>
+                        </button>
                     </div>
                 </div>
             </div>
@@ -394,13 +476,13 @@
         @if($similarCars->count() > 0)
             <div class="mt-12 space-y-5">
                 <div class="flex items-center justify-between">
-                    <h2 class="text-xl sm:text-2xl font-extrabold text-gray-900 tracking-tight">Oxşar Avtomobil Elanları</h2>
+                    <h2 class="text-xl sm:text-2xl font-extrabold text-gray-900 tracking-tight">{{ __('car.similar_cars') }}</h2>
                     <a href="{{ route('listing', ['brand_id' => $car->brand_id]) }}" class="text-xs font-bold text-[var(--primary)] hover:underline">
-                        Bütün {{ $car->brand?->name }} elanları &rarr;
+                        {{ __('Tüm :brand Araçları', ['brand' => $car->brand?->name]) }} &rarr;
                     </a>
                 </div>
 
-                <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 sm:gap-5">
+                <div class="grid grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-4 lg:gap-5">
                     @foreach($similarCars as $sCar)
                         <x-car-card :car="$sCar" />
                     @endforeach
@@ -408,6 +490,9 @@
             </div>
         @endif
     </div>
+
+    <!-- Report Modal -->
+    <x-car.report-modal :car="$car" />
 
     <!-- Promotion Modals -->
     @include('components.car.move-forward-modal')
@@ -518,5 +603,38 @@
                 if (e.target === modalPremium) modalPremium.style.display = 'none';
             });
         });
+
+        async function toggleAdSold(carId) {
+            const btn = document.getElementById('btnMarkSold');
+            const txt = document.getElementById('markSoldText');
+            const st = document.getElementById('ownerAdStatus');
+            if (!confirm('{{ __('İlan durumunu dəyişmək istədiyinizdən əminsiniz?') }}')) return;
+
+            try {
+                const response = await fetch(`/araba/${carId}/satildi-isaretle`, {
+                    method: 'POST',
+                    headers: {
+                        'X-CSRF-TOKEN': '{{ csrf_token() }}',
+                        'Accept': 'application/json',
+                    }
+                });
+                const data = await response.json();
+                if (data.success) {
+                    if (st) st.textContent = data.status;
+                    if (data.status === 'sold') {
+                        btn.className = 'px-3.5 py-1.5 bg-amber-600 hover:bg-amber-700 text-white rounded-xl text-xs font-bold transition shadow-2xs flex items-center gap-1.5';
+                        if (txt) txt.textContent = '{{ __('Təkrar Yayına Al') }}';
+                    } else {
+                        btn.className = 'px-3.5 py-1.5 bg-emerald-600 hover:bg-emerald-700 text-white rounded-xl text-xs font-bold transition shadow-2xs flex items-center gap-1.5';
+                        if (txt) txt.textContent = '{{ __('Satıldı Olarak İşarələ') }}';
+                    }
+                    alert(data.message);
+                } else {
+                    alert(data.message || 'Xəta baş verdi');
+                }
+            } catch (e) {
+                alert('Xəta baş verdi.');
+            }
+        }
     </script>
 @endsection

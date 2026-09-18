@@ -80,17 +80,40 @@ class ModuleServiceProvider extends ServiceProvider
                     $request->is('build*') ||
                     $request->is('vendor*') ||
                     $request->is('storage*') ||
+                    $request->is('sm*') ||
                     $request->is('*reveal-phone*')
                 ) {
                     abort(404);
                 }
 
+                $supportedLocales = ['az', 'en', 'ru', 'tr'];
+                $firstSegment = strtolower((string) $request->segment(1));
+                $path = ltrim($request->path(), '/');
+
+                // 1. Əgər sorğu artıq bir dil prefiksi ilə başlayırsa (məs: /tr/tapilmadi),
+                // bu mövcud olmayan səhifədir, qətiyyən yenidən /tr/ əlavə edib redirect etmə (loop yaratma)!
+                if (in_array($firstSegment, $supportedLocales, true)) {
+                    abort(404);
+                }
+
+                // 2. Əgər fayl uzantısı varsa (məs: .map, .js, .png və s.) və ya təkrarlanan prefikslər varsa -> 404
+                if (
+                    preg_match('/\.(map|js|css|png|jpg|jpeg|gif|ico|svg|webp|woff|woff2|ttf|eot|xml|txt|json)$/i', $path) ||
+                    preg_match('#^(az|en|ru|tr)/(az|en|ru|tr)(/|$)#i', $path)
+                ) {
+                    abort(404);
+                }
+
+                // 3. Yalnız təmiz, dilsiz GET/HEAD səhifə sorğuları üçün yönləndir
+                if (!$request->isMethodSafe()) {
+                    abort(404);
+                }
+
                 $locale = session('lang', config('app.locale', 'tr'));
-                if (!in_array($locale, ['az', 'en', 'ru', 'tr'], true)) {
+                if (!in_array($locale, $supportedLocales, true)) {
                     $locale = 'tr';
                 }
 
-                $path = ltrim($request->path(), '/');
                 $query = $request->getQueryString() ? '?' . $request->getQueryString() : '';
 
                 return redirect()->to('/' . $locale . '/' . $path . $query);

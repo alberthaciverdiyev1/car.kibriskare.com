@@ -190,7 +190,7 @@
                 @endif
             </div>
         @else
-            <div class="relative h-40 sm:h-56 bg-gradient-to-r from-orange-500 to-amber-600 flex items-center justify-center">
+            <div class="relative h-40 sm:h-56 bg-orange-500 flex items-center justify-center">
                 @if($blog->category)
                     <span class="bg-white/20 backdrop-blur text-white text-xs font-semibold px-3 py-1.5 rounded-full">
                         {{ $blog->category }}

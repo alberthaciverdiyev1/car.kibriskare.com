@@ -25,7 +25,8 @@ class SetLocale
             return $next($request);
         }
 
-        // Skip non-public / internal / asset paths
+        // Skip non-public / internal / asset paths & any requests with file extensions
+        $path = ltrim($request->path(), '/');
         if (
             $request->is('api*') ||
             $request->is('livewire*') ||
@@ -38,11 +39,19 @@ class SetLocale
             $request->is('js*') ||
             $request->is('images*') ||
             $request->is('fonts*') ||
+            $request->is('sm*') ||
             $request->is('favicon.ico') ||
             $request->is('robots.txt') ||
-            $request->is('sitemap*.xml')
+            $request->is('sitemap*.xml') ||
+            $request->is('*reveal-phone*') ||
+            preg_match('/\.(map|js|css|png|jpg|jpeg|gif|ico|svg|webp|woff|woff2|ttf|eot|xml|txt|json)$/i', $path)
         ) {
             return $next($request);
+        }
+
+        // Prevent repeated/chained locale prefix loops (e.g. /tr/tr/..., /tr/az/..., etc.)
+        if (preg_match('#^(az|en|ru|tr)/(az|en|ru|tr)(/|$)#i', $path)) {
+            abort(404);
         }
 
         // If URL starts with a valid language prefix (az, en, ru, tr)
@@ -55,6 +64,11 @@ class SetLocale
             return $next($request);
         }
 
+        // Non-GET/HEAD requests without language prefix should not be redirected blindly
+        if (!$request->isMethodSafe()) {
+            return $next($request);
+        }
+
         // If URL has NO language prefix, detect active/session language (default: tr) and redirect to /<locale>/...
         $locale = session('lang', config('app.locale', 'tr'));
         if (!in_array($locale, $supportedLocales, true)) {
@@ -63,8 +77,7 @@ class SetLocale
         app()->setLocale($locale);
         URL::defaults(['locale' => $locale]);
 
-        $path = $request->path();
-        $targetPath = '/' . $locale . ($path === '/' || $path === '' ? '' : '/' . $path);
+        $targetPath = '/' . $locale . ($path === '' ? '' : '/' . $path);
         $query = $request->getQueryString() ? '?' . $request->getQueryString() : '';
 
         return redirect()->to($targetPath . $query);

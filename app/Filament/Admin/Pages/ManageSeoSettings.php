@@ -60,14 +60,9 @@ class ManageSeoSettings extends Page implements HasForms
         $iconMap = [
             'home' => 'heroicon-o-home',
             'listing_sale' => 'heroicon-o-tag',
-            'listing_rent_monthly' => 'heroicon-o-key',
             'listing_rent_daily' => 'heroicon-o-calendar',
-            'requests' => 'heroicon-o-megaphone',
-            'requests_create' => 'heroicon-o-plus-circle',
-            'roommates' => 'heroicon-o-user-group',
-            'roommates_create' => 'heroicon-o-user-plus',
-            'add_property' => 'heroicon-o-document-plus',
-            'agencies' => 'heroicon-o-building-office-2',
+            'add_car' => 'heroicon-o-plus-circle',
+            'autosalons' => 'heroicon-o-building-office-2',
             'blog' => 'heroicon-o-newspaper',
             'contact' => 'heroicon-o-phone',
             'about' => 'heroicon-o-information-circle',
@@ -87,10 +82,10 @@ class ManageSeoSettings extends Page implements HasForms
                         ->description('Axtarış sistemləri üçün səhifənin əsas H1 başlığı (HTML daxilində gizli saxlanılır)')
                         ->schema([
                             Grid::make(2)->schema([
-                                TextInput::make("pages.{$key}.h1.tr")->label('H1 (Türkcə)')->placeholder('məs: Kuzey Kıbrıs Satılık Evler'),
-                                TextInput::make("pages.{$key}.h1.az")->label('H1 (Azərbaycanca)')->placeholder('məs: Şimali Kipr Satılıq Evlər'),
-                                TextInput::make("pages.{$key}.h1.en")->label('H1 (İngiliscə)')->placeholder('e.g: Properties For Sale in Northern Cyprus'),
-                                TextInput::make("pages.{$key}.h1.ru")->label('H1 (Rusca)')->placeholder('напр: Недвижимость на Северном Кипре'),
+                                TextInput::make("pages.{$key}.h1.tr")->label('H1 (Türkcə)')->placeholder('məs: Kuzey Kıbrıs Satılık Araçlar'),
+                                TextInput::make("pages.{$key}.h1.az")->label('H1 (Azərbaycanca)')->placeholder('məs: Şimali Kipr Satılıq Avtomobillər'),
+                                TextInput::make("pages.{$key}.h1.en")->label('H1 (İngiliscə)')->placeholder('e.g: Cars For Sale in Northern Cyprus'),
+                                TextInput::make("pages.{$key}.h1.ru")->label('H1 (Rusca)')->placeholder('напр: Продажа автомобилей на Северном Кипре'),
                             ]),
                         ])
                         ->collapsible(),

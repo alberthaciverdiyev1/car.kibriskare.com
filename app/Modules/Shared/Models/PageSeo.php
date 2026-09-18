@@ -116,25 +116,9 @@ class PageSeo extends Model
         }
 
         // 2. Specific static sections & modules (before wildcard routes)
-        if (str_starts_with($cleanPath, 'requests') || str_starts_with($cleanPath, 'telebler') || str_starts_with($cleanPath, 'ariyorum')) {
+        if (str_starts_with($cleanPath, 'avtosalonlar') || str_starts_with($cleanPath, 'autosalons') || str_starts_with($cleanPath, 'galeriler') || str_starts_with($cleanPath, 'agencies')) {
             static::$memoizedRequestKey = $requestKey;
-            if (str_contains($cleanPath, 'create') || str_contains($cleanPath, 'elave-et') || str_contains($cleanPath, 'ilan-ver')) {
-                return static::$memoizedCurrent = ($all['requests_create'] ?? null);
-            }
-            return static::$memoizedCurrent = ($all['requests'] ?? null);
-        }
-
-        if (str_starts_with($cleanPath, 'roommates') || str_starts_with($cleanPath, 'otaq-yoldasi') || str_starts_with($cleanPath, 'oda-arkadasi')) {
-            static::$memoizedRequestKey = $requestKey;
-            if (str_contains($cleanPath, 'create') || str_contains($cleanPath, 'elave-et') || str_contains($cleanPath, 'ilan-ver')) {
-                return static::$memoizedCurrent = ($all['roommates_create'] ?? null);
-            }
-            return static::$memoizedCurrent = ($all['roommates'] ?? null);
-        }
-
-        if (str_starts_with($cleanPath, 'emlak-ofisleri') || str_starts_with($cleanPath, 'agencies') || str_starts_with($cleanPath, 'agentlikler') || str_starts_with($cleanPath, 'acenteler')) {
-            static::$memoizedRequestKey = $requestKey;
-            return static::$memoizedCurrent = ($all['agencies'] ?? null);
+            return static::$memoizedCurrent = ($all['autosalons'] ?? $all['agencies'] ?? null);
         }
 
         if (str_starts_with($cleanPath, 'blog') || str_starts_with($cleanPath, 'meqaleler') || str_starts_with($cleanPath, 'bloq')) {
@@ -167,9 +151,9 @@ class PageSeo extends Model
             return static::$memoizedCurrent = ($all['favorites'] ?? null);
         }
 
-        if (str_starts_with($cleanPath, 'add-property') || str_starts_with($cleanPath, 'elan-yerlesdir') || str_starts_with($cleanPath, 'ilan-ver')) {
+        if (str_starts_with($cleanPath, 'add-car') || str_starts_with($cleanPath, 'elan-yerlesdir') || str_starts_with($cleanPath, 'araba-ekle') || str_starts_with($cleanPath, 'ilan-ver')) {
             static::$memoizedRequestKey = $requestKey;
-            return static::$memoizedCurrent = ($all['add_property'] ?? null);
+            return static::$memoizedCurrent = ($all['add_car'] ?? $all['add_property'] ?? null);
         }
 
         // 3. Deal type / Listing subpaths (Satılıq vs Kirayə vs Günlük)
@@ -246,269 +230,149 @@ class PageSeo extends Model
                 'route_name' => 'home',
                 'sort_order' => 1,
                 'h1' => [
-                    'tr' => 'Kuzey Kıbrıs Emlak, Satılık ve Kiralık Ev İlanları',
-                    'az' => 'Şimali Kipr Əmlak, Satılıq və Kirayə Ev Elanları',
-                    'en' => 'Northern Cyprus Real Estate, Properties for Sale & Rent',
-                    'ru' => 'Недвижимость на Северном Кипре: Продажа и Аренда',
+                    'tr' => 'Kuzey Kıbrıs Satılık ve Kiralık Araç İlanları, Oto Galeriler',
+                    'az' => 'Şimali Kipr Satılıq və Kirayə Avtomobillər, Avtosalon Elanları',
+                    'en' => 'Northern Cyprus Cars for Sale & Rent, Auto Salon Listings',
+                    'ru' => 'Продажа и аренда авто на Северном Кипре, каталог автосалонов',
                 ],
                 'title' => [
-                    'tr' => 'KibrisKare - Kuzey Kıbrıs Emlak İlanları ve Satılık Evler',
-                    'az' => 'KibrisKare - Şimali Kipr Əmlak Elanları və Satılıq Evlər',
-                    'en' => 'KibrisKare - Northern Cyprus Real Estate & Property Listings',
-                    'ru' => 'KibrisKare - Недвижимость на Северном Кипре',
+                    'tr' => 'araba.kibriskare.com - KKTC Satılık ve Kiralık Araçlar, Oto Pazarı',
+                    'az' => 'araba.kibriskare.com - Şimali Kipr Satılıq və Kirayə Maşınlar',
+                    'en' => 'araba.kibriskare.com - North Cyprus Cars for Sale & Rent',
+                    'ru' => 'araba.kibriskare.com - Автомобили на Северном Кипре',
                 ],
                 'description' => [
-                    'tr' => 'Kuzey Kıbrıs genelinde binlerce satılık ve kiralık villa, daire, arsa ve iş yeri ilanları.',
-                    'az' => 'Şimali Kipr üzrə minlərlə satılıq və kirayə villa, mənzil, torpaq və kommersiya elanları.',
-                    'en' => 'Thousands of villas, apartments, land and commercial properties for sale and rent in Northern Cyprus.',
-                    'ru' => 'Тысячи предложений вилл, квартир и участков на продажу и аренду на Северном Кипре.',
+                    'tr' => 'Kuzey Kıbrıs genelinde binlerce satılık ve günlük kiralık (rent a car) araç ilanları, güncel oto galeri kataloğu.',
+                    'az' => 'Şimali Kipr üzrə minlərlə satılıq və günlük kirayə (rent a car) avtomobil elanları, aktual avtosalon kataloqu.',
+                    'en' => 'Browse thousands of cars for sale and daily rentals (rent a car) across Northern Cyprus from verified dealers.',
+                    'ru' => 'Тысячи предложений покупки и аренды автомобилей (rent a car) на Северном Кипре.',
                 ],
             ],
             [
                 'page_key' => 'listing_sale',
-                'page_name' => 'Satılıq Əmlaklar',
+                'page_name' => 'Satılıq Avtomobillər',
                 'route_name' => 'listing.path1',
                 'sort_order' => 2,
                 'h1' => [
-                    'tr' => 'Kuzey Kıbrıs Satılık Evler, Villalar ve Daireler',
-                    'az' => 'Şimali Kiprdə Satılıq Evlər, Villalar və Mənzillər',
-                    'en' => 'Houses, Villas and Apartments for Sale in Northern Cyprus',
-                    'ru' => 'Продажа домов, вилл и квартир на Северном Кипре',
+                    'tr' => 'Kuzey Kıbrıs Satılık 2. El ve Sıfır Araçlar',
+                    'az' => 'Şimali Kiprdə Satılıq 2-ci Əl və Yeni Avtomobillər',
+                    'en' => 'Used and New Cars for Sale in Northern Cyprus',
+                    'ru' => 'Продажа новых и подержанных авто на Северном Кипре',
                 ],
                 'title' => [
-                    'tr' => 'Kuzey Kıbrıs Satılık Evler, Villalar ve Daireler - KibrisKare',
-                    'az' => 'Şimali Kipr Satılıq Evlər, Villalar və Mənzillər - KibrisKare',
-                    'en' => 'Properties For Sale in Northern Cyprus - Villas & Apartments',
-                    'ru' => 'Купить недвижимость на Северном Кипре - Виллы и квартиры',
+                    'tr' => 'Kuzey Kıbrıs Satılık Araçlar ve 2. El Otomobiller - KibrisKare',
+                    'az' => 'Şimali Kipr Satılıq Avtomobillər və İkinci Əl Maşınlar - KibrisKare',
+                    'en' => 'Cars For Sale in Northern Cyprus - Used & New Vehicles',
+                    'ru' => 'Купить автомобиль на Северном Кипре - Авторынок KKTC',
                 ],
                 'description' => [
-                    'tr' => 'Girne, Lefkoşa, Gazimağusa ve İskele bölgelerinde en uygun fiyatlı satılık evler, lüks villalar ve yatırımlık daireler.',
-                    'az' => 'Girnə, Lefkoşa, Qazimağusa və İskele bölgələrində ən sərfəli qiymətə satılıq evlər, lüks villalar və investisiya mənzilləri.',
-                    'en' => 'Best priced houses, luxury villas, and investment apartments for sale in Kyrenia, Nicosia, Famagusta and Iskele.',
-                    'ru' => 'Лучшие предложения по продаже домов, элитных вилл и инвестиционных квартир на Северном Кипре.',
-                ],
-            ],
-            [
-                'page_key' => 'listing_rent_monthly',
-                'page_name' => 'Kirayə Əmlaklar (Aylıq)',
-                'route_name' => 'listing.path2',
-                'sort_order' => 3,
-                'h1' => [
-                    'tr' => 'Kuzey Kıbrıs Kiralık Evler ve Daireler (Aylık)',
-                    'az' => 'Şimali Kiprdə Aylıq Kirayə Evlər və Mənzillər',
-                    'en' => 'Long Term & Monthly Rentals in Northern Cyprus',
-                    'ru' => 'Долгосрочная аренда квартир и домов на Северном Кипре',
-                ],
-                'title' => [
-                    'tr' => 'Kuzey Kıbrıs Kiralık Evler ve Daireler (Aylık) - KibrisKare',
-                    'az' => 'Şimali Kipr Kirayə Evlər və Mənzillər (Aylıq) - KibrisKare',
-                    'en' => 'Long Term & Monthly Rentals in Northern Cyprus - KibrisKare',
-                    'ru' => 'Аренда квартир и домов на Северном Кипре помесячно',
-                ],
-                'description' => [
-                    'tr' => 'Kıbrıs genelinde eşyalı veya eşyasız, uygun fiyatlı aylık kiralık daireler, siteler ve müstakil evler.',
-                    'az' => 'Kipr üzrə əşyalı və ya əşyasız, münasib qiymətə aylıq kirayə mənzillər, yaşayış kompleksləri və həyət evləri.',
-                    'en' => 'Furnished and unfurnished monthly rental apartments, residences, and houses across Northern Cyprus.',
-                    'ru' => 'Меблированные и без мебели квартиры и дома в долгосрочную аренду на Северном Кипре.',
+                    'tr' => 'Girne, Lefkoşa, Gazimağusa ve İskele genelinde en uygun fiyatlı satılık sedan, SUV, hatchback ve ticari araçlar.',
+                    'az' => 'Girnə, Lefkoşa, Qazimağusa və İskele üzrə ən sərfəli qiymətə satılıq sedan, SUV, hetçbek və kommersiya avtomobilləri.',
+                    'en' => 'Best priced sedans, SUVs, hatchbacks and commercial vehicles for sale across Northern Cyprus.',
+                    'ru' => 'Седаны, внедорожники, хэтчбеки и коммерческий транспорт на продажу по всему Северному Кипру.',
                 ],
             ],
             [
                 'page_key' => 'listing_rent_daily',
-                'page_name' => 'Günlük Kirayə Əmlaklar (Tətil/Qısa Müddətli)',
+                'page_name' => 'Kirayə Avtomobillər (Rent a Car)',
                 'route_name' => 'listing.path2',
+                'sort_order' => 3,
+                'h1' => [
+                    'tr' => 'Kuzey Kıbrıs Günlük Kiralık Araçlar ve Rent a Car Fırsatları',
+                    'az' => 'Şimali Kiprdə Günlük Kirayə Avtomobillər və Rent a Car',
+                    'en' => 'Car Rental & Daily Hire in Northern Cyprus (Rent a Car)',
+                    'ru' => 'Посуточная аренда автомобилей и Rent a Car на Кипре',
+                ],
+                'title' => [
+                    'tr' => 'Kıbrıs Rent a Car - Günlük ve Dönemlik Kiralık Araçlar - KibrisKare',
+                    'az' => 'Kipr Rent a Car - Günlük Kirayə Avtomobillər - KibrisKare',
+                    'en' => 'Car Rental & Daily Hire in Northern Cyprus - KibrisKare',
+                    'ru' => 'Аренда авто посуточно на Северном Кипре - KibrisKare',
+                ],
+                'description' => [
+                    'tr' => 'Ercan Havalimanı teslimatlı, kaskolu ve uygun fiyatlı günlük kiralık araçlar, rent a car filoları.',
+                    'az' => 'Ercan Hava Limanında təhvil verilən, sığortalı və münasib qiymətə günlük kirayə avtomobillər.',
+                    'en' => 'Affordable and insured daily rental cars with Ercan Airport delivery across Northern Cyprus.',
+                    'ru' => 'Выгодная аренда автомобилей с подачей в аэропорт Эрджан на Северном Кипре.',
+                ],
+            ],
+            [
+                'page_key' => 'add_car',
+                'page_name' => 'Yeni Elan Yerləşdir (Avtomobilini Sat / Kirayə Ver)',
+                'route_name' => 'add-car',
                 'sort_order' => 4,
                 'h1' => [
-                    'tr' => 'Kuzey Kıbrıs Günlük Kiralık Villalar ve Tatil Evleri',
-                    'az' => 'Şimali Kiprdə Günlük Kirayə Villalar və İstirahət Evləri',
-                    'en' => 'Daily Vacation Rentals & Luxury Villas in Cyprus',
-                    'ru' => 'Посуточная аренда вилл и апартаментов на Кипре',
+                    'tr' => 'Ücretsiz Araç İlanı Ver, Arabanı Hızla Sat veya Kirala',
+                    'az' => 'Pulsuz Avtomobil Elanı Yerləşdir, Maşınını Tez Sat və ya Kirayə Ver',
+                    'en' => 'Post Free Car Listing in Northern Cyprus',
+                    'ru' => 'Подать бесплатное объявление о продаже или аренде авто на Кипре',
                 ],
                 'title' => [
-                    'tr' => 'Kıbrıs Günlük Kiralık Villalar ve Tatil Evleri - KibrisKare',
-                    'az' => 'Kipr Günlük Kirayə Villalar və İstirahət Evləri - KibrisKare',
-                    'en' => 'Holiday Homes & Daily Villa Rentals in Northern Cyprus',
-                    'ru' => 'Посуточная аренда вилл и апартаментов для отдыха на Кипре',
+                    'tr' => 'Ücretsiz Araç İlanı Ver - Arabanı Sat veya Kirala - KibrisKare',
+                    'az' => 'Pulsuz Avtomobil Elanı Yerləşdir - KibrisKare',
+                    'en' => 'Post Free Vehicle Listing - Sell or Rent Cars in Cyprus',
+                    'ru' => 'Подать бесплатное объявление о продаже авто - KibrisKare',
                 ],
                 'description' => [
-                    'tr' => 'Kuzey Kıbrıs’ta unutulmaz bir tatil için havuzlu lüks villalar ve denize sıfır günlük kiralık daireler.',
-                    'az' => 'Şimali Kiprdə unudulmaz tətil üçün hovuzlu lüks villalar və dəniz kənarı günlük kirayə evlər.',
-                    'en' => 'Luxury villas with private pool and beachfront apartments for daily vacation rentals in Cyprus.',
-                    'ru' => 'Элитные виллы с бассейном и апартаменты у моря в посуточную аренду на Северном Кипре.',
+                    'tr' => 'Aracınızı binlerce alıcıya ve kiralayana kolayca ulaştırın. Hızlı ve ücretsiz ilan ekleme.',
+                    'az' => 'Avtomobilinizi minlərlə alıcı və icarəçiyə asanlıqla çatdırın. Sürətli və pulsuz elan yerləşdirmə.',
+                    'en' => 'Reach thousands of car buyers and renters across Northern Cyprus with quick free listing.',
+                    'ru' => 'Разместите объявление об автомобиле и найдите покупателей быстро и удобно.',
                 ],
             ],
             [
-                'page_key' => 'requests',
-                'page_name' => 'Əmlak Tələbləri (Axtarıram)',
-                'route_name' => 'requests.index',
+                'page_key' => 'autosalons',
+                'page_name' => 'Oto Galerilər (Avtosalonlar)',
+                'route_name' => 'autosalons.index',
                 'sort_order' => 5,
                 'h1' => [
-                    'tr' => 'Alıcı ve Kiracı Gayrimenkul Talepleri (Arıyorum)',
-                    'az' => 'Alıcı və Kirayəçi Daşınmaz Əmlak Tələbləri (Axtarıram)',
-                    'en' => 'Buyer and Tenant Property Requests in Cyprus',
-                    'ru' => 'Запросы клиентов на покупку и аренду недвижимости',
+                    'tr' => 'Kuzey Kıbrıs Yetkili Oto Galerileri ve Araç Satıcıları',
+                    'az' => 'Şimali Kipr Avtosalonları və Rəsmi Qalereyalar',
+                    'en' => 'Auto Salons and Authorized Car Dealerships in Northern Cyprus',
+                    'ru' => 'Автосалоны и официальные дилеры Северного Кипра',
                 ],
                 'title' => [
-                    'tr' => 'Alıcı ve Kiracı Talepleri (Arıyorum) - KibrisKare',
-                    'az' => 'Alıcı və Kirayəçi Tələbləri (Axtarıram) - KibrisKare',
-                    'en' => 'Buyer & Tenant Property Inquiries & Requests - KibrisKare',
-                    'ru' => 'Запросы покупателей и арендаторов на недвижимость',
+                    'tr' => 'Kuzey Kıbrıs Güvenilir Oto Galerileri ve Satıcılar - KibrisKare',
+                    'az' => 'Şimali Kipr Etibarlı Avtosalonları - KibrisKare',
+                    'en' => 'Trusted Auto Salons & Dealers in Northern Cyprus - KibrisKare',
+                    'ru' => 'Автосалоны и автодилеры Северного Кипра - KibrisKare',
                 ],
                 'description' => [
-                    'tr' => 'Kuzey Kıbrıs emlak pazarında alıcı ve kiracıların paylaştığı güncel gayrimenkul talepleri.',
-                    'az' => 'Şimali Kipr əmlak bazarında alıcı və kirayəçilərin paylaşdığı aktual daşınmaz əmlak tələbləri.',
-                    'en' => 'Active property requests posted by buyers and tenants in Northern Cyprus.',
-                    'ru' => 'Актуальные запросы клиентов на покупку и аренду недвижимости на Северном Кипре.',
-                ],
-            ],
-            [
-                'page_key' => 'requests_create',
-                'page_name' => 'Tələb Yerləşdir (Axtarıram Elan Et)',
-                'route_name' => 'requests.create',
-                'sort_order' => 6,
-                'h1' => [
-                    'tr' => 'Gayrimenkul Talebi Oluştur ve Aradığın Evi Bul',
-                    'az' => 'Əmlak Tələbi Yerləşdir və Axtardığın Evi Tap',
-                    'en' => 'Post a Property Request in Northern Cyprus',
-                    'ru' => 'Оставить заявку на подбор недвижимости на Кипре',
-                ],
-                'title' => [
-                    'tr' => 'Gayrimenkul Talebi Oluştur (Arıyorum İlanı Ver) - KibrisKare',
-                    'az' => 'Əmlak Tələbi Yerləşdir (Axtarıram Elanı Ver) - KibrisKare',
-                    'en' => 'Post a Property Request - Find Your Dream Home in Cyprus',
-                    'ru' => 'Оставить заявку на поиск недвижимости на Кипре',
-                ],
-                'description' => [
-                    'tr' => 'Aradığınız evin kriterlerini ve bütçenizi paylaşın, Kıbrıs acenteleri ve sahipleri size ulaşsın.',
-                    'az' => 'Axtardığınız evin parametrlərini və büdcənizi qeyd edin, Kipr agentlikləri və mülkiyyətçiləri sizə təklif göndərsin.',
-                    'en' => 'Submit your property requirements and budget to receive offers directly from verified agencies and owners.',
-                    'ru' => 'Укажите критерии желаемой недвижимости, и агенты свяжутся с вами с подходящими предложениями.',
-                ],
-            ],
-            [
-                'page_key' => 'roommates',
-                'page_name' => 'Otaq Yoldaşı Elanları',
-                'route_name' => 'roommates.index',
-                'sort_order' => 7,
-                'h1' => [
-                    'tr' => 'Kuzey Kıbrıs Oda Arkadaşı ve Paylaşımlı Ev İlanları',
-                    'az' => 'Şimali Kipr Otaq Yoldaşı və Həmyoldaş Elanları',
-                    'en' => 'Roommates and Flatshare Listings in Northern Cyprus',
-                    'ru' => 'Поиск соседей по комнате и совместная аренда на Кипре',
-                ],
-                'title' => [
-                    'tr' => 'Kuzey Kıbrıs Oda Arkadaşı ve Paylaşımlı Ev İlanları - KibrisKare',
-                    'az' => 'Şimali Kipr Otaq Yoldaşı və Həmyoldaş Elanları - KibrisKare',
-                    'en' => 'Roommates & Flatshare in Northern Cyprus - KibrisKare',
-                    'ru' => 'Поиск соседей по комнате и совместная аренда на Кипре',
-                ],
-                'description' => [
-                    'tr' => 'Öğrenciler ve çalışanlar için Kıbrıs genelinde güvenilir oda arkadaşı ve ortak ev kiralama ilanları.',
-                    'az' => 'Tələbələr və işləyənlər üçün Kipr üzrə etibarlı otaq yoldaşı və paylaşılan mənzil elanları.',
-                    'en' => 'Find verified roommates and shared flats in Northern Cyprus for students and professionals.',
-                    'ru' => 'Объявления о поиске соседей для совместной аренды жилья на Северном Кипре.',
-                ],
-            ],
-            [
-                'page_key' => 'roommates_create',
-                'page_name' => 'Otaq Yoldaşı Elanı Əlavə Et',
-                'route_name' => 'roommates.create',
-                'sort_order' => 8,
-                'h1' => [
-                    'tr' => 'Oda Arkadaşı İlanı Ver',
-                    'az' => 'Otaq Yoldaşı Elanı Yerləşdir',
-                    'en' => 'Post a Roommate Listing in Northern Cyprus',
-                    'ru' => 'Подать объявление о поиске соседа по комнате',
-                ],
-                'title' => [
-                    'tr' => 'Oda Arkadaşı İlanı Ver - KibrisKare',
-                    'az' => 'Otaq Yoldaşı Elanı Yerləşdir - KibrisKare',
-                    'en' => 'Post a Roommate Listing - KibrisKare',
-                    'ru' => 'Подать объявление о поиске соседа по комнате',
-                ],
-                'description' => [
-                    'tr' => 'Eviniz veya odanız için en uygun oda arkadaşını hemen bulun.',
-                    'az' => 'Eviniz və ya otağınız üçün ən uyğun otaq yoldaşını dərhal tapın.',
-                    'en' => 'Find the ideal flatmate or roommate for your apartment or house in Cyprus.',
-                    'ru' => 'Разместите объявление о поиске соседа по квартире или комнате на Кипре.',
-                ],
-            ],
-            [
-                'page_key' => 'add_property',
-                'page_name' => 'Yeni Elan Yerləşdir (Əmlakını Sat / Kirayə Ver)',
-                'route_name' => 'add-property',
-                'sort_order' => 9,
-                'h1' => [
-                    'tr' => 'Ücretsiz Emlak İlanı Ver, Evini Sat veya Kirala',
-                    'az' => 'Pulsuz Əmlak Elanı Yerləşdir, Evini Sat və ya Kirayə Ver',
-                    'en' => 'Post Free Property Listing in Northern Cyprus',
-                    'ru' => 'Подать бесплатное объявление о недвижимости на Кипре',
-                ],
-                'title' => [
-                    'tr' => 'Ücretsiz Emlak İlanı Ver - Evini Sat veya Kirala - KibrisKare',
-                    'az' => 'Pulsuz Əmlak Elanı Yerləşdir - Evini Sat və ya Kirayə Ver - KibrisKare',
-                    'en' => 'Post Free Property Ad - Sell or Rent Property in Cyprus',
-                    'ru' => 'Подать бесплатное объявление о продаже или аренде недвижимости',
-                ],
-                'description' => [
-                    'tr' => 'Gayrimenkulünüzü binlerce alıcı ve kiracıya ulaştırın. Hızlı ve kolay ilan ekleme.',
-                    'az' => 'Daşınmaz əmlakınızı minlərlə alıcı və kirayəçiyə çatdırın. Sürətli və asan elan yerləşdirmə.',
-                    'en' => 'Reach thousands of buyers and tenants across Northern Cyprus. Easy and quick listing creation.',
-                    'ru' => 'Разместите объект недвижимости и найдите покупателей или арендаторов быстро и просто.',
-                ],
-            ],
-            [
-                'page_key' => 'agencies',
-                'page_name' => 'Əmlak Agentlikləri',
-                'route_name' => 'agencies.list',
-                'sort_order' => 10,
-                'h1' => [
-                    'tr' => 'Kuzey Kıbrıs Emlak Acenteleri ve Danışmanlık Ofisleri',
-                    'az' => 'Şimali Kipr Əmlak Agentlikləri və Konsaltinq Ofisləri',
-                    'en' => 'Real Estate Agencies and Property Brokers in Northern Cyprus',
-                    'ru' => 'Агентства недвижимости и риелторские компании на Северном Кипре',
-                ],
-                'title' => [
-                    'tr' => 'Kuzey Kıbrıs Güvenilir Emlak Acenteleri ve Ofisleri - KibrisKare',
-                    'az' => 'Şimali Kipr Etibarlı Əmlak Agentlikləri və Ofisləri - KibrisKare',
-                    'en' => 'Trusted Real Estate Agencies in Northern Cyprus - KibrisKare',
-                    'ru' => 'Агентства недвижимости Северного Кипра - KibrisKare',
-                ],
-                'description' => [
-                    'tr' => 'Kuzey Kıbrıs genelinde hizmet veren profesyonel ve kurumsal emlak acentelerini keşfedin.',
-                    'az' => 'Şimali Kipr üzrə fəaliyyət göstərən peşəkar və korporativ əmlak agentliklərini kəşf edin.',
-                    'en' => 'Discover professional and licensed real estate agencies operating in Northern Cyprus.',
-                    'ru' => 'Профессиональные агентства недвижимости, работающие на Северном Кипре.',
+                    'tr' => 'Kuzey Kıbrıs genelinde hizmet veren kurumsal oto galerileri, rent a car şirketleri ve güncel araç stokları.',
+                    'az' => 'Şimali Kipr üzrə fəaliyyət göstərən rəsmi avtosalonlar, rent a car şirkətləri və avtomobil parkları.',
+                    'en' => 'Discover verified auto salons, licensed car dealerships and rental companies in Northern Cyprus.',
+                    'ru' => 'Каталог проверенных автосалонов и прокатных компаний на Северном Кипре.',
                 ],
             ],
             [
                 'page_key' => 'blog',
                 'page_name' => 'Bloq & Xəbərlər',
                 'route_name' => 'blog.list',
-                'sort_order' => 11,
+                'sort_order' => 6,
                 'h1' => [
-                    'tr' => 'Kıbrıs Emlak Rehberi, Yatırım Tavsiyeleri ve Piyasa Haberleri',
-                    'az' => 'Kipr Əmlak Bələdçisi, İnvestisiya Məsləhətləri və Bazar Xəbərləri',
-                    'en' => 'Cyprus Real Estate Guide, Investment News and Articles',
-                    'ru' => 'Новости недвижимости и инвестиционный гид по Северному Кипру',
+                    'tr' => 'Kıbrıs Otomobil Dünyası, Araç İncelemeleri ve Sektör Haberleri',
+                    'az' => 'Kipr Avtomobil Dünyası, Test-Drayv və Sektor Xəbərləri',
+                    'en' => 'Cyprus Automotive News, Car Reviews and Driving Guides',
+                    'ru' => 'Автомобильные новости, тест-драйвы и гид водителя на Кипре',
                 ],
                 'title' => [
-                    'tr' => 'Kıbrıs Emlak Rehberi, Yatırım Tavsiyeleri ve Haberler - Blog',
-                    'az' => 'Kipr Əmlak Bələdçisi, İnvestisiya Məsləhətləri və Xəbərlər - Bloq',
-                    'en' => 'Cyprus Real Estate Guide, Investment Tips & News - Blog',
-                    'ru' => 'Гид по недвижимости Кипра, инвестиции и новости - Блог',
+                    'tr' => 'Kıbrıs Otomobil Rehberi, Araç İncelemeleri ve Haberler - Blog',
+                    'az' => 'Kipr Avtomobil Bələdçisi, Xəbərlər və İcmallar - Bloq',
+                    'en' => 'Cyprus Car Guide, Reviews & Automotive News - Blog',
+                    'ru' => 'Автомобильный гид по Кипру, обзоры и новости - Блог',
                 ],
                 'description' => [
-                    'tr' => 'Kuzey Kıbrıs gayrimenkul yatırımı, yaşam rehberi ve emlak piyasası analizleri.',
-                    'az' => 'Şimali Kipr daşınmaz əmlak investisiyası, yaşayış bələdçisi və bazar analizləri.',
-                    'en' => 'Northern Cyprus property investment, lifestyle guides and real estate market trends.',
-                    'ru' => 'Инвестиции в недвижимость Северного Кипра, аналитика и полезные статьи.',
+                    'tr' => 'Kuzey Kıbrıs araç piyasası analizleri, model incelemeleri, sürüş ipuçları ve güncel otomotiv gelişmeleri.',
+                    'az' => 'Şimali Kipr avtomobil bazarı analizləri, model icmalları və aktual xəbərlər.',
+                    'en' => 'Northern Cyprus automotive market trends, car reviews and driving tips.',
+                    'ru' => 'Обзоры автомобилей, советы водителям и новости авторынка Северного Кипра.',
                 ],
             ],
             [
                 'page_key' => 'contact',
                 'page_name' => 'Əlaqə',
                 'route_name' => 'contact',
-                'sort_order' => 12,
+                'sort_order' => 7,
                 'h1' => [
                     'tr' => 'KibrisKare İletişim ve Müşteri Hizmetleri',
                     'az' => 'KibrisKare Əlaqə və Müştəri Xidmətləri',
@@ -522,22 +386,22 @@ class PageSeo extends Model
                     'ru' => 'Контакты - Служба поддержки KibrisKare',
                 ],
                 'description' => [
-                    'tr' => 'KibrisKare müşteri hizmetleri, ofis adresi, telefon ve mesaj formu ile bize ulaşın.',
-                    'az' => 'KibrisKare müştəri xidmətləri, ofis ünvanı, telefon və müraciət forması ilə bizimlə əlaqə saxlayın.',
-                    'en' => 'Get in touch with KibrisKare customer support, office address, phone and inquiry form.',
-                    'ru' => 'Свяжитесь со службой поддержки KibrisKare, адрес офиса и телефон.',
+                    'tr' => 'KibrisKare müşteri hizmetleri, iletişim formu, telefon ve WhatsApp desteği ile bize ulaşın.',
+                    'az' => 'KibrisKare müştəri xidmətləri, əlaqə forması, telefon və WhatsApp dəstəyi ilə bizimlə əlaqə saxlayın.',
+                    'en' => 'Get in touch with KibrisKare customer support, phone and contact form.',
+                    'ru' => 'Свяжитесь со службой поддержки KibrisKare по телефону или через форму обратной связи.',
                 ],
             ],
             [
                 'page_key' => 'about',
                 'page_name' => 'Haqqımızda',
                 'route_name' => 'about-us',
-                'sort_order' => 13,
+                'sort_order' => 8,
                 'h1' => [
-                    'tr' => 'KibrisKare Hakkında - Vizyonumuz ve Hizmetlerimiz',
-                    'az' => 'KibrisKare Haqqında - Baxışımız və Xidmətlərimiz',
-                    'en' => 'About KibrisKare - Our Vision and Services',
-                    'ru' => 'О компании KibrisKare - Наша миссия и услуги',
+                    'tr' => 'KibrisKare Hakkında - Kıbrıs\'ın Güvenilir Otomobil Platformu',
+                    'az' => 'KibrisKare Haqqında - Kiprin Etibarlı Avtomobil Platforması',
+                    'en' => 'About KibrisKare - Cyprus Trusted Automotive Portal',
+                    'ru' => 'О компании KibrisKare - Автомобильный портал Кипра',
                 ],
                 'title' => [
                     'tr' => 'Hakkımızda - araba.kibriskare.com Vizyon ve Misyonumuz',
@@ -546,22 +410,22 @@ class PageSeo extends Model
                     'ru' => 'О нас - araba.kibriskare.com Миссия и видение',
                 ],
                 'description' => [
-                    'tr' => 'araba.kibriskare.com hakkında bilgi, misyonumuz, vizyonumuz ve hizmetlerimiz.',
-                    'az' => 'araba.kibriskare.com haqqında məlumat, missiyamız, baxışımız və təqdim etdiyimiz xidmətlər.',
-                    'en' => 'Learn about araba.kibriskare.com, our mission, vision and real estate solutions.',
-                    'ru' => 'Информация о портале araba.kibriskare.com, наша миссия и услуги.',
+                    'tr' => 'araba.kibriskare.com hakkında bilgi, vizyonumuz ve KKTC otomotiv pazarına sunduğumuz dijital çözümler.',
+                    'az' => 'araba.kibriskare.com haqqında məlumat, missiyamız və təqdim etdiyimiz avtomobil xidmətləri.',
+                    'en' => 'Learn about araba.kibriskare.com, our automotive marketplace vision and solutions.',
+                    'ru' => 'Информация об автопортале araba.kibriskare.com, миссия и наши решения.',
                 ],
             ],
             [
                 'page_key' => 'faq',
                 'page_name' => 'Tez-tez Verilən Suallar (FAQ / SSS)',
                 'route_name' => 'faq',
-                'sort_order' => 14,
+                'sort_order' => 9,
                 'h1' => [
-                    'tr' => 'Sıkça Sorulan Sorular ve Emlak Rehberi',
-                    'az' => 'Tez-tez Verilən Suallar və Əmlak Bələdçisi',
-                    'en' => 'Frequently Asked Questions (FAQ)',
-                    'ru' => 'Часто задаваемые вопросы о недвижимости',
+                    'tr' => 'Sıkça Sorulan Sorular ve Araç Alım-Satım Rehberi',
+                    'az' => 'Tez-tez Verilən Suallar və Avtomobil Alqı-Satqı Bələdçisi',
+                    'en' => 'Frequently Asked Questions (FAQ) - Cyprus Car Guide',
+                    'ru' => 'Часто задаваемые вопросы об авторынке Кипра',
                 ],
                 'title' => [
                     'tr' => 'Sıkça Sorulan Sorular (SSS) - KibrisKare',
@@ -570,68 +434,85 @@ class PageSeo extends Model
                     'ru' => 'Часто задаваемые вопросы (FAQ) - KibrisKare',
                 ],
                 'description' => [
-                    'tr' => 'Kuzey Kıbrıs’ta ev alırken, kiralarken ve ilan verirken en çok sorulan soruların yanıtları.',
-                    'az' => 'Şimali Kiprdə ev alarkən, kirayələyərkən və elan yerləşdirərkən ən çox verilən sualların cavabları.',
-                    'en' => 'Answers to the most common questions about buying, renting and listing property in Northern Cyprus.',
-                    'ru' => 'Ответы на популярные вопросы о покупке, аренде и публикации объявлений на Северном Кипре.',
+                    'tr' => 'Kuzey Kıbrıs’ta araç alırken, satarken, kiralarken ve ilan verirken en çok sorulan soruların yanıtları.',
+                    'az' => 'Şimali Kiprdə avtomobil alarkən, satarkən, kirayələyərkən ən çox verilən sualların cavabları.',
+                    'en' => 'Answers to common questions about buying, selling, renting and listing cars in Northern Cyprus.',
+                    'ru' => 'Ответы на популярные вопросы о покупке, аренде и продаже авто на Северном Кипре.',
                 ],
             ],
             [
                 'page_key' => 'compare',
-                'page_name' => 'Əmlak Müqayisəsi',
+                'page_name' => 'Avtomobil Müqayisəsi',
                 'route_name' => 'compares',
-                'sort_order' => 15,
+                'sort_order' => 10,
                 'h1' => [
-                    'tr' => 'Emlak Karşılaştırma Listesi',
-                    'az' => 'Əmlak Müqayisəsi Siyahısı',
-                    'en' => 'Property Comparison List',
-                    'ru' => 'Сравнение объектов недвижимости',
+                    'tr' => 'Araç Karşılaştırma Listesi',
+                    'az' => 'Avtomobil Müqayisəsi Siyahısı',
+                    'en' => 'Vehicle Comparison List',
+                    'ru' => 'Сравнение автомобилей',
                 ],
                 'title' => [
-                    'tr' => 'Emlak Karşılaştırma Aracı - KibrisKare',
-                    'az' => 'Əmlak Müqayisəsi Aləti - KibrisKare',
-                    'en' => 'Property Comparison Tool - KibrisKare',
-                    'ru' => 'Сравнение объектов недвижимости - KibrisKare',
+                    'tr' => 'Araç Karşılaştırma Aracı - KibrisKare',
+                    'az' => 'Avtomobil Müqayisəsi Aləti - KibrisKare',
+                    'en' => 'Vehicle Comparison Tool - KibrisKare',
+                    'ru' => 'Сравнение автомобилей - KibrisKare',
                 ],
                 'description' => [
-                    'tr' => 'Seçtiğiniz gayrimenkullerin özelliklerini, fiyatlarını ve konumlarını yan yana karşılaştırın.',
-                    'az' => 'Seçdiyiniz daşınmaz əmlakların parametrlərini, qiymətlərini və yerləşməsini müqayisə edin.',
-                    'en' => 'Compare property features, prices and locations side by side.',
-                    'ru' => 'Сравните характеристики, цены и расположение выбранных объектов недвижимости.',
+                    'tr' => 'Seçtiğiniz araçların motor, yakıt, şanzıman ve donanım özelliklerini yan yana karşılaştırın.',
+                    'az' => 'Seçdiyiniz avtomobillərin mühərrik, yanacaq, sürətlər qutusu və təchizat parametrlərini müqayisə edin.',
+                    'en' => 'Compare vehicle engine, fuel, transmission and feature specifications side by side.',
+                    'ru' => 'Сравните характеристики двигателей, комплектации и цены выбранных авто.',
                 ],
             ],
             [
                 'page_key' => 'favorites',
                 'page_name' => 'Seçilmişlər (Sevimlilər)',
                 'route_name' => 'favorites',
-                'sort_order' => 16,
+                'sort_order' => 11,
                 'h1' => [
-                    'tr' => 'Favori İlanlarım',
-                    'az' => 'Seçilmiş Elanlarım',
-                    'en' => 'My Favorite Properties',
-                    'ru' => 'Мои избранные объявления',
+                    'tr' => 'Favori Araç İlanlarım',
+                    'az' => 'Seçilmiş Avtomobil Elanlarım',
+                    'en' => 'My Favorite Vehicles',
+                    'ru' => 'Мои избранные автомобили',
                 ],
                 'title' => [
-                    'tr' => 'Favori İlanlarım - KibrisKare',
-                    'az' => 'Seçilmiş Elanlarım - KibrisKare',
-                    'en' => 'My Favorite Properties - KibrisKare',
-                    'ru' => 'Избранные объявления - KibrisKare',
+                    'tr' => 'Favori Araçlarım - KibrisKare',
+                    'az' => 'Seçilmiş Avtomobillər - KibrisKare',
+                    'en' => 'My Favorite Vehicles - KibrisKare',
+                    'ru' => 'Избранные автомобили - KibrisKare',
                 ],
                 'description' => [
-                    'tr' => 'Beğendiğiniz ve kaydettiğiniz satılık ve kiralık emlak ilanlarını buradan takip edin.',
-                    'az' => 'Bəyəndiyiniz və yadda saxladığınız satılıq və kirayə əmlak elanlarını buradan izləyin.',
-                    'en' => 'View and track your saved and favorite properties for sale and rent.',
-                    'ru' => 'Сохраненные и избранные объявления недвижимости.',
+                    'tr' => 'Beğendiğiniz ve kaydettiğiniz satılık ve kiralık araç ilanlarını buradan takip edin.',
+                    'az' => 'Bəyəndiyiniz və yadda saxladığınız satılıq və kirayə avtomobil elanlarını buradan izləyin.',
+                    'en' => 'View and track your saved and favorite cars for sale and rent.',
+                    'ru' => 'Сохраненные и избранные объявления автомобилей.',
                 ],
             ],
         ];
 
+        // 1. Clean up legacy keys
+        self::whereIn('page_key', [
+            'requests',
+            'requests_create',
+            'roommates',
+            'roommates_create',
+            'add_property',
+            'agencies',
+            'listing_rent_monthly',
+        ])->delete();
+
+        // 2. Insert or update default pages
         foreach ($defaultPages as $pageData) {
             $record = self::where('page_key', $pageData['page_key'])->first();
             if ($record) {
-                if (empty($record->h1)) {
-                    $record->update(['h1' => $pageData['h1']]);
-                }
+                $record->update([
+                    'page_name' => $pageData['page_name'],
+                    'route_name' => $pageData['route_name'],
+                    'sort_order' => $pageData['sort_order'],
+                    'h1' => $pageData['h1'],
+                    'title' => $pageData['title'],
+                    'description' => $pageData['description'],
+                ]);
             } else {
                 self::create($pageData);
             }

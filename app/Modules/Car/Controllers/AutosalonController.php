@@ -28,8 +28,8 @@ class AutosalonController extends Controller
         }
 
         $autosalons = $query->orderByDesc('is_verified')
-            ->orderByDesc('rating')
             ->orderByDesc('cars_count')
+            ->orderByDesc('id')
             ->paginate(12)
             ->withQueryString();
 

@@ -1,5 +1,5 @@
 @if(count($cars) > 0)
-    <div id="carsGridContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 sm:gap-5">
+    <div id="carsGridContainer" class="grid grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2.5 sm:gap-4 lg:gap-5">
         @foreach($cars as $car)
             <x-car-card :car="$car" />
         @endforeach

@@ -16,7 +16,7 @@
             <img src="{{ $autosalon->banner_url }}"
                  alt="{{ $autosalon->name }}"
                  class="w-full h-full object-cover opacity-90" />
-            <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent"></div>
+            <div class="absolute inset-0 bg-black/50"></div>
         </div>
 
         <!-- Info Bar (Overlapping Banner) -->
@@ -33,14 +33,11 @@
                         <div class="flex flex-wrap items-center gap-2 mb-1.5">
                             @if($autosalon->is_verified)
                                 <span class="bg-emerald-500 text-white text-xs font-bold px-2.5 py-0.5 rounded-lg shadow-sm flex items-center gap-1">
-                                    <i class="bi bi-patch-check-fill text-xs"></i> Təsdiqlənmiş Diler
+                                    <i class="bi bi-patch-check-fill text-xs"></i> {{ __('agency.official_partner') }}
                                 </span>
                             @endif
-                            <span class="bg-amber-400 text-gray-900 text-xs font-extrabold px-2.5 py-0.5 rounded-lg flex items-center gap-1">
-                                <i class="bi bi-star-fill text-xs"></i> {{ $autosalon->rating ?? '5.0' }}
-                            </span>
                             <span class="bg-gray-100 text-gray-700 text-xs font-semibold px-2.5 py-0.5 rounded-lg">
-                                {{ $cars->total() }} İlan
+                                {{ $cars->total() }} {{ __('listing.show_properties_count') }}
                             </span>
                         </div>
 
@@ -103,10 +100,10 @@
             <div>
                 <h2 class="text-xl sm:text-2xl font-bold text-gray-900 tracking-tight flex items-center gap-2">
                     <i class="bi bi-grid-fill text-[var(--primary)]"></i>
-                    <span>Avtosalonun Elanları</span>
+                    <span>{{ __('agency.agency_listings') }}</span>
                 </h2>
                 <p class="text-xs sm:text-sm text-gray-500 mt-0.5">
-                    Bu avtosalon tərəfindən yerləşdirilmiş aktiv avtomobillər
+                    {{ __('agency.all_listings_posted_by', ['name' => $autosalon->name]) }}
                 </p>
             </div>
 
@@ -114,15 +111,15 @@
             <div class="flex items-center gap-2 bg-gray-100 p-1 rounded-2xl">
                 <a href="{{ route('autosalons.show', $autosalon->slug) }}"
                    class="px-4 py-1.5 rounded-xl text-xs font-bold transition {{ !request('deal_type') ? 'bg-white text-gray-900 shadow-xs' : 'text-gray-600 hover:text-gray-900' }}">
-                    Hamısı ({{ $autosalon->cars_count }})
+                    {{ __('listing.all') }} ({{ $autosalon->cars_count }})
                 </a>
                 <a href="{{ route('autosalons.show', ['slug' => $autosalon->slug, 'deal_type' => 'sale']) }}"
                    class="px-4 py-1.5 rounded-xl text-xs font-bold transition {{ request('deal_type') === 'sale' ? 'bg-white text-gray-900 shadow-xs' : 'text-gray-600 hover:text-gray-900' }}">
-                    Satılıq
+                    {{ __('listing.buy') }}
                 </a>
                 <a href="{{ route('autosalons.show', ['slug' => $autosalon->slug, 'deal_type' => 'rent_daily']) }}"
                    class="px-4 py-1.5 rounded-xl text-xs font-bold transition {{ request('deal_type') === 'rent_daily' ? 'bg-white text-gray-900 shadow-xs' : 'text-gray-600 hover:text-gray-900' }}">
-                    Rent a Car
+                    {{ __('listing.rent') }}
                 </a>
             </div>
         </div>
@@ -140,10 +137,10 @@
         @else
             <div class="text-center py-16 bg-white rounded-3xl border border-gray-200 p-8">
                 <i class="bi bi-car-front text-4xl text-gray-300"></i>
-                <h3 class="text-lg font-bold text-gray-800 mt-3">Bu kateqoriyada elan yoxdur</h3>
-                <p class="text-sm text-gray-500 mt-1">Avtosalonun digər elanlarına baxa bilərsiniz.</p>
+                <h3 class="text-lg font-bold text-gray-800 mt-3">{{ __('agency.no_agency_listings') }}</h3>
+                <p class="text-sm text-gray-500 mt-1">{{ __('agency.browse_other_agencies_agents') }}</p>
                 <a href="{{ route('autosalons.show', $autosalon->slug) }}" class="mt-4 inline-block px-5 py-2.5 bg-[var(--primary)] text-white text-xs font-bold rounded-xl">
-                    Bütün Elanları Göstər
+                    {{ __('listing.show_results') }}
                 </a>
             </div>
         @endif

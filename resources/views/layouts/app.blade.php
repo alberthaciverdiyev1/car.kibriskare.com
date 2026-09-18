@@ -75,6 +75,25 @@
 
     @stack('styles')
 
+    {{-- Strictly Disable All Transitions & Gradient Colors Site-Wide --}}
+    <style>
+        *, *::before, *::after {
+            transition: none !important;
+            -webkit-transition: none !important;
+            transition-property: none !important;
+            transition-duration: 0s !important;
+            animation: none !important;
+            -webkit-animation: none !important;
+            animation-duration: 0s !important;
+        }
+        [class*="bg-gradient-"],
+        [class*="from-"],
+        [class*="to-"],
+        [class*="via-"] {
+            background-image: none !important;
+        }
+    </style>
+
     {{-- Global <head> Scripts (Raw HTML/JS from Admin) --}}
     @if(!empty($seoConf?->head_scripts))
         {!! $seoConf->head_scripts !!}

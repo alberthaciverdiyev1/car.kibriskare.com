@@ -45,3 +45,28 @@ html {
   scrollbar-width: thin;
   scrollbar-color: #cbd5e1 #f8fafc;
 }
+
+/* Strictly disable all transitions and animations across the whole site */
+*, *::before, *::after {
+  transition-property: none !important;
+  transition-duration: 0s !important;
+  transition: none !important;
+  animation-duration: 0s !important;
+  animation: none !important;
+}
+
+/* Strictly disable all gradient backgrounds across the whole site */
+[class*="bg-gradient-"],
+[class*="from-"],
+[class*="to-"],
+[class*="via-"] {
+  background-image: none !important;
+}
+/* Utility to hide scrollbar for horizontal swipe containers */
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}

@@ -64,10 +64,6 @@ class AutosalonResource extends Resource
                                     ->label('İş Saatları')
                                     ->placeholder('09:00 - 18:30 (B.e - Şənbə)'),
 
-                                Forms\Components\TextInput::make('rating')
-                                    ->label('Reytinq')
-                                    ->numeric()
-                                    ->default(5.00),
 
                                 Forms\Components\Toggle::make('is_verified')
                                     ->label('Təsdiqlənmiş Avtosalon')

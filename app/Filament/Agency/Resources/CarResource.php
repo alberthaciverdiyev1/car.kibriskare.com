@@ -8,6 +8,7 @@ use App\Modules\Car\Enums\CarDealType;
 use App\Modules\Car\Enums\CarStatus;
 use App\Modules\Car\Enums\Drivetrain;
 use App\Modules\Car\Enums\FuelType;
+use App\Modules\Car\Enums\ImportOrigin;
 use App\Modules\Car\Enums\PlateType;
 use App\Modules\Car\Enums\SteeringWheel;
 use App\Modules\Car\Enums\Transmission;
@@ -210,9 +211,29 @@ class CarResource extends Resource
                                         ->options(Drivetrain::options())
                                         ->nullable(),
 
-                                    Forms\Components\TextInput::make('color')
+                                     Forms\Components\TextInput::make('color')
                                         ->label('Rəng')
                                         ->placeholder('Qara, Ağ, Gümüşü, Mavi'),
+                                ]),
+
+                                Forms\Components\Grid::make(4)->schema([
+                                    Forms\Components\Select::make('import_origin')
+                                        ->label('İthalat Menşei')
+                                        ->options(ImportOrigin::options())
+                                        ->nullable(),
+
+                                    Forms\Components\DatePicker::make('road_tax_valid_until')
+                                        ->label('Seyrüsefer Son Tarixi')
+                                        ->nullable(),
+
+                                    Forms\Components\DatePicker::make('inspection_valid_until')
+                                        ->label('Muayene Son Tarixi')
+                                        ->nullable(),
+
+                                    Forms\Components\TextInput::make('video_url')
+                                        ->label('Araç Videosu (YouTube URL)')
+                                        ->url()
+                                        ->maxLength(500),
                                 ]),
 
                                 Forms\Components\Grid::make(3)->schema([
@@ -232,9 +253,13 @@ class CarResource extends Resource
                                         ->default(5),
                                 ]),
 
-                                Forms\Components\Grid::make(3)->schema([
+                                Forms\Components\Grid::make(4)->schema([
                                     Forms\Components\Toggle::make('is_customs_cleared')
                                         ->label('KKTC Plakalı / Gömrük ödənilib')
+                                        ->default(true),
+
+                                    Forms\Components\Toggle::make('title_deed_ready')
+                                        ->label('Koçan / Devre Hazır')
                                         ->default(true),
 
                                     Forms\Components\Toggle::make('is_credit_available')
@@ -258,6 +283,50 @@ class CarResource extends Resource
                                         ->default(false),
                                 ]),
                             ]),
+
+                        Forms\Components\Tabs\Tab::make('Ekspertiz & Hasar Vəziyyəti')
+                            ->icon('heroicon-o-shield-check')
+                            ->schema([
+                                Forms\Components\Grid::make(3)->schema([
+                                    Forms\Components\Toggle::make('is_heavy_damaged')
+                                        ->label('Ağır Hasarlı / Pert Kayıtlı')
+                                        ->default(false),
+
+                                    Forms\Components\Toggle::make('has_tramer')
+                                        ->label('Tramer / Hasar Kaydı Var')
+                                        ->default(false)
+                                        ->live(),
+
+                                    Forms\Components\TextInput::make('tramer_amount')
+                                        ->label('Tramer Tutarı')
+                                        ->numeric()
+                                        ->visible(fn (Forms\Get $get) => (bool)$get('has_tramer')),
+
+                                    Forms\Components\Select::make('tramer_currency')
+                                        ->label('Tramer Valyutası')
+                                        ->options([
+                                            'GBP' => 'GBP (£)',
+                                            'TRY' => 'TRY (₺)',
+                                            'EUR' => 'EUR (€)',
+                                            'USD' => 'USD ($)',
+                                        ])
+                                        ->default('GBP')
+                                        ->visible(fn (Forms\Get $get) => (bool)$get('has_tramer')),
+
+                                    Forms\Components\FileUpload::make('inspection_pdf')
+                                        ->label('Ekspertiz Raporu (PDF / Görsel)')
+                                        ->disk('public')
+                                        ->directory('cars/inspections')
+                                        ->acceptedFileTypes(['application/pdf', 'image/*']),
+                                ]),
+
+                                Forms\Components\KeyValue::make('damage_parts')
+                                    ->label('Kaporta Parça Durumları')
+                                    ->keyLabel('Parça (hood, roof, trunk, door...)')
+                                    ->valueLabel('Vəziyyət (original, painted, replaced)')
+                                    ->helperText('Parçalar: hood, roof, trunk, front_bumper, rear_bumper, front_left_door, front_right_door, rear_left_door, rear_right_door, front_left_fender, front_right_fender, rear_left_fender, rear_right_fender'),
+                            ]),
+
 
                         Forms\Components\Tabs\Tab::make('Təchizat və Opsiyalar')
                             ->icon('heroicon-o-sparkles')
@@ -343,7 +412,7 @@ class CarResource extends Resource
                     ->circular()
                     ->stacked()
                     ->limit(1)
-                    ->defaultImageUrl(asset('images/box-house.jpg')),
+                    ->defaultImageUrl(asset('images/car-placeholder.svg')),
 
                 Tables\Columns\TextColumn::make('display_title')
                     ->label('Avtomobil')

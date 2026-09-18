@@ -30,7 +30,7 @@ Route::get('/car/{slug}', CarDetailController::class);
 Route::get('/ilan/{slug}', CarDetailController::class)->name('properties.show');
 Route::get('/elan/{slug}', CarDetailController::class);
 
-// İlan Ekle (Add Car)
+// İlan Ekle & Düzenle (Add / Edit Car)
 Route::get('/ilan-ver', [AddCarController::class, 'create'])->name('add-car');
 Route::get('/add-car', [AddCarController::class, 'create']);
 Route::get('/add-property', [AddCarController::class, 'create'])->name('add-property');
@@ -39,5 +39,17 @@ Route::post('/ilan-ver', [AddCarController::class, 'store'])->name('add-car.stor
 Route::post('/add-car', [AddCarController::class, 'store']);
 Route::post('/add-property', [AddCarController::class, 'store'])->name('add-property.store');
 
+Route::middleware('auth')->group(function () {
+    Route::get('/ilan-duzenle/{car}', [AddCarController::class, 'edit'])->name('cars.edit');
+    Route::get('/araba/{car:slug}/duzenle', [AddCarController::class, 'edit'])->name('cars.slug-edit');
+    Route::put('/araba/{car}/guncelle', [AddCarController::class, 'update'])->name('cars.update');
+    Route::post('/araba/{car}/satildi-isaretle', [AddCarController::class, 'markSold'])->name('cars.mark-sold');
+    Route::delete('/api/car-images/{image}', [AddCarController::class, 'deleteImage'])->name('cars.delete-image');
+});
+
+// İlan Şikayet Et (Report Listing)
+Route::post('/api/cars/report', [\App\Modules\Car\Controllers\CarReportController::class, 'store'])->name('cars.report');
+
 // AJAX Models by Brand
 Route::get('/api/brands/{brandId}/models', [CarHomeController::class, 'modelsByBrand'])->name('api.brands.models');
+

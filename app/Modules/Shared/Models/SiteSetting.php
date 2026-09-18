@@ -73,6 +73,7 @@ class SiteSetting extends Model
         'items_per_page',
         'featured_limit',
         'vip_limit',
+        'enable_car_video',
         'whatsapp_property_message',
         'whatsapp_roommate_message',
         'default_property_image',
@@ -92,6 +93,7 @@ class SiteSetting extends Model
         'items_per_page' => 'integer',
         'featured_limit' => 'integer',
         'vip_limit' => 'integer',
+        'enable_car_video' => 'boolean',
         'map_latitude' => 'float',
         'map_longitude' => 'float',
     ];

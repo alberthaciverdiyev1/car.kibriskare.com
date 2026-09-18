@@ -32,7 +32,7 @@ class LatestCarsTableWidget extends BaseWidget
                     ->circular()
                     ->stacked()
                     ->limit(1)
-                    ->defaultImageUrl(asset('images/box-house.jpg')),
+                    ->defaultImageUrl(asset('images/car-placeholder.svg')),
 
                 Tables\Columns\TextColumn::make('display_title')
                     ->label('Avtomobil')

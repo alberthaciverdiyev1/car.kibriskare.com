@@ -9,4 +9,5 @@ return [
     'explore_listings' => 'İlanları Keşfet',
     'empty_message' => 'Favori ilan bulunamadı.',
     'confirm_clear_all' => 'Tüm favori ilanları silmek istediğinizden emin misiniz?',
+    'add_to_favorites' => 'Favorilere Ekle',
 ];

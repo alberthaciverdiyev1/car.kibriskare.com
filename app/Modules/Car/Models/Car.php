@@ -7,6 +7,7 @@ use App\Modules\Car\Enums\CarDealType;
 use App\Modules\Car\Enums\CarStatus;
 use App\Modules\Car\Enums\Drivetrain;
 use App\Modules\Car\Enums\FuelType;
+use App\Modules\Car\Enums\ImportOrigin;
 use App\Modules\Car\Enums\PlateType;
 use App\Modules\Car\Enums\SteeringWheel;
 use App\Modules\Car\Enums\Transmission;
@@ -58,7 +59,17 @@ class Car extends Model
         'doors',
         'seats',
         'condition',
+        'damage_parts',
+        'has_tramer',
+        'tramer_amount',
+        'tramer_currency',
+        'is_heavy_damaged',
+        'inspection_pdf',
         'plate_type',
+        'import_origin',
+        'road_tax_valid_until',
+        'inspection_valid_until',
+        'title_deed_ready',
         'is_customs_cleared',
         'is_credit_available',
         'is_barter_available',
@@ -75,6 +86,7 @@ class Car extends Model
         'lng',
         'status',
         'rejection_reason',
+        'video_url',
         'is_vip',
         'is_premium',
         'is_urgent',
@@ -96,6 +108,8 @@ class Car extends Model
         'steering_wheel' => SteeringWheel::class,
         'condition' => CarCondition::class,
         'plate_type' => PlateType::class,
+        'import_origin' => ImportOrigin::class,
+        'damage_parts' => 'array',
         'status' => CarStatus::class,
         'price_gbp' => 'decimal:2',
         'price_try' => 'decimal:2',
@@ -108,6 +122,12 @@ class Car extends Model
         'doors' => 'integer',
         'seats' => 'integer',
         'is_metallic' => 'boolean',
+        'has_tramer' => 'boolean',
+        'tramer_amount' => 'decimal:2',
+        'is_heavy_damaged' => 'boolean',
+        'title_deed_ready' => 'boolean',
+        'road_tax_valid_until' => 'date',
+        'inspection_valid_until' => 'date',
         'is_customs_cleared' => 'boolean',
         'is_credit_available' => 'boolean',
         'is_barter_available' => 'boolean',
@@ -273,4 +293,40 @@ class Car extends Model
     {
         return number_format($this->mileage, 0, '.', ',') . ' ' . $this->mileage_unit;
     }
+
+    public function reports(): HasMany
+    {
+        return $this->hasMany(CarReport::class);
+    }
+
+    public function getEmbedVideoUrlAttribute(): ?string
+    {
+        if (empty($this->video_url)) {
+            return null;
+        }
+
+        $url = trim($this->video_url);
+
+        // YouTube formats:
+        // https://www.youtube.com/watch?v=VIDEO_ID
+        // https://youtu.be/VIDEO_ID
+        // https://www.youtube.com/shorts/VIDEO_ID
+        // https://www.youtube.com/embed/VIDEO_ID
+        if (preg_match('/(?:youtube\.com\/(?:watch\?v=|shorts\/|embed\/)|youtu\.be\/)([a-zA-Z0-9_\-]+)/i', $url, $matches)) {
+            return 'https://www.youtube.com/embed/' . $matches[1];
+        }
+
+        // Vimeo: https://vimeo.com/VIDEO_ID
+        if (preg_match('/vimeo\.com\/(?:video\/)?([0-9]+)/i', $url, $matches)) {
+            return 'https://player.vimeo.com/video/' . $matches[1];
+        }
+
+        return $url;
+    }
+
+    public function hasDamageData(): bool
+    {
+        return !empty($this->damage_parts) || $this->has_tramer || $this->is_heavy_damaged || !empty($this->inspection_pdf);
+    }
 }
+

@@ -11,9 +11,9 @@ enum CarDealType: string
     public function label(): string
     {
         return match ($this) {
-            self::Sale => 'Satılıq',
-            self::RentDaily => 'Kirayə',
-            self::RentMonthly => 'Aylıq Kirayə',
+            self::Sale => __('Satılık'),
+            self::RentDaily => __('Günlük Kiralık'),
+            self::RentMonthly => __('Aylık Kiralık'),
         };
     }
 
