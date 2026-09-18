@@ -430,7 +430,7 @@
                 <div>
                     <label class="block text-xs font-bold text-gray-700 uppercase tracking-wider mb-1.5">{{ __('car.description') }}</label>
                     <textarea name="description" rows="4" placeholder="{{ __('car.description_placeholder') }}"
-                              class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl text-sm font-medium text-gray-800 outline-none focus:border-[var(--primary)] focus:bg-white transition">{{ old('description', $car?->display_description ?? '') }}</textarea>
+                              class="w-full px-4 py-3 bg-gray-50 border border-gray-200 rounded-2xl text-sm font-medium text-gray-800 outline-none focus:border-[var(--primary)] focus:bg-white">{{ old('description', $car?->display_description ?? '') }}</textarea>
                 </div>
             </div>
 
@@ -439,12 +439,9 @@
                 <div class="bg-white/95 backdrop-blur-md p-4 sm:p-5 rounded-3xl border border-gray-200 shadow-xl flex items-center justify-between gap-4">
                     <p class="text-xs text-gray-500 hidden sm:block">{{ __('car.terms_notice') }}</p>
                     <button type="submit" id="submitCarBtn"
-                            class="w-full sm:w-auto px-8 py-3.5 bg-[var(--primary)] hover:bg-[var(--primary-hover)] text-white font-bold text-sm sm:text-base rounded-2xl shadow-md transition flex items-center justify-center gap-2">
+                            class="w-full sm:w-auto px-8 py-3.5 bg-[var(--primary)] hover:bg-[var(--primary-hover)] text-white font-bold text-sm sm:text-base rounded-2xl shadow-md flex items-center justify-center gap-2">
                         <i class="bi bi-check2-circle text-lg"></i>
                         <span>{{ $isEdit ? __('İlanı Yenilə') : __('car.submit_listing') }}</span>
-                    </button>
-                </div>
-            </div>n>
                     </button>
                 </div>
             </div>

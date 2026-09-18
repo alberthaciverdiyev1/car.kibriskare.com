@@ -23,15 +23,15 @@
                         <!-- Deal Type (Hamısı / Satılıq / Kirayə) -->
                         <div class="flex gap-1 bg-gray-100 p-1 rounded-2xl border border-gray-200/60 shadow-2xs" data-role="add-type-toggle">
                             <button type="button" data-value="all"
-                                    class="deal-type-btn px-4 sm:px-5 py-2 rounded-xl font-bold text-xs tracking-wide uppercase transition duration-200 {{ $selectedAdType === 'all' || !$selectedAdType ? 'bg-white text-[var(--primary)] shadow-sm' : 'text-gray-600 hover:text-gray-900' }}">
+                                    class="deal-type-btn px-4 sm:px-5 py-2 rounded-xl font-bold text-xs tracking-wide uppercase {{ $selectedAdType === 'all' || !$selectedAdType ? 'bg-white text-[var(--primary)] shadow-sm' : 'text-gray-600 hover:text-gray-900' }}">
                                 {{ __('listing.all') }}
                             </button>
                             <button type="button" data-value="sale"
-                                    class="deal-type-btn px-4 sm:px-5 py-2 rounded-xl font-bold text-xs tracking-wide uppercase transition duration-200 {{ $selectedAdType === 'sale' ? 'bg-white text-[var(--primary)] shadow-sm' : 'text-gray-600 hover:text-gray-900' }}">
+                                    class="deal-type-btn px-4 sm:px-5 py-2 rounded-xl font-bold text-xs tracking-wide uppercase {{ $selectedAdType === 'sale' ? 'bg-white text-[var(--primary)] shadow-sm' : 'text-gray-600 hover:text-gray-900' }}">
                                 {{ __('listing.buy') }}
                             </button>
                             <button type="button" data-value="rent"
-                                    class="deal-type-btn px-4 sm:px-5 py-2 rounded-xl font-bold text-xs tracking-wide uppercase transition duration-200 {{ in_array($selectedAdType, ['rent', 'rent_daily', 'rent_monthly']) ? 'bg-white text-[var(--primary)] shadow-sm' : 'text-gray-600 hover:text-gray-900' }}">
+                                    class="deal-type-btn px-4 sm:px-5 py-2 rounded-xl font-bold text-xs tracking-wide uppercase {{ in_array($selectedAdType, ['rent', 'rent_daily', 'rent_monthly']) ? 'bg-white text-[var(--primary)] shadow-sm' : 'text-gray-600 hover:text-gray-900' }}">
                                 {{ __('listing.rent') }} (Rent a Car)
                             </button>
                             <input type="hidden" name="adType" id="adTypeInput" value="{{ $selectedAdType }}">
@@ -40,7 +40,7 @@
                         <!-- Reset Button Top Right -->
                         <div class="flex items-center gap-2">
                             <button type="button" id="resetFiltersBtn" title="{{ __('listing.reset') }}"
-                                    class="px-3.5 py-2 bg-white border border-gray-200/90 rounded-xl hover:bg-gray-50 text-gray-600 flex items-center justify-center transition shadow-2xs cursor-pointer">
+                                    class="px-3.5 py-2 bg-white border border-gray-200/90 rounded-xl hover:bg-gray-50 text-gray-600 flex items-center justify-center shadow-2xs cursor-pointer">
                                 <i class="bi bi-arrow-clockwise text-base mr-1.5 text-[var(--primary)]"></i>
                                 <span class="text-xs font-bold">{{ __('listing.reset') }}</span>
                             </button>

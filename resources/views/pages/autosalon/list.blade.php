@@ -47,7 +47,7 @@
                     </div>
 
                     <button type="submit"
-                            class="px-6 py-3 bg-neutral-900 hover:bg-black text-white font-bold rounded-2xl text-sm transition shadow-sm shrink-0">
+                            class="px-6 py-3 bg-neutral-900 hover:bg-black text-white font-bold rounded-2xl text-sm shadow-sm shrink-0">
                         Axtar
                     </button>
                 </form>
@@ -58,7 +58,7 @@
         @if($autosalons->count() > 0)
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
                 @foreach($autosalons as $salon)
-                    <div class="bg-white rounded-3xl border border-gray-200/80 hover:border-[var(--primary)] overflow-hidden flex flex-col group transition-all duration-300 shadow-2xs hover:shadow-lg">
+                    <div class="bg-white rounded-3xl border border-gray-200/80 hover:border-[var(--primary)] overflow-hidden flex flex-col group shadow-2xs hover:shadow-lg">
                         
                         <!-- Banner & Logo Header -->
                         <div class="relative h-36 bg-gray-100 overflow-hidden">
@@ -85,10 +85,10 @@
                         <!-- Card Body -->
                         <div class="p-5 pt-7 flex flex-col flex-1 justify-between gap-4">
                             <div>
-                                <h3 class="font-bold text-gray-900 text-lg group-hover:text-[var(--primary)] transition">
+                                <h3 class="font-bold text-gray-900 text-lg group-hover:text-[var(--primary)]">
                                     <a href="{{ route('autosalons.show', $salon->slug) }}">
-                                        {{ $salon->name }}
-                                    </a>
+                                         {{ $salon->name }}
+                                     </a>
                                 </h3>
 
                                 <div class="flex items-center gap-2 text-xs text-gray-500 mt-1">
@@ -115,7 +115,7 @@
                                 </div>
 
                                 <a href="{{ route('autosalons.show', $salon->slug) }}"
-                                   class="inline-flex items-center gap-1.5 text-xs font-bold bg-[var(--primary)] hover:bg-[var(--primary-hover)] text-white px-4 py-2 rounded-xl transition shadow-2xs">
+                                   class="inline-flex items-center gap-1.5 text-xs font-bold bg-[var(--primary)] hover:bg-[var(--primary-hover)] text-white px-4 py-2 rounded-xl shadow-2xs">
                                     <span>Vitrini Gör</span>
                                     <i class="bi bi-arrow-right text-xs"></i>
                                 </a>

@@ -52,10 +52,10 @@
             <div id="report-message" class="hidden p-3 rounded-xl text-xs font-medium"></div>
 
             <div class="flex items-center justify-end gap-3 pt-2">
-                <button type="button" onclick="closeReportModal()" class="px-4 py-2 text-xs font-semibold text-gray-600 hover:bg-gray-100 rounded-xl transition-colors">
+                <button type="button" onclick="closeReportModal()" class="px-4 py-2 text-xs font-semibold text-gray-600 hover:bg-gray-100 rounded-xl">
                     {{ __('İptal') }}
                 </button>
-                <button type="submit" id="report-submit-btn" class="px-5 py-2 text-xs font-semibold text-white bg-rose-600 hover:bg-rose-700 rounded-xl shadow-xs transition-colors">
+                <button type="submit" id="report-submit-btn" class="px-5 py-2 text-xs font-semibold text-white bg-rose-600 hover:bg-rose-700 rounded-xl shadow-xs">
                     {{ __('Bildirimi Gönder') }}
                 </button>
             </div>

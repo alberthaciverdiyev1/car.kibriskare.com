@@ -95,7 +95,7 @@
 
         @if($inspectionPdf || $car?->inspection_pdf)
             <a href="{{ Storage::url($inspectionPdf ?? $car->inspection_pdf) }}" target="_blank"
-               class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 transition-colors border border-indigo-200">
+               class="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-lg text-xs font-semibold text-indigo-700 bg-indigo-50 hover:bg-indigo-100 border border-indigo-200">
                 <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
@@ -156,7 +156,7 @@
             <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2 text-right md:text-left">{{ __('Sol Taraf') }}</h4>
             @foreach(['front_left_fender', 'front_left_door', 'rear_left_door', 'rear_left_fender'] as $pKey)
                 @php $st = $currentParts[$pKey] ?? 'original'; $info = $statuses[$st] ?? $statuses['original']; @endphp
-                <div class="flex items-center justify-between p-2.5 rounded-lg border {{ $info['border'] }} bg-white hover:bg-gray-50 transition-colors shadow-xs">
+                <div class="flex items-center justify-between p-2.5 rounded-lg border {{ $info['border'] }} bg-white hover:bg-gray-50 shadow-xs">
                     <span class="text-xs font-medium text-gray-800">{{ $partsMap[$pKey] }}</span>
                     <span class="text-[11px] font-bold px-2 py-0.5 rounded-md {{ $info['badge'] }} border">{{ $info['label'] }}</span>
                 </div>
@@ -201,7 +201,7 @@
             <h4 class="text-xs font-bold text-gray-400 uppercase tracking-wider mb-2">{{ __('Sağ Taraf') }}</h4>
             @foreach(['front_right_fender', 'front_right_door', 'rear_right_door', 'rear_right_fender'] as $pKey)
                 @php $st = $currentParts[$pKey] ?? 'original'; $info = $statuses[$st] ?? $statuses['original']; @endphp
-                <div class="flex items-center justify-between p-2.5 rounded-lg border {{ $info['border'] }} bg-white hover:bg-gray-50 transition-colors shadow-xs">
+                <div class="flex items-center justify-between p-2.5 rounded-lg border {{ $info['border'] }} bg-white hover:bg-gray-50 shadow-xs">
                     <span class="text-xs font-medium text-gray-800">{{ $partsMap[$pKey] }}</span>
                     <span class="text-[11px] font-bold px-2 py-0.5 rounded-md {{ $info['badge'] }} border">{{ $info['label'] }}</span>
                 </div>

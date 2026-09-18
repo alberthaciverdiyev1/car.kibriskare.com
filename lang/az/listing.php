@@ -50,7 +50,7 @@ return [
     'search_region_placeholder' => 'Region axtar...',
     'no_region_found' => 'Region tapılmadı',
     'reset' => 'Filtrləri Sıfırla',
-    'show_properties_count' => 'avtomobil göstər',
+    'show_properties_count' => 'avtomobil',
     'sale_badge' => 'Satılıq',
     'rent_badge' => 'Kirayə',
     'compare' => 'Müqayisə',

@@ -50,7 +50,7 @@ return [
     'search_region_placeholder' => 'Bölge ara...',
     'no_region_found' => 'Bölge bulunamadı',
     'reset' => 'Filtreleri Temizle',
-    'show_properties_count' => 'araç göster',
+    'show_properties_count' => 'araç',
     'sale_badge' => 'Satılık',
     'rent_badge' => 'Kiralık',
     'compare' => 'Karşılaştır',

@@ -7,7 +7,7 @@
             </span>
         @else
             <a href="{{ $cars->previousPageUrl() }}" data-page="{{ $cars->currentPage() - 1 }}"
-               class="pagination-link w-10 h-10 flex items-center justify-center rounded-xl bg-white border border-gray-200 text-gray-700 hover:bg-orange-50 hover:text-[var(--primary)] hover:border-[var(--primary)] transition shadow-2xs font-semibold text-sm">
+               class="pagination-link w-10 h-10 flex items-center justify-center rounded-xl bg-white border border-gray-200 text-gray-700 hover:bg-orange-50 hover:text-[var(--primary)] hover:border-[var(--primary)] shadow-2xs font-semibold text-sm">
                 <i class="bi bi-chevron-left text-xs"></i>
             </a>
         @endif
@@ -20,7 +20,7 @@
                 </span>
             @else
                 <a href="{{ $url }}" data-page="{{ $page }}"
-                   class="pagination-link w-10 h-10 flex items-center justify-center rounded-xl bg-white border border-gray-200 text-gray-700 hover:bg-orange-50 hover:text-[var(--primary)] hover:border-[var(--primary)] transition shadow-2xs font-semibold text-sm">
+                   class="pagination-link w-10 h-10 flex items-center justify-center rounded-xl bg-white border border-gray-200 text-gray-700 hover:bg-orange-50 hover:text-[var(--primary)] hover:border-[var(--primary)] shadow-2xs font-semibold text-sm">
                     {{ $page }}
                 </a>
             @endif
@@ -29,7 +29,7 @@
         {{-- Next Page Link --}}
         @if($cars->hasMorePages())
             <a href="{{ $cars->nextPageUrl() }}" data-page="{{ $cars->currentPage() + 1 }}"
-               class="pagination-link w-10 h-10 flex items-center justify-center rounded-xl bg-white border border-gray-200 text-gray-700 hover:bg-orange-50 hover:text-[var(--primary)] hover:border-[var(--primary)] transition shadow-2xs font-semibold text-sm">
+               class="pagination-link w-10 h-10 flex items-center justify-center rounded-xl bg-white border border-gray-200 text-gray-700 hover:bg-orange-50 hover:text-[var(--primary)] hover:border-[var(--primary)] shadow-2xs font-semibold text-sm">
                 <i class="bi bi-chevron-right text-xs"></i>
             </a>
         @else

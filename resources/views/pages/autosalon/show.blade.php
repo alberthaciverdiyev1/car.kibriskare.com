@@ -66,7 +66,7 @@
                     @if($autosalon->whatsapp)
                         <a href="https://wa.me/{{ preg_replace('/[^0-9]/', '', $autosalon->whatsapp) }}"
                            target="_blank"
-                           class="flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold shadow-sm transition">
+                           class="flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-emerald-600 hover:bg-emerald-700 text-white text-sm font-bold shadow-sm">
                             <i class="bi bi-whatsapp text-base"></i>
                             <span>WhatsApp</span>
                         </a>
@@ -74,7 +74,7 @@
 
                     @if($autosalon->phone)
                         <a href="tel:{{ $autosalon->phone }}"
-                           class="flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-[var(--primary)] hover:bg-[var(--primary-hover)] text-white text-sm font-bold shadow-sm transition">
+                           class="flex items-center justify-center gap-2 px-5 py-3 rounded-2xl bg-[var(--primary)] hover:bg-[var(--primary-hover)] text-white text-sm font-bold shadow-sm">
                             <i class="bi bi-telephone-fill text-base"></i>
                             <span>{{ $autosalon->phone }}</span>
                         </a>
@@ -110,15 +110,15 @@
             <!-- Deal Type Filter Pills -->
             <div class="flex items-center gap-2 bg-gray-100 p-1 rounded-2xl">
                 <a href="{{ route('autosalons.show', $autosalon->slug) }}"
-                   class="px-4 py-1.5 rounded-xl text-xs font-bold transition {{ !request('deal_type') ? 'bg-white text-gray-900 shadow-xs' : 'text-gray-600 hover:text-gray-900' }}">
+                   class="px-4 py-1.5 rounded-xl text-xs font-bold {{ !request('deal_type') ? 'bg-white text-gray-900 shadow-xs' : 'text-gray-600 hover:text-gray-900' }}">
                     {{ __('listing.all') }} ({{ $autosalon->cars_count }})
                 </a>
                 <a href="{{ route('autosalons.show', ['slug' => $autosalon->slug, 'deal_type' => 'sale']) }}"
-                   class="px-4 py-1.5 rounded-xl text-xs font-bold transition {{ request('deal_type') === 'sale' ? 'bg-white text-gray-900 shadow-xs' : 'text-gray-600 hover:text-gray-900' }}">
+                   class="px-4 py-1.5 rounded-xl text-xs font-bold {{ request('deal_type') === 'sale' ? 'bg-white text-gray-900 shadow-xs' : 'text-gray-600 hover:text-gray-900' }}">
                     {{ __('listing.buy') }}
                 </a>
                 <a href="{{ route('autosalons.show', ['slug' => $autosalon->slug, 'deal_type' => 'rent_daily']) }}"
-                   class="px-4 py-1.5 rounded-xl text-xs font-bold transition {{ request('deal_type') === 'rent_daily' ? 'bg-white text-gray-900 shadow-xs' : 'text-gray-600 hover:text-gray-900' }}">
+                   class="px-4 py-1.5 rounded-xl text-xs font-bold {{ request('deal_type') === 'rent_daily' ? 'bg-white text-gray-900 shadow-xs' : 'text-gray-600 hover:text-gray-900' }}">
                     {{ __('listing.rent') }}
                 </a>
             </div>
